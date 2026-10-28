@@ -9,7 +9,7 @@
       "S1",
       "S2"
     ],
-    "path": "knowledge/strategic/定方向/A01.md",
+    "path": "knowledge/sales/strategic/定方向/A01.md",
     "sourceIds": [
       "DOE-1",
       "EPRI-1"
@@ -27,7 +27,7 @@
       "S2",
       "S3"
     ],
-    "path": "knowledge/strategic/定方向/A02.md",
+    "path": "knowledge/sales/strategic/定方向/A02.md",
     "sourceIds": [
       "DOE-1",
       "WB-1",
@@ -46,7 +46,7 @@
       "S3",
       "S5"
     ],
-    "path": "knowledge/strategic/定方向/A03.md",
+    "path": "knowledge/sales/strategic/定方向/A03.md",
     "sourceIds": [
       "UK-1",
       "UK-3",
@@ -66,7 +66,7 @@
       "S5",
       "S6"
     ],
-    "path": "knowledge/strategic/定方向/A04.md",
+    "path": "knowledge/sales/strategic/定方向/A04.md",
     "sourceIds": [
       "SAFE-3",
       "AU-2",
@@ -86,7 +86,7 @@
       "S5",
       "S6"
     ],
-    "path": "knowledge/strategic/定方向/A05.md",
+    "path": "knowledge/sales/strategic/定方向/A05.md",
     "sourceIds": [
       "DOE-2",
       "UK-1",
@@ -106,7 +106,7 @@
       "S3",
       "S5"
     ],
-    "path": "knowledge/strategic/定方向/A06.md",
+    "path": "knowledge/sales/strategic/定方向/A06.md",
     "sourceIds": [
       "FIN-1",
       "FIN-2",
@@ -125,7 +125,7 @@
       "S3",
       "S5"
     ],
-    "path": "knowledge/strategic/定方向/A07.md",
+    "path": "knowledge/sales/strategic/定方向/A07.md",
     "sourceIds": [
       "WB-1",
       "WB-2",
@@ -145,7 +145,7 @@
       "S5",
       "S6"
     ],
-    "path": "knowledge/strategic/定方向/A08.md",
+    "path": "knowledge/sales/strategic/定方向/A08.md",
     "sourceIds": [
       "EPRI-2",
       "WB-1",
@@ -165,7 +165,7 @@
       "S3",
       "S4"
     ],
-    "path": "knowledge/strategic/定方向/A09.md",
+    "path": "knowledge/sales/strategic/定方向/A09.md",
     "sourceIds": [
       "DOE-3",
       "SAFE-2",
@@ -184,7 +184,7 @@
       "S7",
       "S8"
     ],
-    "path": "knowledge/strategic/定方向/A10.md",
+    "path": "knowledge/sales/strategic/定方向/A10.md",
     "sourceIds": [
       "OPS-1",
       "EPRI-1",
@@ -202,7 +202,7 @@
       "S1",
       "S2"
     ],
-    "path": "knowledge/strategic/识风险/B01.md",
+    "path": "knowledge/sales/strategic/识风险/B01.md",
     "sourceIds": [
       "DOE-1",
       "DOE-3"
@@ -221,7 +221,7 @@
       "S5",
       "S6"
     ],
-    "path": "knowledge/strategic/识风险/B02.md",
+    "path": "knowledge/sales/strategic/识风险/B02.md",
     "sourceIds": [
       "UK-1",
       "AU-2",
@@ -241,7 +241,7 @@
       "S5",
       "S6"
     ],
-    "path": "knowledge/strategic/识风险/B03.md",
+    "path": "knowledge/sales/strategic/识风险/B03.md",
     "sourceIds": [
       "DOE-2",
       "UK-3",
@@ -261,7 +261,7 @@
       "S5",
       "S8"
     ],
-    "path": "knowledge/strategic/识风险/B04.md",
+    "path": "knowledge/sales/strategic/识风险/B04.md",
     "sourceIds": [
       "FIN-1",
       "WB-1",
@@ -280,7 +280,7 @@
       "S3",
       "S5"
     ],
-    "path": "knowledge/strategic/识风险/B05.md",
+    "path": "knowledge/sales/strategic/识风险/B05.md",
     "sourceIds": [
       "WB-1",
       "WB-2",
@@ -301,7 +301,7 @@
       "S6",
       "S7"
     ],
-    "path": "knowledge/strategic/识风险/B06.md",
+    "path": "knowledge/sales/strategic/识风险/B06.md",
     "sourceIds": [
       "SAFE-3",
       "OPS-1",
@@ -322,7 +322,7 @@
       "S4",
       "S5"
     ],
-    "path": "knowledge/strategic/识风险/B07.md",
+    "path": "knowledge/sales/strategic/识风险/B07.md",
     "sourceIds": [
       "DOE-3",
       "SAFE-2",
@@ -340,7 +340,7 @@
       "S5",
       "S6"
     ],
-    "path": "knowledge/strategic/识风险/B08.md",
+    "path": "knowledge/sales/strategic/识风险/B08.md",
     "sourceIds": [
       "WB-1",
       "EPRI-2",
@@ -359,7 +359,7 @@
       "S7",
       "S8"
     ],
-    "path": "knowledge/strategic/识风险/B09.md",
+    "path": "knowledge/sales/strategic/识风险/B09.md",
     "sourceIds": [
       "OPS-1",
       "EPRI-1",
@@ -380,7 +380,7 @@
       "S4",
       "S5"
     ],
-    "path": "knowledge/strategic/识风险/B10.md",
+    "path": "knowledge/sales/strategic/识风险/B10.md",
     "sourceIds": [
       "DOE-1",
       "DOE-3",
@@ -404,7 +404,7 @@
       "S7",
       "S8"
     ],
-    "path": "knowledge/strategic/递资源/C01.md",
+    "path": "knowledge/sales/strategic/递资源/C01.md",
     "sourceIds": [
       "DOE-1",
       "DOE-2",
@@ -425,7 +425,7 @@
       "S4",
       "S5"
     ],
-    "path": "knowledge/strategic/递资源/C02.md",
+    "path": "knowledge/sales/strategic/递资源/C02.md",
     "sourceIds": [
       "EPRI-1",
       "AU-1"
@@ -447,7 +447,7 @@
       "S7",
       "S8"
     ],
-    "path": "knowledge/strategic/递资源/C03.md",
+    "path": "knowledge/sales/strategic/递资源/C03.md",
     "sourceIds": [
       "EPRI-1",
       "DOE-1",
@@ -467,7 +467,7 @@
       "S4",
       "S5"
     ],
-    "path": "knowledge/strategic/递资源/C04.md",
+    "path": "knowledge/sales/strategic/递资源/C04.md",
     "sourceIds": [
       "OPS-1",
       "EPRI-2"
@@ -486,7 +486,7 @@
       "S5",
       "S8"
     ],
-    "path": "knowledge/strategic/递资源/C05.md",
+    "path": "knowledge/sales/strategic/递资源/C05.md",
     "sourceIds": [
       "FIN-1",
       "FIN-2",
@@ -506,7 +506,7 @@
       "S5",
       "S6"
     ],
-    "path": "knowledge/strategic/递资源/C06.md",
+    "path": "knowledge/sales/strategic/递资源/C06.md",
     "sourceIds": [
       "UK-1",
       "UK-3",
@@ -526,7 +526,7 @@
       "S7",
       "S8"
     ],
-    "path": "knowledge/strategic/递资源/C07.md",
+    "path": "knowledge/sales/strategic/递资源/C07.md",
     "sourceIds": [
       "OPS-1",
       "EPRI-1",
@@ -549,7 +549,7 @@
       "S6",
       "S8"
     ],
-    "path": "knowledge/strategic/递资源/C08.md",
+    "path": "knowledge/sales/strategic/递资源/C08.md",
     "sourceIds": [
       "DOE-3",
       "EPRI-1",

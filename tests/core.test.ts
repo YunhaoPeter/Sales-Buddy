@@ -1,11 +1,12 @@
+import {testDirectory} from './helpers/temp.ts';
 import {test,before,after} from 'node:test';
 import assert from 'node:assert/strict';
 import express from 'express';
 import {DatabaseSync} from 'node:sqlite';
 import {StreamableHTTPServerTransport} from '@modelcontextprotocol/sdk/server/streamableHttp.js';
-import {mkdtempSync,writeFileSync,mkdirSync} from 'node:fs';
+import {writeFileSync,mkdirSync} from 'node:fs';
 import {join} from 'node:path';
-process.env.DATABASE_PATH=join(mkdtempSync(join(process.cwd(),'data-test-')),'test.sqlite');
+process.env.DATABASE_PATH=join(testDirectory("unit"),'test.sqlite');
 process.env.SALES_BUDDY_TEST_MODE='1';
 process.env.MEMORY_ROOT=join(process.env.DATABASE_PATH,'..','memory');
 const D=await import('../apps/server/src/db.ts');
@@ -26,7 +27,7 @@ before(async()=>{
  const app=express();app.use(express.json());app.post('/mcp',async(req,res)=>{try{const user=C.fromToken(String(req.headers.authorization).replace('Bearer ',''));const s=P.createMcpServer(user);const t=new StreamableHTTPServerTransport({sessionIdGenerator:undefined,enableJsonResponse:true});res.on('close',()=>{void t.close();void s.close()});await s.connect(t);await t.handleRequest(req,res,req.body);}catch(e:any){res.status(403).json({message:e.message});}});
  server=await new Promise<any>(resolve=>{const s=app.listen(0,'127.0.0.1',()=>resolve(s));});process.env.APP_PORT=String(server.address().port);token=C.session(u.id);client=await P.connectMcp(token);
 });
-after(async()=>{await client?.close();await new Promise<void>(r=>server.close(()=>r()));mkdirSync('docs',{recursive:true});writeFileSync('docs/test-results.json',JSON.stringify({at:new Date().toISOString(),mode:'deterministic_and_real_mcp',database:'isolated temporary SQLite',results},null,2));D.db.close();});
+after(async()=>{await client?.close();await new Promise<void>(r=>server.close(()=>r()));mkdirSync('docs',{recursive:true});writeFileSync('runtime/reports/test-results.json',JSON.stringify({at:new Date().toISOString(),mode:'deterministic_and_real_mcp',database:'isolated temporary SQLite',results},null,2));D.db.close();});
 for(let n=0;n<9;n++)for(const variant of ['N','M','C']){
  check('ST-S'+n+'-'+variant,'阶段'+n+' '+({N:'正常证据',M:'信息缺失',C:'证据冲突'} as any)[variant],()=>{
  const id='TEST-ST-'+n+'-'+variant;const p=K.profiles[n];const evidence=Object.fromEntries(p.requiredEvidence.map(x=>[x.key,variant==='N']));const r:any={id,type:n===0?'lead':'opportunity',customerId:scope.customerId,name:'阶段测试',stage:'S'+n,status:'open',description:variant==='N'?'明确需求':'',evidence,caseType:variant==='C'?'conflict':'normal',updatedAt:D.now()};D.saveRecord(r);
@@ -67,8 +68,8 @@ check('WB-02','历史回答保留对应工作台快照',()=>{const snapshot=C.ow
 check('WB-03','新会话不会继承旧回答工作台',()=>{const c=A.createConversation(u,scope);assert.ok(!D.list('workbenches').some(w=>w.conversationId===c.id));});
 check('KB-01','国家适用性过滤',()=>{const cards=K.searchKnowledge('自供电 政策','S3','GB');assert.ok(cards.every(k=>!JSON.parse(k.countries).length||JSON.parse(k.countries).includes('GB')));});
 check('KB-02','来源保留时点与历史适用说明',()=>{assert.ok(K.sourceCatalog.every((s:any)=>s.retrievedAt==='2026-10-25'&&s.fullTextReview==='pending'));assert.ok(K.sourceCatalog.some((s:any)=>s.summary.includes('历史')));});
-check('KB-03','收益讨论包含资料不足边界',()=>{assert.ok(D.readFileSync('knowledge/playbooks/commercial_industrial.md','utf8').includes('不承诺回收期'));});
-check('KB-04','无授权资料不编造正式商务政策',()=>{const p=JSON.parse(D.readFileSync('knowledge/demo-policy.json','utf8'));assert.equal(p.fictional,true);assert.ok(p.rule.includes('不作底价'));});
+check('KB-03','收益讨论包含资料不足边界',()=>{assert.ok(D.readFileSync('knowledge/sales/playbooks/commercial_industrial.md','utf8').includes('不承诺回收期'));});
+check('KB-04','无授权资料不编造正式商务政策',()=>{const p=JSON.parse(D.readFileSync('knowledge/sales/demo-policy.json','utf8'));assert.equal(p.fictional,true);assert.ok(p.rule.includes('不作底价'));});
 check('RT-01','磁盘数据库可重新连接读取',()=>{const c=new DatabaseSync(D.dbPath);assert.ok(c.prepare('SELECT id FROM users WHERE id=?').get(u.id));assert.ok(c.prepare('SELECT id FROM documents WHERE collection=? AND id=?').get('answers',completed.id));c.close();});
 check('RT-02','模型未配置时禁止伪装live',()=>{const old=process.env.MODEL_API_KEY;delete process.env.MODEL_API_KEY;const c=A.createConversation(u,scope);assert.throws(()=>A.startRun(u,token,c.id,'分析','live'),/配置/);if(old)process.env.MODEL_API_KEY=old;});
 

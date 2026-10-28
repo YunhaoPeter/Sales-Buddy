@@ -6,7 +6,11 @@
 
 GitHub：[YunhaoPeter/Sales-Buddy](https://github.com/YunhaoPeter/Sales-Buddy)。`main` 为稳定基线，`develop` 为集成分支，后续每次迭代从 `develop` 新建 `codex/<任务名>` 分支，通过PR集成。详见[分支管理与发布流程](docs/分支管理与发布流程.md)及[助手协作约定](AGENTS.md)。
 
-原始Pencil及HTML设计参考位于[designs/](designs/)，完整建设方案和模块规划位于[docs/](docs/)，预制PPT位于[knowledge/presentations/library/](knowledge/presentations/library/)。运行数据库、API密钥、用户上传、对话记忆和自动生成报告不上传。
+原始Pencil及HTML设计参考位于[designs/](designs/)，完整建设方案和模块规划位于[docs/](docs/)，预制PPT位于[assets/presentations/library/](assets/presentations/library/)。运行数据库、API密钥、用户上传、对话记忆和自动生成报告不上传。
+
+## 项目结构
+
+目录职责、知识/PPT边界及迁移说明见[项目目录结构与迁移](docs/项目目录结构与迁移.md)。源码、知识和静态素材进入Git；数据库、用户素材、测试现场及报告统一归入忽略提交的 `runtime/`。成功测试自动清理本次临时数据，失败测试保留现场。
 
 ## 启动
 
@@ -69,7 +73,7 @@ npm run mcp:stdio
 npm run scenario:reset -- --confirm=RESET_MOCK
 ~~~
 
-重置会移除Mock会话和创建记录；不删除PEN源文件。数据库data/app.sqlite，生成的Memory文件在data/memory。
+重置会移除Mock会话和创建记录；不删除PEN源文件。数据库runtime/app/app.sqlite，生成的Memory文件在runtime/app/memory。
 重置后重新选择Mock身份。当前MCP仅支持查询及创建活动、进展、待办，不支持改阶段、完成待办、发邮件。
 
 ## 主要界面
@@ -79,18 +83,18 @@ npm run scenario:reset -- --confirm=RESET_MOCK
 
 ## 文件与报告
 
-- [建设方案](../Sales-Buddy-本地Mock系统建设与验证方案-v1.0.md)
+- [建设方案](docs/Sales-Buddy-本地Mock系统建设与验证方案-v1.0.md)
 - [验收报告](docs/acceptance-report.md)
 - [建设方案执行映射](docs/implementation-map.md)
-- [实际自动测试结果](docs/test-results.json)
-- [浏览器测试结果](docs/e2e-results.json)
-- [在线验证状态](docs/live-results.json)
+- 本地自动测试结果：`runtime/reports/test-results.json`
+- 本地浏览器测试结果：`runtime/reports/e2e-results.json`
+- 本地在线验证状态：`runtime/reports/live-results.json`
 - [MCP合同](docs/mcp-contract.md)
 - [数据模型与差异](docs/data-model.md)
 - [知识目录](docs/knowledge-catalog.md)
 - [演示脚本](docs/scenario-guide.md)
 
-当前主库为30份原创销售策略与活动文档，见[全流程合并MD](knowledge/internal/储能销售策略与关键活动全流程指引-v2.md)。支持echarts结构化表格/图形和历史Markdown表格；客户与项目最近沟通及逐轮日志已加入。正式使用前需业务审核。详细已知限制见验收报告。
+当前主库为30份原创销售策略与活动文档，见[全流程合并MD](knowledge/sales/guides/储能销售策略与关键活动全流程指引-v2.md)。支持echarts结构化表格/图形和历史Markdown表格；客户与项目最近沟通及逐轮日志已加入。正式使用前需业务审核。详细已知限制见验收报告。
 
 
 更新说明：[知识主库](docs/knowledge-catalog.md) · [表格与ECharts](docs/rich-output.md) · [最近沟通与布局修复](docs/conversation-history-fix.md)。
@@ -108,7 +112,7 @@ npm run scenario:reset -- --confirm=RESET_MOCK
 - [实施架构与开发明细](docs/P11-实施架构与开发明细.md)
 - [公开资料研究与Mock PPT说明](docs/P11-储能资料研究与MockPPT说明.md)
 - [实施与验收报告](docs/P11-实施与验收报告.md)
-- [PPT目录与文件](knowledge/presentations/library/README.md)
+- [PPT目录与文件](assets/presentations/library/README.md)
 
 PPT生成/预览使用Codex本机Artifact Tool运行时；普通开发环境需提供兼容的运行时模块路径。环境配置可选项见.env.example。使用`npm run knowledge:ppt:build`复建素材（已有文件不覆盖）；`npx tsx scripts/p11-live-smoke.ts`执行隔离数据的真实在线模型烟雾测试，会消耗已配置API。正式功能不使用固定回复。
 
@@ -126,7 +130,7 @@ P11会晤交互与匹配规则已修订：[背景追问、流式回复、中文�
 
 知识库已按定方向、识风险、递资源组织，新增28个专题并保留30份原有文档，共58份。可按子分类/阶段/模式筛选。
 
-- [三类知识完整汇编](knowledge/strategic/储能项目全生命周期-三类知识库汇编.md)
+- [三类知识完整汇编](knowledge/sales/strategic/储能项目全生命周期-三类知识库汇编.md)
 - [分类汇总](docs/储能知识库-三类分类汇总.md)
 - [画像与知识库实施说明](docs/项目画像与三类知识库-实施说明.md)
 

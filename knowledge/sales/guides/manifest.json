@@ -12,7 +12,7 @@
     "kind": "internal_playbook",
     "pillar": "定方向",
     "subcategory": "A01",
-    "path": "knowledge/internal/KB-S0-playbook.md"
+    "path": "knowledge/sales/guides/KB-S0-playbook.md"
   },
   {
     "id": "KB-S1-playbook",
@@ -27,7 +27,7 @@
     "kind": "internal_playbook",
     "pillar": "定方向",
     "subcategory": "A02",
-    "path": "knowledge/internal/KB-S1-playbook.md"
+    "path": "knowledge/sales/guides/KB-S1-playbook.md"
   },
   {
     "id": "KB-S2-playbook",
@@ -42,7 +42,7 @@
     "kind": "internal_playbook",
     "pillar": "定方向",
     "subcategory": "A09",
-    "path": "knowledge/internal/KB-S2-playbook.md"
+    "path": "knowledge/sales/guides/KB-S2-playbook.md"
   },
   {
     "id": "KB-S3-playbook",
@@ -57,7 +57,7 @@
     "kind": "internal_playbook",
     "pillar": "定方向",
     "subcategory": "A08",
-    "path": "knowledge/internal/KB-S3-playbook.md"
+    "path": "knowledge/sales/guides/KB-S3-playbook.md"
   },
   {
     "id": "KB-S4-playbook",
@@ -72,7 +72,7 @@
     "kind": "internal_playbook",
     "pillar": "定方向",
     "subcategory": "A09",
-    "path": "knowledge/internal/KB-S4-playbook.md"
+    "path": "knowledge/sales/guides/KB-S4-playbook.md"
   },
   {
     "id": "KB-S5-playbook",
@@ -87,7 +87,7 @@
     "kind": "internal_playbook",
     "pillar": "定方向",
     "subcategory": "A10",
-    "path": "knowledge/internal/KB-S5-playbook.md"
+    "path": "knowledge/sales/guides/KB-S5-playbook.md"
   },
   {
     "id": "KB-S6-playbook",
@@ -102,7 +102,7 @@
     "kind": "internal_playbook",
     "pillar": "定方向",
     "subcategory": "A10",
-    "path": "knowledge/internal/KB-S6-playbook.md"
+    "path": "knowledge/sales/guides/KB-S6-playbook.md"
   },
   {
     "id": "KB-S7-playbook",
@@ -117,7 +117,7 @@
     "kind": "internal_playbook",
     "pillar": "定方向",
     "subcategory": "A10",
-    "path": "knowledge/internal/KB-S7-playbook.md"
+    "path": "knowledge/sales/guides/KB-S7-playbook.md"
   },
   {
     "id": "KB-S8-playbook",
@@ -132,7 +132,7 @@
     "kind": "internal_playbook",
     "pillar": "定方向",
     "subcategory": "A10",
-    "path": "knowledge/internal/KB-S8-playbook.md"
+    "path": "knowledge/sales/guides/KB-S8-playbook.md"
   },
   {
     "id": "KB-MODE-utility_scale",
@@ -147,7 +147,7 @@
     "kind": "internal_playbook",
     "pillar": "定方向",
     "subcategory": "A09",
-    "path": "knowledge/internal/KB-MODE-utility_scale.md"
+    "path": "knowledge/sales/guides/KB-MODE-utility_scale.md"
   },
   {
     "id": "KB-MODE-commercial_industrial",
@@ -162,7 +162,7 @@
     "kind": "internal_playbook",
     "pillar": "定方向",
     "subcategory": "A07",
-    "path": "knowledge/internal/KB-MODE-commercial_industrial.md"
+    "path": "knowledge/sales/guides/KB-MODE-commercial_industrial.md"
   },
   {
     "id": "KB-MODE-channel_project",
@@ -177,7 +177,7 @@
     "kind": "internal_playbook",
     "pillar": "递资源",
     "subcategory": "C02",
-    "path": "knowledge/internal/KB-MODE-channel_project.md"
+    "path": "knowledge/sales/guides/KB-MODE-channel_project.md"
   },
   {
     "id": "KB-PLAY-competition",
@@ -192,7 +192,7 @@
     "kind": "internal_playbook",
     "pillar": "识风险",
     "subcategory": "B07",
-    "path": "knowledge/internal/KB-PLAY-competition.md"
+    "path": "knowledge/sales/guides/KB-PLAY-competition.md"
   },
   {
     "id": "KB-PLAY-stalled",
@@ -207,7 +207,7 @@
     "kind": "internal_playbook",
     "pillar": "定方向",
     "subcategory": "A09",
-    "path": "knowledge/internal/KB-PLAY-stalled.md"
+    "path": "knowledge/sales/guides/KB-PLAY-stalled.md"
   },
   {
     "id": "KB-PLAY-decision",
@@ -222,7 +222,7 @@
     "kind": "internal_playbook",
     "pillar": "定方向",
     "subcategory": "A09",
-    "path": "knowledge/internal/KB-PLAY-decision.md"
+    "path": "knowledge/sales/guides/KB-PLAY-decision.md"
   },
   {
     "id": "KB-PLAY-meeting",
@@ -237,7 +237,7 @@
     "kind": "internal_playbook",
     "pillar": "定方向",
     "subcategory": "A09",
-    "path": "knowledge/internal/KB-PLAY-meeting.md"
+    "path": "knowledge/sales/guides/KB-PLAY-meeting.md"
   },
   {
     "id": "KB-PLAY-mutual-plan",
@@ -252,7 +252,7 @@
     "kind": "internal_playbook",
     "pillar": "定方向",
     "subcategory": "A09",
-    "path": "knowledge/internal/KB-PLAY-mutual-plan.md"
+    "path": "knowledge/sales/guides/KB-PLAY-mutual-plan.md"
   },
   {
     "id": "KB-PLAY-handover",
@@ -267,7 +267,7 @@
     "kind": "internal_playbook",
     "pillar": "定方向",
     "subcategory": "A09",
-    "path": "knowledge/internal/KB-PLAY-handover.md"
+    "path": "knowledge/sales/guides/KB-PLAY-handover.md"
   },
   {
     "id": "KB-PLAY-evidence",
@@ -282,7 +282,7 @@
     "kind": "internal_playbook",
     "pillar": "定方向",
     "subcategory": "A09",
-    "path": "knowledge/internal/KB-PLAY-evidence.md"
+    "path": "knowledge/sales/guides/KB-PLAY-evidence.md"
   },
   {
     "id": "KB-TPL-qualification",
@@ -297,7 +297,7 @@
     "kind": "internal_playbook",
     "pillar": "递资源",
     "subcategory": "C01",
-    "path": "knowledge/internal/KB-TPL-qualification.md"
+    "path": "knowledge/sales/guides/KB-TPL-qualification.md"
   },
   {
     "id": "KB-TPL-decision",
@@ -312,7 +312,7 @@
     "kind": "internal_playbook",
     "pillar": "递资源",
     "subcategory": "C01",
-    "path": "knowledge/internal/KB-TPL-decision.md"
+    "path": "knowledge/sales/guides/KB-TPL-decision.md"
   },
   {
     "id": "KB-TPL-baseline",
@@ -327,7 +327,7 @@
     "kind": "internal_playbook",
     "pillar": "递资源",
     "subcategory": "C01",
-    "path": "knowledge/internal/KB-TPL-baseline.md"
+    "path": "knowledge/sales/guides/KB-TPL-baseline.md"
   },
   {
     "id": "KB-TPL-competition",
@@ -342,7 +342,7 @@
     "kind": "internal_playbook",
     "pillar": "识风险",
     "subcategory": "B07",
-    "path": "knowledge/internal/KB-TPL-competition.md"
+    "path": "knowledge/sales/guides/KB-TPL-competition.md"
   },
   {
     "id": "KB-TPL-plan",
@@ -357,7 +357,7 @@
     "kind": "internal_playbook",
     "pillar": "递资源",
     "subcategory": "C04",
-    "path": "knowledge/internal/KB-TPL-plan.md"
+    "path": "knowledge/sales/guides/KB-TPL-plan.md"
   },
   {
     "id": "KB-TPL-bid",
@@ -372,7 +372,7 @@
     "kind": "internal_playbook",
     "pillar": "递资源",
     "subcategory": "C01",
-    "path": "knowledge/internal/KB-TPL-bid.md"
+    "path": "knowledge/sales/guides/KB-TPL-bid.md"
   },
   {
     "id": "KB-TPL-handover",
@@ -387,7 +387,7 @@
     "kind": "internal_playbook",
     "pillar": "递资源",
     "subcategory": "C01",
-    "path": "knowledge/internal/KB-TPL-handover.md"
+    "path": "knowledge/sales/guides/KB-TPL-handover.md"
   },
   {
     "id": "KB-REG-Europe",
@@ -402,7 +402,7 @@
     "kind": "internal_playbook",
     "pillar": "定方向",
     "subcategory": "A09",
-    "path": "knowledge/internal/KB-REG-Europe.md"
+    "path": "knowledge/sales/guides/KB-REG-Europe.md"
   },
   {
     "id": "KB-REG-NorthAmerica",
@@ -417,7 +417,7 @@
     "kind": "internal_playbook",
     "pillar": "定方向",
     "subcategory": "A09",
-    "path": "knowledge/internal/KB-REG-NorthAmerica.md"
+    "path": "knowledge/sales/guides/KB-REG-NorthAmerica.md"
   },
   {
     "id": "KB-REG-MiddleEast",
@@ -432,7 +432,7 @@
     "kind": "internal_playbook",
     "pillar": "定方向",
     "subcategory": "A09",
-    "path": "knowledge/internal/KB-REG-MiddleEast.md"
+    "path": "knowledge/sales/guides/KB-REG-MiddleEast.md"
   },
   {
     "id": "KB-REG-APAC",
@@ -447,7 +447,7 @@
     "kind": "internal_playbook",
     "pillar": "定方向",
     "subcategory": "A09",
-    "path": "knowledge/internal/KB-REG-APAC.md"
+    "path": "knowledge/sales/guides/KB-REG-APAC.md"
   },
   {
     "id": "KB-A01",
@@ -483,7 +483,7 @@
         "publishedAt": "2025-12-09T00:00:00.000Z"
       }
     ],
-    "path": "knowledge/internal/KB-A01.md"
+    "path": "knowledge/sales/guides/KB-A01.md"
   },
   {
     "id": "KB-A02",
@@ -527,7 +527,7 @@
         "publishedAt": null
       }
     ],
-    "path": "knowledge/internal/KB-A02.md"
+    "path": "knowledge/sales/guides/KB-A02.md"
   },
   {
     "id": "KB-A03",
@@ -571,7 +571,7 @@
         "publishedAt": null
       }
     ],
-    "path": "knowledge/internal/KB-A03.md"
+    "path": "knowledge/sales/guides/KB-A03.md"
   },
   {
     "id": "KB-A04",
@@ -616,7 +616,7 @@
         "publishedAt": null
       }
     ],
-    "path": "knowledge/internal/KB-A04.md"
+    "path": "knowledge/sales/guides/KB-A04.md"
   },
   {
     "id": "KB-A05",
@@ -668,7 +668,7 @@
         "publishedAt": null
       }
     ],
-    "path": "knowledge/internal/KB-A05.md"
+    "path": "knowledge/sales/guides/KB-A05.md"
   },
   {
     "id": "KB-A06",
@@ -712,7 +712,7 @@
         "publishedAt": null
       }
     ],
-    "path": "knowledge/internal/KB-A06.md"
+    "path": "knowledge/sales/guides/KB-A06.md"
   },
   {
     "id": "KB-A07",
@@ -756,7 +756,7 @@
         "publishedAt": null
       }
     ],
-    "path": "knowledge/internal/KB-A07.md"
+    "path": "knowledge/sales/guides/KB-A07.md"
   },
   {
     "id": "KB-A08",
@@ -801,7 +801,7 @@
         "publishedAt": null
       }
     ],
-    "path": "knowledge/internal/KB-A08.md"
+    "path": "knowledge/sales/guides/KB-A08.md"
   },
   {
     "id": "KB-A09",
@@ -846,7 +846,7 @@
         "publishedAt": null
       }
     ],
-    "path": "knowledge/internal/KB-A09.md"
+    "path": "knowledge/sales/guides/KB-A09.md"
   },
   {
     "id": "KB-A10",
@@ -890,7 +890,7 @@
         "publishedAt": null
       }
     ],
-    "path": "knowledge/internal/KB-A10.md"
+    "path": "knowledge/sales/guides/KB-A10.md"
   },
   {
     "id": "KB-B01",
@@ -926,7 +926,7 @@
         "publishedAt": null
       }
     ],
-    "path": "knowledge/internal/KB-B01.md"
+    "path": "knowledge/sales/guides/KB-B01.md"
   },
   {
     "id": "KB-B02",
@@ -971,7 +971,7 @@
         "publishedAt": null
       }
     ],
-    "path": "knowledge/internal/KB-B02.md"
+    "path": "knowledge/sales/guides/KB-B02.md"
   },
   {
     "id": "KB-B03",
@@ -1016,7 +1016,7 @@
         "publishedAt": null
       }
     ],
-    "path": "knowledge/internal/KB-B03.md"
+    "path": "knowledge/sales/guides/KB-B03.md"
   },
   {
     "id": "KB-B04",
@@ -1061,7 +1061,7 @@
         "publishedAt": null
       }
     ],
-    "path": "knowledge/internal/KB-B04.md"
+    "path": "knowledge/sales/guides/KB-B04.md"
   },
   {
     "id": "KB-B05",
@@ -1105,7 +1105,7 @@
         "publishedAt": null
       }
     ],
-    "path": "knowledge/internal/KB-B05.md"
+    "path": "knowledge/sales/guides/KB-B05.md"
   },
   {
     "id": "KB-B06",
@@ -1151,7 +1151,7 @@
         "publishedAt": null
       }
     ],
-    "path": "knowledge/internal/KB-B06.md"
+    "path": "knowledge/sales/guides/KB-B06.md"
   },
   {
     "id": "KB-B07",
@@ -1197,7 +1197,7 @@
         "publishedAt": null
       }
     ],
-    "path": "knowledge/internal/KB-B07.md"
+    "path": "knowledge/sales/guides/KB-B07.md"
   },
   {
     "id": "KB-B08",
@@ -1240,7 +1240,7 @@
         "publishedAt": null
       }
     ],
-    "path": "knowledge/internal/KB-B08.md"
+    "path": "knowledge/sales/guides/KB-B08.md"
   },
   {
     "id": "KB-B09",
@@ -1284,7 +1284,7 @@
         "publishedAt": null
       }
     ],
-    "path": "knowledge/internal/KB-B09.md"
+    "path": "knowledge/sales/guides/KB-B09.md"
   },
   {
     "id": "KB-B10",
@@ -1330,7 +1330,7 @@
         "publishedAt": "2025-04-03T00:00:00.000Z"
       }
     ],
-    "path": "knowledge/internal/KB-B10.md"
+    "path": "knowledge/sales/guides/KB-B10.md"
   },
   {
     "id": "KB-C01",
@@ -1379,7 +1379,7 @@
         "publishedAt": null
       }
     ],
-    "path": "knowledge/internal/KB-C01.md"
+    "path": "knowledge/sales/guides/KB-C01.md"
   },
   {
     "id": "KB-C02",
@@ -1418,7 +1418,7 @@
         "publishedAt": null
       }
     ],
-    "path": "knowledge/internal/KB-C02.md"
+    "path": "knowledge/sales/guides/KB-C02.md"
   },
   {
     "id": "KB-C03",
@@ -1466,7 +1466,7 @@
         "publishedAt": null
       }
     ],
-    "path": "knowledge/internal/KB-C03.md"
+    "path": "knowledge/sales/guides/KB-C03.md"
   },
   {
     "id": "KB-C04",
@@ -1504,7 +1504,7 @@
         "publishedAt": null
       }
     ],
-    "path": "knowledge/internal/KB-C04.md"
+    "path": "knowledge/sales/guides/KB-C04.md"
   },
   {
     "id": "KB-C05",
@@ -1549,7 +1549,7 @@
         "publishedAt": null
       }
     ],
-    "path": "knowledge/internal/KB-C05.md"
+    "path": "knowledge/sales/guides/KB-C05.md"
   },
   {
     "id": "KB-C06",
@@ -1594,7 +1594,7 @@
         "publishedAt": null
       }
     ],
-    "path": "knowledge/internal/KB-C06.md"
+    "path": "knowledge/sales/guides/KB-C06.md"
   },
   {
     "id": "KB-C07",
@@ -1646,7 +1646,7 @@
         "publishedAt": null
       }
     ],
-    "path": "knowledge/internal/KB-C07.md"
+    "path": "knowledge/sales/guides/KB-C07.md"
   },
   {
     "id": "KB-C08",
@@ -1693,6 +1693,6 @@
         "publishedAt": "2025-04-03T00:00:00.000Z"
       }
     ],
-    "path": "knowledge/internal/KB-C08.md"
+    "path": "knowledge/sales/guides/KB-C08.md"
   }
 ]

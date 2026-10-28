@@ -3,8 +3,8 @@ test('客户级对话进入最近清单、刷新保留且日志可打开原会�
  await page.goto('/');await page.getByRole('button',{name:/张小小/}).click();await page.getByLabel('搜索客户或项目').fill('Northstar');await page.getByRole('button',{name:/客户.*Northstar Energy/}).click();
  await page.getByRole('button',{name:'新对话',exact:true}).click();const question='客户级最近清单与日志验证 '+Date.now();await page.getByLabel('发送问题').fill(question);await page.getByRole('button',{name:'发送',exact:true}).click();await expect(page.getByText('常用工具',{exact:true})).toBeVisible();await expect(page.getByRole('group',{name:'建议提问'}).last()).toBeVisible();
  await page.getByRole('button',{name:'销售战略参谋',exact:true}).click();const card=page.locator('.recent-card').filter({has:page.getByRole('heading',{name:'Northstar Energy',exact:true})});await expect(card).toContainText(question);
- await page.reload();await expect(card).toContainText(question);await page.screenshot({path:'docs/screenshots/recent-customer-projects.png',fullPage:true});
- await page.getByRole('button',{name:'对话日志',exact:true}).click();const row=page.locator('tr').filter({hasText:question});await expect(row).toContainText('已完成');await page.screenshot({path:'docs/screenshots/conversation-logs.png',fullPage:true});await row.getByRole('button',{name:'打开原会话'}).click();await expect(page.getByRole('heading',{name:'Northstar Energy',exact:true})).toBeVisible();await expect(page.locator('.user-bubble').filter({hasText:question})).toBeVisible();
+ await page.reload();await expect(card).toContainText(question);await page.screenshot({path:'runtime/reports/screenshots/recent-customer-projects.png',fullPage:true});
+ await page.getByRole('button',{name:'对话日志',exact:true}).click();const row=page.locator('tr').filter({hasText:question});await expect(row).toContainText('已完成');await page.screenshot({path:'runtime/reports/screenshots/conversation-logs.png',fullPage:true});await row.getByRole('button',{name:'打开原会话'}).click();await expect(page.getByRole('heading',{name:'Northstar Energy',exact:true})).toBeVisible();await expect(page.locator('.user-bubble').filter({hasText:question})).toBeVisible();
 });
 test('120个会话仅滚动左栏，输入框与主标题保持在视口内',async({page})=>{
  await page.route('**/api/conversations?scope=*',async route=>{const r=await route.fetch();const rows=await r.json();if(rows[0]?.scope.objectId==='OP-UK-026')rows.push(...Array.from({length:120},(_,i)=>({...rows[0],id:'layout-fixture-'+i,title:'历史会话布局验证 '+i,messageCount:0})));await route.fulfill({response:r,json:rows});});
@@ -13,6 +13,6 @@ test('120个会话仅滚动左栏，输入框与主标题保持在视口内',asy
  await expect(page.getByRole('heading',{name:'英国储能一期',exact:true})).toBeVisible();const input=page.getByLabel('发送问题');const before=await input.boundingBox();expect(before!.y).toBeGreaterThan(64);expect(before!.y+before!.height).toBeLessThan(1000);
  await list.hover();await page.mouse.wheel(0,6000);await expect.poll(()=>list.evaluate(el=>el.scrollTop)).toBeGreaterThan(0);const after=await input.boundingBox();expect(Math.abs(before!.y-after!.y)).toBeLessThan(2);
  expect(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight+1)).toBe(true);expect(await page.locator('main').evaluate(el=>el.scrollTop)).toBe(0);expect(await page.locator('.object-bar').evaluate(el=>el.getBoundingClientRect().top)).toBeGreaterThanOrEqual(64);
- await page.screenshot({path:'docs/screenshots/many-session-layout.png',fullPage:true});
+ await page.screenshot({path:'runtime/reports/screenshots/many-session-layout.png',fullPage:true});
  await page.setViewportSize({width:1280,height:720});await expect(input).toBeVisible();const smaller=await input.boundingBox();expect(smaller!.y+smaller!.height).toBeLessThan(720);expect(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight+1)).toBe(true);
 });
