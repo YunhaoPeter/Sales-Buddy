@@ -1,0 +1,428 @@
+[
+  {
+    "id": "SRC-001",
+    "title": "DOE采购清单",
+    "url": "https://www.energy.gov/cmei/femp/articles/battery-energy-storage-system-procurement-checklist",
+    "region": "global",
+    "countries": [],
+    "summary": "早期项目通过任务、问题与参考点组织采购准备；美国联邦采购背景。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-002",
+    "title": "DOE技术规格模板",
+    "url": "https://www.energy.gov/cmei/femp/articles/lithium-ion-battery-storage-technical-specifications",
+    "region": "global",
+    "countries": [],
+    "summary": "采购方可调整技术规格模板；应明确项目适用条件和需求。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-003",
+    "title": "世界银行光储规划",
+    "url": "https://www.worldbank.org/en/news/press-release/2023/11/27/world-bank-unveils-comprehensive-framework-to-accelerate-solar-plus-storage-adoption-in-developing-countries",
+    "region": "global",
+    "countries": [],
+    "summary": "指引覆盖可行性、商业模式、风险分配和竞争采购。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-004",
+    "title": "世界银行BESS PPP",
+    "url": "https://ppp.worldbank.org/es/node/9657",
+    "region": "global",
+    "countries": [],
+    "summary": "储能商业模式受市场和服务收入条件影响；PPP是特定结构而非所有项目通用。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-005",
+    "title": "EPRI Utility BESS Handbook",
+    "url": "https://storagewiki.epri.com/index.php/Utility_BESS_Handbook",
+    "region": "global",
+    "countries": [],
+    "summary": "生命周期包括规划、采购、部署集成、运维；涉及各类利益相关者职责。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-006",
+    "title": "EPRI Integration and Deployment",
+    "url": "https://storagewiki.epri.com/index.php/Energy_Storage_101/Integration_and_Deployment",
+    "region": "global",
+    "countries": [],
+    "summary": "先识别电网需求，再形成采购规格；交付、安装、调试与验收应提前规划。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-007",
+    "title": "EPRI Commissioning Guide 2016",
+    "url": "https://restservice.epri.com/publicdownload/000000003002009250/0/Product",
+    "region": "global",
+    "countries": [],
+    "summary": "采购阶段需关注场地调试要求与性能验证；历史资料，实际项目核对新版。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-008",
+    "title": "EPRI Commissioning Guide新版",
+    "url": "https://restservice.epri.com/publicdownload/000000003002027455/0/Product",
+    "region": "global",
+    "countries": [],
+    "summary": "调试需求需识别参与方与计划，物流和储存条件要提前考虑。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-009",
+    "title": "NLR REopt",
+    "url": "https://www.nlr.gov/reopt/curriculum/what-is-reopt",
+    "region": "global",
+    "countries": [],
+    "summary": "场地、费率、负荷和运行策略影响储能经济性；不能只凭容量承诺回收期。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-010",
+    "title": "NREL SAM储能模型",
+    "url": "https://sam.nrel.gov/index.php?Itemid=360&id=94&option=com_content&view=article",
+    "region": "global",
+    "countries": [],
+    "summary": "不同财务模型区分表前与表后业务；运行和衰减参数影响分析。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-011",
+    "title": "MEDDICC方法",
+    "url": "https://meddicc.com/faqs",
+    "region": "global",
+    "countries": [],
+    "summary": "复杂销售需验证价值指标、经济买方、决策标准、决策流程、痛点、支持者及竞争。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-012",
+    "title": "SolarPower Europe指南索引",
+    "url": "https://www.solarpowereurope.org/publications?filter=bestPracticeGuideline",
+    "region": "欧洲",
+    "countries": [],
+    "summary": "公开目录含混合光储尽调与EPC指南；本条为目录参考，不声称已读取受限全文。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-013",
+    "title": "英国大型储能健康安全",
+    "url": "https://www.gov.uk/government/publications/grid-scale-electrical-energy-storage-systems-health-and-safety",
+    "region": "欧洲",
+    "countries": [
+      "GB"
+    ],
+    "summary": "英国网级储能有专门健康安全指导；项目需明确安全责任和适用要求。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-014",
+    "title": "苏格兰BESS规划指导",
+    "url": "https://www.gov.scot/publications/planning-guidance-battery-energy-storage-systems/documents/",
+    "region": "欧洲",
+    "countries": [
+      "GB"
+    ],
+    "summary": "适用于苏格兰规划和许可，不能直接当作英国所有地区的同一规则。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-015",
+    "title": "阿布扎比自供电政策",
+    "url": "https://doe.gov.ae/-/media/Project/DOE/Department-Of-Energy/Media-Center-Publications/2026/Feb/PV-and-Battery-Energy-Storage-Systems-For-Self-Supply-Policy.pdf",
+    "region": "中东",
+    "countries": [
+      "AE"
+    ],
+    "summary": "2026年阿布扎比光伏和储能自供电政策，适用范围需按酋长国核对；仅保存摘要和链接。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-016",
+    "title": "AEMO WEM接入",
+    "url": "https://www.aemo.com.au/energy-systems/electricity/wholesale-electricity-market-wem/participate-in-the-market/connections",
+    "region": "亚太",
+    "countries": [
+      "AU"
+    ],
+    "summary": "西澳接入指南覆盖发电、储能、负荷等设施；不直接套用到其他澳洲市场。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-017",
+    "title": "EMA储能系统",
+    "url": "https://www.ema.gov.sg/our-energy-story/energy-grid/energy-storage-systems",
+    "region": "亚太",
+    "countries": [
+      "SG"
+    ],
+    "summary": "新加坡储能应用、商业模式与审批支持，气候与运行环境也需要考虑。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-018",
+    "title": "EMA储能手册",
+    "url": "https://www.ema.gov.sg/content/dam/corporate/resources/educational-materials/handbook/handbook-pdfs/english/EMA-Resources-Educational-Materials-Handbook-Energy-Storage-Systems-20201022.pdf",
+    "region": "亚太",
+    "countries": [
+      "SG"
+    ],
+    "summary": "新加坡储能手册；历史版本参考，项目实施前检查最新要求。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-019",
+    "title": "EMA标准目录",
+    "url": "https://www.ema.gov.sg/regulations-licences/regulations/standards-guidelines/singapore-standards-and-technical-references",
+    "region": "亚太",
+    "countries": [
+      "SG"
+    ],
+    "summary": "储能和电气安装存在对应标准及技术参考；目录不能替代标准全文。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-020",
+    "title": "沙特采购资格公告",
+    "url": "https://www.spa.gov.sa/en/N2568317",
+    "region": "中东",
+    "countries": [
+      "SA"
+    ],
+    "summary": "沙特第二组储能项目资格程序公告，资格路径与项目采购窗口需要核实。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-021",
+    "title": "Masdar项目公告",
+    "url": "https://masdar.ae/en/news/newsroom/worlds-1st-gigascale-round-the-clock-renewable-energy-project-worth-aed22bn",
+    "region": "中东",
+    "countries": [
+      "AE"
+    ],
+    "summary": "大型光储项目公告可提供市场信号，但不能据此假设虚构客户已落实采购。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-022",
+    "title": "METI电池与电力产业战略",
+    "url": "https://www.meti.go.jp/english/press/2026/0602_003.html",
+    "region": "亚太",
+    "countries": [
+      "JP"
+    ],
+    "summary": "2026年战略涉及储能与电力系统能力；产业政策不等同于具体客户需求。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-023",
+    "title": "CPUC储能",
+    "url": "https://www.cpuc.ca.gov/industries-and-topics/electrical-energy/energy-storage",
+    "region": "北美",
+    "countries": [
+      "US"
+    ],
+    "summary": "加州储能采购和评估资料，不直接适用于美国所有州。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-024",
+    "title": "Illinois储能采购",
+    "url": "https://ipa.illinois.gov/renewable-resources/energy-storage.html",
+    "region": "北美",
+    "countries": [
+      "US"
+    ],
+    "summary": "伊利诺伊州储能采购有自己的程序与合同结构，需按当前项目文件核实。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-025",
+    "title": "NYSERDA Utility Procurement",
+    "url": "https://www.nyserda.ny.gov/All-Programs/Energy-Storage-Program/Developers-and-Contractors/Utility-Procurement",
+    "region": "北美",
+    "countries": [
+      "US"
+    ],
+    "summary": "纽约储能采购和非电网替代方案具有特定机制，不泛化为全北美规则。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-026",
+    "title": "印度储能政策目录",
+    "url": "https://mnre.gov.in/en/document-category/ess_policies_and_guidelines/",
+    "region": "亚太",
+    "countries": [
+      "IN"
+    ],
+    "summary": "目录包含采购、支持与市场文件；每个项目应核对具体文件版本。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-027",
+    "title": "新墨西哥采购指导",
+    "url": "https://www.emnrd.nm.gov/ecmd/wp-content/uploads/sites/3/EnergyStorageGuidance.pdf",
+    "region": "北美",
+    "countries": [
+      "US"
+    ],
+    "summary": "历史采购指南可作为RFP资料清单参考，不代表当前全部技术规范。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-028",
+    "title": "CESA市政储能采购指导",
+    "url": "https://www.cesa.org/resource-library/resource/energy-storage-procurement-guidance-documents-for-municipalities/",
+    "region": "北美",
+    "countries": [
+      "US"
+    ],
+    "summary": "采购资料用于帮助市政单位组织RFP项目，引用需保留适用背景。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-029",
+    "title": "LBL采购与调试",
+    "url": "https://microgridresourcecenter.lbl.gov/procurement-and-commissioning",
+    "region": "北美",
+    "countries": [
+      "US"
+    ],
+    "summary": "官方资源目录关联储能采购清单和技术规格，用于资料导航。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  },
+  {
+    "id": "SRC-030",
+    "title": "APPA储能项目计划",
+    "url": "https://www.publicpower.org/resource/public-power-energy-storage-project-plan-guide",
+    "region": "北美",
+    "countries": [
+      "US"
+    ],
+    "summary": "公共电力项目计划涉及范围、预算、人员、采购、风险和项目后评估。",
+    "retrievedAt": "2026-10-25",
+    "reviewStatus": "search_summary_checked",
+    "fullTextReview": "pending",
+    "authority": "primary",
+    "notes": "已核对公开页面或检索摘要；不声称完成全文、法律或技术专家审核。"
+  }
+]

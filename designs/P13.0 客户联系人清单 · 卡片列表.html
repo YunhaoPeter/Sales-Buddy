@@ -1,0 +1,840 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter%3Awght%40100..900&family=JetBrains+Mono%3Awght%40100..800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      *, ::before, ::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body style="background-color: #F5F6FA">
+    <div
+      data-pencil-name="P13.0 客户联系人清单 · 卡片列表"
+      style="align-items: flex-start; background-color: #F5F6FA; box-sizing: border-box; display: flex; flex-direction: column; gap: 0px; height: 1366px; justify-content: flex-start; overflow: hidden; width: 390px"
+    >
+      <div
+        data-pencil-name="系统状态栏"
+        style="align-items: center; background-color: #F5F6FA; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 0px; height: 62px; justify-content: space-between; padding: 24px; width: 100%"
+      >
+        <div
+          data-pencil-name="Time"
+          style="box-sizing: border-box; color: #1A1A2E; font-family: Inter, system-ui, sans-serif; font-size: 14px; font-style: normal; font-weight: 600; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap"
+        >
+          9:41
+        </div>
+        <div
+          data-pencil-name="Right Status"
+          style="align-items: center; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 6px; height: fit-content; justify-content: flex-start; width: fit-content"
+        >
+          <div
+            data-pencil-name="Signal"
+            style="box-sizing: border-box; color: #1A1A2E; font-family: Inter, system-ui, sans-serif; font-size: 13px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap"
+          >
+            ●●●
+          </div>
+          <svg
+            data-icon-name="battery-charging"
+            data-icon-set="lucide"
+            viewBox="0 0 13.99993896484375 14"
+            preserveAspectRatio="xMidYMid meet"
+            xmlns="http://www.w3.org/2000/svg"
+            style="box-sizing: border-box; flex-shrink: 0; height: 14px; width: 14px"
+          >
+            <path
+              d="M1.97559 2.95313q-0.56055 0.12646-0.93311 0.54003-0.36914 0.41357-0.44092 0.9878-0.02734 0.15381-0.02734 2.51904 0 2.36523 0.02734 2.51904 0.02734 0.30762 0.16748 0.58789 0.15381 0.32471 0.44092 0.56397 0.28711 0.23584 0.65283 0.34863 0.11279 0.04102 0.2085 0.04785 0.09912 0.00684 0.48877 0.00684 0.39307 0 0.48535 0 0.09229 0 0.17432-0.03418 0.08545-0.0376 0.17431-0.11963 0.09229-0.08545 0.14014-0.18799 0.05127-0.10596 0.05127-0.23242 0-0.12646-0.05811-0.23926-0.08203-0.19482-0.28027-0.29394-0.06836-0.02734-0.14697-0.03418-0.0752-0.00684-0.41358-0.00684-0.4751-0.01367-0.52978-0.02734-0.23926-0.08545-0.35205-0.32129l-0.04102-0.09912 0-4.95606 0.04102-0.09912q0.12646-0.28027 0.43408-0.32129 0.11279-0.02734 1.02197-0.02734l0.07178 0q0.52979 0 0.66992 0 0.21191-0.01367 0.28027-0.04102 0.07178-0.03076 0.15381-0.11279l0.01709-0.01367q0.2085-0.21191 0.15723-0.50586-0.04785-0.29395-0.31445-0.43408l-0.08203-0.04102-1.94483 0q-0.18457 0.01367-0.29394 0.02735z m6.53515-0.01368q-0.19482 0.05811-0.31445 0.21875-0.11963 0.16064-0.11279 0.32813 0.00684 0.16748 0.09228 0.31445 0.08545 0.14697 0.23926 0.21875 0.05469 0.04102 0.12988 0.04785 0.07861 0.00684 0.43067 0.00684 0.3623 0.01367 0.4375 0.02051 0.07861 0.00684 0.15039 0.03418 0.2085 0.09912 0.30761 0.30761l0.04102 0.09912 0 4.92872-0.04102 0.09912q-0.14014 0.27686-0.43408 0.33496-0.09912 0.02734-1.0083 0.02734l-0.81348 0q-0.14014 0-0.21875 0.0376-0.0752 0.03418-0.16748 0.11963-0.08887 0.08203-0.12988 0.16406-0.08545 0.16748-0.05127 0.34522 0.0376 0.17432 0.17774 0.31445 0.08203 0.0957 0.17089 0.1333 0.09229 0.03418 0.23243 0.03418l1.10742 0q0.7417 0 0.89551-0.02051 0.15381-0.02051 0.34863-0.10596l0.04443-0.01367q0.29395-0.12646 0.54346-0.37598 0.25293-0.25293 0.37939-0.54687l0.02735-0.07178q0.05811-0.12646 0.07177-0.23584 0.01367-0.15723 0.01368-0.60498l0-4.36816q0-0.38965-0.02735-0.4751-0.12646-0.48877-0.458-0.81689-0.32813-0.33154-0.80323-0.47168-0.09912-0.02734-0.20508-0.03418-0.10254-0.00684-0.48193-0.00684-0.52979 0-0.57422 0.01367z m-2.25244 0.58789q-0.15381 0.04102-0.25293 0.14014-0.05469 0.07178-0.96045 1.56885-0.90234 1.49707-0.94336 1.59619-0.05469 0.19482 0.03418 0.3999 0.09229 0.20166 0.28711 0.30078 0.05811 0.02734 0.17432 0.03418 0.11963 0.00684 0.63916 0.00684l0.72803 0.01367-0.61524 1.02197q-0.61865 1.02197-0.646 1.10743-0.06836 0.19482 0.01368 0.41357 0.08545 0.21533 0.28027 0.31445 0.09912 0.04102 0.25293 0.04102 0.15381 0 0.24951-0.04785 0.09912-0.05127 0.16748-0.12647 0.07178-0.07861 0.97412-1.58252 0.90576-1.50391 0.92627-1.58252 0.02051-0.07861 0.00684-0.20166-0.01367-0.12646-0.04102-0.19824-0.09912-0.16748-0.28027-0.2666l-0.08545-0.05469-0.72803 0q-0.72803 0-0.72802-0.01367 0-0.01367 0.61523-1.03565 0.61865-1.02197 0.646-1.12109 0.05469-0.15381 0.00683-0.32812-0.04785-0.17432-0.16748-0.27344-0.11963-0.09912-0.27344-0.1333-0.15381-0.03418-0.28027 0.00683z m6.43945 1.73633q-0.14014 0.04102-0.25976 0.15381-0.11963 0.11279-0.16065 0.25293-0.02734 0.09912-0.02734 1.33984 0 1.2373 0.02734 1.31934 0.05811 0.21191 0.23243 0.32471 0.17432 0.10938 0.37597 0.08886 0.20508-0.02051 0.35889-0.17431 0.12646-0.12646 0.15381-0.29395 0.02734-0.11279 0.02734-1.2749 0-1.16211-0.02734-1.2749-0.02734-0.16748-0.15381-0.29395-0.09912-0.11279-0.25293-0.15381-0.15381-0.04102-0.29395-0.01367z"
+              fill="#1A1A2E"
+            ></path>
+          </svg>
+        </div>
+      </div>
+      <div
+        data-pencil-name="客户联系人清单导航"
+        style="align-items: center; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 0px; height: 56px; justify-content: space-between; padding: 4px 16px 14px 16px; width: 100%"
+      >
+        <div
+          data-pencil-name="返回客户组织架构"
+          style="align-items: center; background-color: #FFFFFF; border-radius: 19px; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 0px; height: 38px; justify-content: center; width: 38px"
+        >
+          <svg
+            data-pencil-name="返回"
+            data-icon-name="arrow-left"
+            data-icon-set="lucide"
+            viewBox="0 0 13.99993896484375 14"
+            preserveAspectRatio="xMidYMid meet"
+            xmlns="http://www.w3.org/2000/svg"
+            style="box-sizing: border-box; flex-shrink: 0; height: 18px; width: 18px"
+          >
+            <path
+              d="M6.90088 2.35156q-0.0957 0.01367-0.16748 0.05127-0.06836 0.03418-2.17725 2.13623-2.10547 2.09863-2.14648 2.16699-0.11279 0.18115-0.07178 0.40674 0.02734 0.0957 0.06836 0.17432 0.04443 0.0752 2.15674 2.17725l1.68164 1.67822q0.37598 0.36572 0.51611 0.46484 0.08545 0.05469 0.19824 0.05469l0.04102 0q0.23926 0 0.42041-0.18115 0.11279-0.11279 0.14697-0.28028 0.03418-0.16748-0.02051-0.32128-0.02734-0.08545-0.25976-0.3213-0.23242-0.23926-1.36377-1.37402-1.58252-1.58252-1.58252-1.59619 0-0.01367 3.42822-0.01367l3.01123 0q0.44775 0 0.52979-0.03418 0.08545-0.0376 0.16748-0.11963 0.08545-0.08545 0.1333-0.18799 0.05127-0.10596 0.05127-0.23242 0-0.12646-0.04102-0.23926-0.09912-0.19482-0.29394-0.29394l-0.08545-0.04102-3.44531 0q-3.45557 0-3.45557-0.01367 0-0.01367 1.58252-1.59619 1.13135-1.13477 1.36377-1.37061 0.23242-0.23926 0.25976-0.3247 0.06836-0.2085-0.00341-0.40332-0.06836-0.19824-0.24268-0.30079-0.17432-0.10596-0.3999-0.06494z"
+              fill="#1A1A2E"
+            ></path>
+          </svg>
+        </div>
+        <div
+          data-pencil-name="页面标题"
+          style='box-sizing: border-box; color: #1A1A2E; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 18px; font-style: normal; font-weight: 700; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+        >
+          客户联系人
+        </div>
+        <div
+          data-pencil-name="更多操作"
+          style="align-items: center; background-color: #FFFFFF; border-radius: 19px; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 0px; height: 38px; justify-content: center; width: 38px"
+        >
+          <svg
+            data-pencil-name="更多"
+            data-icon-name="ellipsis"
+            data-icon-set="lucide"
+            viewBox="0 0 13.99993896484375 14"
+            preserveAspectRatio="xMidYMid meet"
+            xmlns="http://www.w3.org/2000/svg"
+            style="box-sizing: border-box; flex-shrink: 0; height: 18px; width: 18px"
+          >
+            <path
+              d="M2.77197 5.85156q-0.2666 0.01367-0.50244 0.18115-0.33838 0.22559-0.45801 0.59815-0.11621 0.36914 0.00684 0.7417 0.12646 0.36914 0.46484 0.6084 0.26318 0.18115 0.62891 0.18115 0.25293 0 0.44092-0.0752 0.18799-0.07861 0.37597-0.2666 0.19141-0.19141 0.26661-0.37939 0.07861-0.18799 0.07861-0.44092 0-0.25293-0.07861-0.44092-0.0752-0.18799-0.25635-0.37256-0.15381-0.15381-0.29395-0.22216-0.30762-0.15381-0.67334-0.1128z m4.10157 0q-0.2085 0.01367-0.37598 0.09912-0.23926 0.11279-0.3999 0.31446-0.16064 0.20166-0.23243 0.44091-0.02734 0.11279-0.02734 0.29395 0 0.18115 0.02734 0.29395 0.08545 0.30762 0.30762 0.5332 0.22559 0.22217 0.5332 0.30762 0.11279 0.02734 0.29395 0.02734 0.18115 0 0.29395-0.02734 0.30762-0.08545 0.52978-0.30762 0.22559-0.22559 0.31104-0.5332 0.02734-0.11279 0.02734-0.29395 0-0.18115-0.02734-0.29395-0.07178-0.23926-0.23243-0.44091-0.16064-0.20166-0.3999-0.31446-0.26318-0.14014-0.6289-0.09912z m4.07421 0q-0.39307 0.02734-0.70068 0.33496-0.16748 0.18457-0.24609 0.37256-0.0752 0.18799-0.0752 0.44092 0 0.25293 0.0752 0.44775 0.07861 0.19482 0.2666 0.3794 0.19141 0.18115 0.37939 0.25976 0.18799 0.0752 0.44092 0.0752 0.36572 0 0.62891-0.18115 0.33838-0.23926 0.46142-0.6084 0.12647-0.37256 0.00684-0.7417-0.11621-0.37256-0.46143-0.60156-0.3418-0.23242-0.77588-0.17774z"
+              fill="#1A1A2E"
+            ></path>
+          </svg>
+        </div>
+      </div>
+      <div
+        data-pencil-name="客户联系人清单内容"
+        style="align-items: flex-start; box-sizing: border-box; display: flex; flex-direction: column; flex-shrink: 0; gap: 10px; height: 1248px; justify-content: flex-start; padding: 0px 24px 20px 24px; width: 100%"
+      >
+        <div
+          data-pencil-name="所属客户与联系人数量"
+          style="align-items: flex-start; box-sizing: border-box; display: flex; flex-direction: column; flex-shrink: 0; gap: 6px; height: 50px; justify-content: flex-start; width: 100%"
+        >
+          <div
+            data-pencil-name="联系人所属客户"
+            style='box-sizing: border-box; color: #1A1A2E; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 16px; font-style: normal; font-weight: 700; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+          >
+            深圳前海科技
+          </div>
+          <div
+            data-pencil-name="联系人清单摘要"
+            style='box-sizing: border-box; color: #8E8EA0; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 11px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+          >
+            9 位联系人 · 示例数据
+          </div>
+        </div>
+        <div
+          data-pencil-name="客户内搜索联系人"
+          style="align-items: center; background-color: #FFFFFF; border-radius: 10px; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 8px; height: 40px; justify-content: flex-start; padding: 10px 12px; width: 100%"
+        >
+          <svg
+            data-pencil-name="联系人搜索图标"
+            data-icon-name="search"
+            data-icon-set="lucide"
+            viewBox="0 0 13.99993896484375 14"
+            preserveAspectRatio="xMidYMid meet"
+            xmlns="http://www.w3.org/2000/svg"
+            style="box-sizing: border-box; flex-shrink: 0; height: 16px; width: 16px"
+          >
+            <path
+              d="M6.00537 1.17578q-0.04102 0.01367-0.23584 0.02734-0.57422 0.07178-1.16211 0.29053-0.58789 0.21533-1.09375 0.5503-0.39307 0.2666-0.74853 0.61181-0.35547 0.3418-0.62207 0.7041-0.646 0.92285-0.86817 2.03028-0.05811 0.28027-0.07861 0.46142-0.02051 0.18115-0.02051 0.57422 0 0.43408 0.02734 0.68018 0.02734 0.24268 0.12647 0.59472 0.19482 0.75537 0.60156 1.43555 0.40674 0.67676 0.96729 1.18262 0.40674 0.3623 0.81689 0.60156 0.41357 0.23926 0.91944 0.43408 1.06299 0.39307 2.21826 0.29395 1.15527-0.09912 2.1499-0.65967 0.12646-0.06836 0.33496-0.2085 0.2085-0.14014 0.29395-0.21191l0.05468-0.05469 1.10743 1.10742q1.12109 1.104 1.20312 1.15528 0.08545 0.04785 0.23926 0.04785 0.15381 0 0.23584-0.03418 0.08545-0.0376 0.18115-0.1333 0.09912-0.09912 0.1333-0.18115 0.0376-0.08545 0.0376-0.23926 0-0.15381-0.05127-0.23584-0.04785-0.08545-1.15186-1.20654l-1.10742-1.10743 0.05469-0.06836q0.05811-0.05469 0.19824-0.25293 0.82373-1.23047 0.89209-2.70703 0.07178-1.47656-0.63916-2.76513-0.5332-0.96729-1.42187-1.64405-0.88867-0.68018-1.95508-0.9331-0.29395-0.06836-0.54004-0.09571-0.24268-0.03076-0.60498-0.04443-0.43408 0-0.49219 0z m0.7417 1.17578q0.37939 0.01367 0.79297 0.14014 0.41357 0.12646 0.78955 0.32129 0.7417 0.39307 1.28857 1.08008 0.54687 0.68359 0.75538 1.49707 0.07178 0.28027 0.09228 0.49902 0.02051 0.21533 0.02051 0.50928 0 0.70068-0.19483 1.30224-0.39307 1.16211-1.33984 1.91065-0.94336 0.74853-2.16016 0.875-0.19824 0.01367-0.49218 0.00683-0.29395-0.00684-0.48877-0.03418-0.5332-0.08545-1.03907-0.30761-0.50244-0.22559-0.93652-0.56055-0.14014-0.12646-0.35205-0.3418-0.2085-0.21875-0.33154-0.37256-0.57422-0.76904-0.7417-1.69531-0.08545-0.43408-0.06494-0.90918 0.02051-0.4751 0.11963-0.89551 0.29395-1.14844 1.18945-1.95849 0.89551-0.81348 2.05762-1.02539 0.18115-0.02734 0.42041-0.04102 0.23926-0.01367 0.34863-0.01367l0.2666 0.01367z"
+              fill="#8E8EA0"
+            ></path>
+          </svg>
+          <div
+            data-pencil-name="联系人搜索提示"
+            style='box-sizing: border-box; color: #8E8EA0; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 12px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+          >
+            搜索姓名、部门或职务
+          </div>
+        </div>
+        <div
+          data-pencil-name="联系人筛选栏"
+          style="align-items: flex-start; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 8px; height: 28px; justify-content: flex-start; width: 100%"
+        >
+          <div
+            data-pencil-name="全部 9筛选项"
+            style="align-items: center; background-color: #EEF1FF; border-radius: 8px; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 0px; height: 28px; justify-content: flex-start; padding: 6px 10px; width: fit-content"
+          >
+            <div
+              data-pencil-name="全部 9筛选文字"
+              style='box-sizing: border-box; color: #4F6CF7; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 11px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+            >
+              全部 9
+            </div>
+          </div>
+          <div
+            data-pencil-name="关键联系人筛选项"
+            style="align-items: center; background-color: #FFFFFF; border-radius: 8px; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 0px; height: 28px; justify-content: flex-start; padding: 6px 10px; width: fit-content"
+          >
+            <div
+              data-pencil-name="关键联系人筛选文字"
+              style='box-sizing: border-box; color: #717187; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 11px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+            >
+              关键联系人
+            </div>
+          </div>
+          <div
+            data-pencil-name="部门筛选筛选项"
+            style="align-items: center; background-color: #FFFFFF; border-radius: 8px; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 0px; height: 28px; justify-content: flex-start; padding: 6px 10px; width: fit-content"
+          >
+            <div
+              data-pencil-name="部门筛选筛选文字"
+              style='box-sizing: border-box; color: #717187; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 11px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+            >
+              部门筛选
+            </div>
+          </div>
+        </div>
+        <div
+          data-pencil-name="客户联系人卡片列表"
+          style="align-items: flex-start; box-sizing: border-box; display: flex; flex-direction: column; flex-shrink: 0; gap: 10px; height: 980px; justify-content: flex-start; width: 100%"
+        >
+          <div
+            data-pencil-name="李明联系人卡片"
+            style="align-items: flex-start; background-color: #FFFFFF; border-radius: 12px; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 10px; height: 100px; justify-content: flex-start; padding: 12px; width: 100%"
+          >
+            <div
+              data-pencil-name="李明头像"
+              style="align-items: center; background-color: #EEF1FF; border-radius: 17px; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 0px; height: 34px; justify-content: center; width: 34px"
+            >
+              <div
+                data-pencil-name="李明头像文字"
+                style='box-sizing: border-box; color: #4F6CF7; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 14px; font-style: normal; font-weight: 600; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                李
+              </div>
+            </div>
+            <div
+              data-pencil-name="李明联系人信息"
+              style="align-items: flex-start; box-sizing: border-box; display: flex; flex-direction: column; flex: 1 1 0; gap: 5px; height: 76px; justify-content: flex-start"
+            >
+              <div
+                data-pencil-name="李明姓名及态度行"
+                style="align-items: center; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 0px; height: 18px; justify-content: space-between; width: 100%"
+              >
+                <div
+                  data-pencil-name="李明姓名"
+                  style='box-sizing: border-box; color: #1A1A2E; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 14px; font-style: normal; font-weight: 600; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+                >
+                  李明
+                </div>
+                <div
+                  data-pencil-name="李明态度分值"
+                  style='box-sizing: border-box; color: #4F6CF7; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 10px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+                >
+                  态度 3
+                </div>
+              </div>
+              <div
+                data-pencil-name="李明部门职务"
+                style='box-sizing: border-box; color: #62677C; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 11px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                采购部 · 采购总监
+              </div>
+              <div
+                data-pencil-name="李明角色维护人"
+                style='box-sizing: border-box; color: #717187; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 10px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                决策者 · 维护 张伟
+              </div>
+              <div
+                data-pencil-name="李明年度拜访频次"
+                style='box-sizing: border-box; color: #717187; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 10px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                年度拜访 12次/年
+              </div>
+            </div>
+            <svg
+              data-pencil-name="查看李明详情"
+              data-icon-name="chevron-right"
+              data-icon-set="lucide"
+              viewBox="0 0 13.99993896484375 14"
+              preserveAspectRatio="xMidYMid meet"
+              xmlns="http://www.w3.org/2000/svg"
+              style="box-sizing: border-box; flex-shrink: 0; height: 14px; width: 14px"
+            >
+              <path
+                d="M5.09619 2.93945q-0.25293 0.08545-0.37939 0.30762-0.04102 0.08545-0.04102 0.25293 0 0.16748 0.04102 0.25293 0.04443 0.08203 1.62353 1.66455l1.58252 1.58252-1.58252 1.58252q-1.5791 1.58252-1.62353 1.66797-0.04102 0.08203-0.04102 0.23584 0 0.15381 0.03418 0.23926 0.0376 0.08203 0.1333 0.18115 0.09912 0.0957 0.18115 0.1333 0.08545 0.03418 0.23926 0.03418 0.15381 0 0.24268-0.04785 0.09229-0.05127 1.90381-1.8628 1.81494-1.81494 1.86279-1.9038 0.05127-0.09229 0.05127-0.25977 0-0.16748-0.04443-0.24951-0.04102-0.08545-1.85938-1.90723l-1.44238-1.42871q-0.33496-0.33496-0.46143-0.41699-0.09912-0.07178-0.19824-0.07178l-0.04102 0q-0.14014 0-0.18115 0.01367z"
+                fill="#8E8EA0"
+              ></path>
+            </svg>
+          </div>
+          <div
+            data-pencil-name="张云飞联系人卡片"
+            style="align-items: flex-start; background-color: #FFFFFF; border-radius: 12px; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 10px; height: 100px; justify-content: flex-start; padding: 12px; width: 100%"
+          >
+            <div
+              data-pencil-name="张云飞头像"
+              style="align-items: center; background-color: #EEF1FF; border-radius: 17px; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 0px; height: 34px; justify-content: center; width: 34px"
+            >
+              <div
+                data-pencil-name="张云飞头像文字"
+                style='box-sizing: border-box; color: #4F6CF7; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 14px; font-style: normal; font-weight: 600; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                张
+              </div>
+            </div>
+            <div
+              data-pencil-name="张云飞联系人信息"
+              style="align-items: flex-start; box-sizing: border-box; display: flex; flex-direction: column; flex: 1 1 0; gap: 5px; height: 76px; justify-content: flex-start"
+            >
+              <div
+                data-pencil-name="张云飞姓名及态度行"
+                style="align-items: center; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 0px; height: 18px; justify-content: space-between; width: 100%"
+              >
+                <div
+                  data-pencil-name="张云飞姓名"
+                  style='box-sizing: border-box; color: #1A1A2E; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 14px; font-style: normal; font-weight: 600; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+                >
+                  张云飞
+                </div>
+                <div
+                  data-pencil-name="张云飞态度分值"
+                  style='box-sizing: border-box; color: #4F6CF7; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 10px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+                >
+                  态度 3
+                </div>
+              </div>
+              <div
+                data-pencil-name="张云飞部门职务"
+                style='box-sizing: border-box; color: #62677C; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 11px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                技术部 · CTO
+              </div>
+              <div
+                data-pencil-name="张云飞角色维护人"
+                style='box-sizing: border-box; color: #717187; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 10px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                技术决策者 · 维护 张小小
+              </div>
+              <div
+                data-pencil-name="张云飞年度拜访频次"
+                style='box-sizing: border-box; color: #717187; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 10px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                年度拜访 1次/年
+              </div>
+            </div>
+            <svg
+              data-pencil-name="查看张云飞详情"
+              data-icon-name="chevron-right"
+              data-icon-set="lucide"
+              viewBox="0 0 13.99993896484375 14"
+              preserveAspectRatio="xMidYMid meet"
+              xmlns="http://www.w3.org/2000/svg"
+              style="box-sizing: border-box; flex-shrink: 0; height: 14px; width: 14px"
+            >
+              <path
+                d="M5.09619 2.93945q-0.25293 0.08545-0.37939 0.30762-0.04102 0.08545-0.04102 0.25293 0 0.16748 0.04102 0.25293 0.04443 0.08203 1.62353 1.66455l1.58252 1.58252-1.58252 1.58252q-1.5791 1.58252-1.62353 1.66797-0.04102 0.08203-0.04102 0.23584 0 0.15381 0.03418 0.23926 0.0376 0.08203 0.1333 0.18115 0.09912 0.0957 0.18115 0.1333 0.08545 0.03418 0.23926 0.03418 0.15381 0 0.24268-0.04785 0.09229-0.05127 1.90381-1.8628 1.81494-1.81494 1.86279-1.9038 0.05127-0.09229 0.05127-0.25977 0-0.16748-0.04443-0.24951-0.04102-0.08545-1.85938-1.90723l-1.44238-1.42871q-0.33496-0.33496-0.46143-0.41699-0.09912-0.07178-0.19824-0.07178l-0.04102 0q-0.14014 0-0.18115 0.01367z"
+                fill="#8E8EA0"
+              ></path>
+            </svg>
+          </div>
+          <div
+            data-pencil-name="王佳联系人卡片"
+            style="align-items: flex-start; background-color: #FFFFFF; border-radius: 12px; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 10px; height: 100px; justify-content: flex-start; padding: 12px; width: 100%"
+          >
+            <div
+              data-pencil-name="王佳头像"
+              style="align-items: center; background-color: #EEF1FF; border-radius: 17px; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 0px; height: 34px; justify-content: center; width: 34px"
+            >
+              <div
+                data-pencil-name="王佳头像文字"
+                style='box-sizing: border-box; color: #4F6CF7; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 14px; font-style: normal; font-weight: 600; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                王
+              </div>
+            </div>
+            <div
+              data-pencil-name="王佳联系人信息"
+              style="align-items: flex-start; box-sizing: border-box; display: flex; flex-direction: column; flex: 1 1 0; gap: 5px; height: 76px; justify-content: flex-start"
+            >
+              <div
+                data-pencil-name="王佳姓名及态度行"
+                style="align-items: center; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 0px; height: 18px; justify-content: space-between; width: 100%"
+              >
+                <div
+                  data-pencil-name="王佳姓名"
+                  style='box-sizing: border-box; color: #1A1A2E; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 14px; font-style: normal; font-weight: 600; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+                >
+                  王佳
+                </div>
+                <div
+                  data-pencil-name="王佳态度分值"
+                  style='box-sizing: border-box; color: #4F6CF7; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 10px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+                >
+                  态度 3
+                </div>
+              </div>
+              <div
+                data-pencil-name="王佳部门职务"
+                style='box-sizing: border-box; color: #62677C; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 11px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                技术部 · 产品总监
+              </div>
+              <div
+                data-pencil-name="王佳角色维护人"
+                style='box-sizing: border-box; color: #717187; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 10px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                技术影响者 · 维护 张小小
+              </div>
+              <div
+                data-pencil-name="王佳年度拜访频次"
+                style='box-sizing: border-box; color: #717187; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 10px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                年度拜访 4次/年
+              </div>
+            </div>
+            <svg
+              data-pencil-name="查看王佳详情"
+              data-icon-name="chevron-right"
+              data-icon-set="lucide"
+              viewBox="0 0 13.99993896484375 14"
+              preserveAspectRatio="xMidYMid meet"
+              xmlns="http://www.w3.org/2000/svg"
+              style="box-sizing: border-box; flex-shrink: 0; height: 14px; width: 14px"
+            >
+              <path
+                d="M5.09619 2.93945q-0.25293 0.08545-0.37939 0.30762-0.04102 0.08545-0.04102 0.25293 0 0.16748 0.04102 0.25293 0.04443 0.08203 1.62353 1.66455l1.58252 1.58252-1.58252 1.58252q-1.5791 1.58252-1.62353 1.66797-0.04102 0.08203-0.04102 0.23584 0 0.15381 0.03418 0.23926 0.0376 0.08203 0.1333 0.18115 0.09912 0.0957 0.18115 0.1333 0.08545 0.03418 0.23926 0.03418 0.15381 0 0.24268-0.04785 0.09229-0.05127 1.90381-1.8628 1.81494-1.81494 1.86279-1.9038 0.05127-0.09229 0.05127-0.25977 0-0.16748-0.04443-0.24951-0.04102-0.08545-1.85938-1.90723l-1.44238-1.42871q-0.33496-0.33496-0.46143-0.41699-0.09912-0.07178-0.19824-0.07178l-0.04102 0q-0.14014 0-0.18115 0.01367z"
+                fill="#8E8EA0"
+              ></path>
+            </svg>
+          </div>
+          <div
+            data-pencil-name="赵凯联系人卡片"
+            style="align-items: flex-start; background-color: #FFFFFF; border-radius: 12px; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 10px; height: 100px; justify-content: flex-start; padding: 12px; width: 100%"
+          >
+            <div
+              data-pencil-name="赵凯头像"
+              style="align-items: center; background-color: #EEF1FF; border-radius: 17px; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 0px; height: 34px; justify-content: center; width: 34px"
+            >
+              <div
+                data-pencil-name="赵凯头像文字"
+                style='box-sizing: border-box; color: #4F6CF7; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 14px; font-style: normal; font-weight: 600; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                赵
+              </div>
+            </div>
+            <div
+              data-pencil-name="赵凯联系人信息"
+              style="align-items: flex-start; box-sizing: border-box; display: flex; flex-direction: column; flex: 1 1 0; gap: 5px; height: 76px; justify-content: flex-start"
+            >
+              <div
+                data-pencil-name="赵凯姓名及态度行"
+                style="align-items: center; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 0px; height: 18px; justify-content: space-between; width: 100%"
+              >
+                <div
+                  data-pencil-name="赵凯姓名"
+                  style='box-sizing: border-box; color: #1A1A2E; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 14px; font-style: normal; font-weight: 600; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+                >
+                  赵凯
+                </div>
+                <div
+                  data-pencil-name="赵凯态度分值"
+                  style='box-sizing: border-box; color: #FF3B30; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 10px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+                >
+                  态度 -1
+                </div>
+              </div>
+              <div
+                data-pencil-name="赵凯部门职务"
+                style='box-sizing: border-box; color: #62677C; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 11px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                技术部 · 研发总监
+              </div>
+              <div
+                data-pencil-name="赵凯角色维护人"
+                style='box-sizing: border-box; color: #717187; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 10px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                技术评估者 · 维护 李明
+              </div>
+              <div
+                data-pencil-name="赵凯年度拜访频次"
+                style='box-sizing: border-box; color: #717187; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 10px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                年度拜访 1次/年
+              </div>
+            </div>
+            <svg
+              data-pencil-name="查看赵凯详情"
+              data-icon-name="chevron-right"
+              data-icon-set="lucide"
+              viewBox="0 0 13.99993896484375 14"
+              preserveAspectRatio="xMidYMid meet"
+              xmlns="http://www.w3.org/2000/svg"
+              style="box-sizing: border-box; flex-shrink: 0; height: 14px; width: 14px"
+            >
+              <path
+                d="M5.09619 2.93945q-0.25293 0.08545-0.37939 0.30762-0.04102 0.08545-0.04102 0.25293 0 0.16748 0.04102 0.25293 0.04443 0.08203 1.62353 1.66455l1.58252 1.58252-1.58252 1.58252q-1.5791 1.58252-1.62353 1.66797-0.04102 0.08203-0.04102 0.23584 0 0.15381 0.03418 0.23926 0.0376 0.08203 0.1333 0.18115 0.09912 0.0957 0.18115 0.1333 0.08545 0.03418 0.23926 0.03418 0.15381 0 0.24268-0.04785 0.09229-0.05127 1.90381-1.8628 1.81494-1.81494 1.86279-1.9038 0.05127-0.09229 0.05127-0.25977 0-0.16748-0.04443-0.24951-0.04102-0.08545-1.85938-1.90723l-1.44238-1.42871q-0.33496-0.33496-0.46143-0.41699-0.09912-0.07178-0.19824-0.07178l-0.04102 0q-0.14014 0-0.18115 0.01367z"
+                fill="#8E8EA0"
+              ></path>
+            </svg>
+          </div>
+          <div
+            data-pencil-name="李海涛联系人卡片"
+            style="align-items: flex-start; background-color: #FFFFFF; border-radius: 12px; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 10px; height: 100px; justify-content: flex-start; padding: 12px; width: 100%"
+          >
+            <div
+              data-pencil-name="李海涛头像"
+              style="align-items: center; background-color: #EEF1FF; border-radius: 17px; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 0px; height: 34px; justify-content: center; width: 34px"
+            >
+              <div
+                data-pencil-name="李海涛头像文字"
+                style='box-sizing: border-box; color: #4F6CF7; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 14px; font-style: normal; font-weight: 600; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                李
+              </div>
+            </div>
+            <div
+              data-pencil-name="李海涛联系人信息"
+              style="align-items: flex-start; box-sizing: border-box; display: flex; flex-direction: column; flex: 1 1 0; gap: 5px; height: 76px; justify-content: flex-start"
+            >
+              <div
+                data-pencil-name="李海涛姓名及态度行"
+                style="align-items: center; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 0px; height: 18px; justify-content: space-between; width: 100%"
+              >
+                <div
+                  data-pencil-name="李海涛姓名"
+                  style='box-sizing: border-box; color: #1A1A2E; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 14px; font-style: normal; font-weight: 600; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+                >
+                  李海涛
+                </div>
+                <div
+                  data-pencil-name="李海涛态度分值"
+                  style='box-sizing: border-box; color: #4F6CF7; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 10px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+                >
+                  态度 1
+                </div>
+              </div>
+              <div
+                data-pencil-name="李海涛部门职务"
+                style='box-sizing: border-box; color: #62677C; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 11px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                运营部 · COO
+              </div>
+              <div
+                data-pencil-name="李海涛角色维护人"
+                style='box-sizing: border-box; color: #717187; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 10px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                业务决策者 · 维护 张小小
+              </div>
+              <div
+                data-pencil-name="李海涛年度拜访频次"
+                style='box-sizing: border-box; color: #717187; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 10px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                年度拜访 4次/年
+              </div>
+            </div>
+            <svg
+              data-pencil-name="查看李海涛详情"
+              data-icon-name="chevron-right"
+              data-icon-set="lucide"
+              viewBox="0 0 13.99993896484375 14"
+              preserveAspectRatio="xMidYMid meet"
+              xmlns="http://www.w3.org/2000/svg"
+              style="box-sizing: border-box; flex-shrink: 0; height: 14px; width: 14px"
+            >
+              <path
+                d="M5.09619 2.93945q-0.25293 0.08545-0.37939 0.30762-0.04102 0.08545-0.04102 0.25293 0 0.16748 0.04102 0.25293 0.04443 0.08203 1.62353 1.66455l1.58252 1.58252-1.58252 1.58252q-1.5791 1.58252-1.62353 1.66797-0.04102 0.08203-0.04102 0.23584 0 0.15381 0.03418 0.23926 0.0376 0.08203 0.1333 0.18115 0.09912 0.0957 0.18115 0.1333 0.08545 0.03418 0.23926 0.03418 0.15381 0 0.24268-0.04785 0.09229-0.05127 1.90381-1.8628 1.81494-1.81494 1.86279-1.9038 0.05127-0.09229 0.05127-0.25977 0-0.16748-0.04443-0.24951-0.04102-0.08545-1.85938-1.90723l-1.44238-1.42871q-0.33496-0.33496-0.46143-0.41699-0.09912-0.07178-0.19824-0.07178l-0.04102 0q-0.14014 0-0.18115 0.01367z"
+                fill="#8E8EA0"
+              ></path>
+            </svg>
+          </div>
+          <div
+            data-pencil-name="陈亮联系人卡片"
+            style="align-items: flex-start; background-color: #FFFFFF; border-radius: 12px; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 10px; height: 100px; justify-content: flex-start; padding: 12px; width: 100%"
+          >
+            <div
+              data-pencil-name="陈亮头像"
+              style="align-items: center; background-color: #EEF1FF; border-radius: 17px; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 0px; height: 34px; justify-content: center; width: 34px"
+            >
+              <div
+                data-pencil-name="陈亮头像文字"
+                style='box-sizing: border-box; color: #4F6CF7; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 14px; font-style: normal; font-weight: 600; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                陈
+              </div>
+            </div>
+            <div
+              data-pencil-name="陈亮联系人信息"
+              style="align-items: flex-start; box-sizing: border-box; display: flex; flex-direction: column; flex: 1 1 0; gap: 5px; height: 76px; justify-content: flex-start"
+            >
+              <div
+                data-pencil-name="陈亮姓名及态度行"
+                style="align-items: center; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 0px; height: 18px; justify-content: space-between; width: 100%"
+              >
+                <div
+                  data-pencil-name="陈亮姓名"
+                  style='box-sizing: border-box; color: #1A1A2E; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 14px; font-style: normal; font-weight: 600; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+                >
+                  陈亮
+                </div>
+                <div
+                  data-pencil-name="陈亮态度分值"
+                  style='box-sizing: border-box; color: #4F6CF7; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 10px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+                >
+                  态度 1
+                </div>
+              </div>
+              <div
+                data-pencil-name="陈亮部门职务"
+                style='box-sizing: border-box; color: #62677C; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 11px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                运营部 · 华东区总监
+              </div>
+              <div
+                data-pencil-name="陈亮角色维护人"
+                style='box-sizing: border-box; color: #717187; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 10px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                业务影响者 · 维护 王芳
+              </div>
+              <div
+                data-pencil-name="陈亮年度拜访频次"
+                style='box-sizing: border-box; color: #717187; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 10px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                年度拜访 1次/年
+              </div>
+            </div>
+            <svg
+              data-pencil-name="查看陈亮详情"
+              data-icon-name="chevron-right"
+              data-icon-set="lucide"
+              viewBox="0 0 13.99993896484375 14"
+              preserveAspectRatio="xMidYMid meet"
+              xmlns="http://www.w3.org/2000/svg"
+              style="box-sizing: border-box; flex-shrink: 0; height: 14px; width: 14px"
+            >
+              <path
+                d="M5.09619 2.93945q-0.25293 0.08545-0.37939 0.30762-0.04102 0.08545-0.04102 0.25293 0 0.16748 0.04102 0.25293 0.04443 0.08203 1.62353 1.66455l1.58252 1.58252-1.58252 1.58252q-1.5791 1.58252-1.62353 1.66797-0.04102 0.08203-0.04102 0.23584 0 0.15381 0.03418 0.23926 0.0376 0.08203 0.1333 0.18115 0.09912 0.0957 0.18115 0.1333 0.08545 0.03418 0.23926 0.03418 0.15381 0 0.24268-0.04785 0.09229-0.05127 1.90381-1.8628 1.81494-1.81494 1.86279-1.9038 0.05127-0.09229 0.05127-0.25977 0-0.16748-0.04443-0.24951-0.04102-0.08545-1.85938-1.90723l-1.44238-1.42871q-0.33496-0.33496-0.46143-0.41699-0.09912-0.07178-0.19824-0.07178l-0.04102 0q-0.14014 0-0.18115 0.01367z"
+                fill="#8E8EA0"
+              ></path>
+            </svg>
+          </div>
+          <div
+            data-pencil-name="林峰联系人卡片"
+            style="align-items: flex-start; background-color: #FFFFFF; border-radius: 12px; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 10px; height: 100px; justify-content: flex-start; padding: 12px; width: 100%"
+          >
+            <div
+              data-pencil-name="林峰头像"
+              style="align-items: center; background-color: #EEF1FF; border-radius: 17px; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 0px; height: 34px; justify-content: center; width: 34px"
+            >
+              <div
+                data-pencil-name="林峰头像文字"
+                style='box-sizing: border-box; color: #4F6CF7; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 14px; font-style: normal; font-weight: 600; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                林
+              </div>
+            </div>
+            <div
+              data-pencil-name="林峰联系人信息"
+              style="align-items: flex-start; box-sizing: border-box; display: flex; flex-direction: column; flex: 1 1 0; gap: 5px; height: 76px; justify-content: flex-start"
+            >
+              <div
+                data-pencil-name="林峰姓名及态度行"
+                style="align-items: center; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 0px; height: 18px; justify-content: space-between; width: 100%"
+              >
+                <div
+                  data-pencil-name="林峰姓名"
+                  style='box-sizing: border-box; color: #1A1A2E; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 14px; font-style: normal; font-weight: 600; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+                >
+                  林峰
+                </div>
+                <div
+                  data-pencil-name="林峰态度分值"
+                  style='box-sizing: border-box; color: #4F6CF7; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 10px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+                >
+                  态度 0
+                </div>
+              </div>
+              <div
+                data-pencil-name="林峰部门职务"
+                style='box-sizing: border-box; color: #62677C; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 11px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                运营部 · 华南区总监
+              </div>
+              <div
+                data-pencil-name="林峰角色维护人"
+                style='box-sizing: border-box; color: #717187; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 10px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                业务使用者 · 维护 王芳
+              </div>
+              <div
+                data-pencil-name="林峰年度拜访频次"
+                style='box-sizing: border-box; color: #717187; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 10px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                年度拜访 4次/年
+              </div>
+            </div>
+            <svg
+              data-pencil-name="查看林峰详情"
+              data-icon-name="chevron-right"
+              data-icon-set="lucide"
+              viewBox="0 0 13.99993896484375 14"
+              preserveAspectRatio="xMidYMid meet"
+              xmlns="http://www.w3.org/2000/svg"
+              style="box-sizing: border-box; flex-shrink: 0; height: 14px; width: 14px"
+            >
+              <path
+                d="M5.09619 2.93945q-0.25293 0.08545-0.37939 0.30762-0.04102 0.08545-0.04102 0.25293 0 0.16748 0.04102 0.25293 0.04443 0.08203 1.62353 1.66455l1.58252 1.58252-1.58252 1.58252q-1.5791 1.58252-1.62353 1.66797-0.04102 0.08203-0.04102 0.23584 0 0.15381 0.03418 0.23926 0.0376 0.08203 0.1333 0.18115 0.09912 0.0957 0.18115 0.1333 0.08545 0.03418 0.23926 0.03418 0.15381 0 0.24268-0.04785 0.09229-0.05127 1.90381-1.8628 1.81494-1.81494 1.86279-1.9038 0.05127-0.09229 0.05127-0.25977 0-0.16748-0.04443-0.24951-0.04102-0.08545-1.85938-1.90723l-1.44238-1.42871q-0.33496-0.33496-0.46143-0.41699-0.09912-0.07178-0.19824-0.07178l-0.04102 0q-0.14014 0-0.18115 0.01367z"
+                fill="#8E8EA0"
+              ></path>
+            </svg>
+          </div>
+          <div
+            data-pencil-name="刘雪梅联系人卡片"
+            style="align-items: flex-start; background-color: #FFFFFF; border-radius: 12px; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 10px; height: 100px; justify-content: flex-start; padding: 12px; width: 100%"
+          >
+            <div
+              data-pencil-name="刘雪梅头像"
+              style="align-items: center; background-color: #EEF1FF; border-radius: 17px; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 0px; height: 34px; justify-content: center; width: 34px"
+            >
+              <div
+                data-pencil-name="刘雪梅头像文字"
+                style='box-sizing: border-box; color: #4F6CF7; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 14px; font-style: normal; font-weight: 600; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                刘
+              </div>
+            </div>
+            <div
+              data-pencil-name="刘雪梅联系人信息"
+              style="align-items: flex-start; box-sizing: border-box; display: flex; flex-direction: column; flex: 1 1 0; gap: 5px; height: 76px; justify-content: flex-start"
+            >
+              <div
+                data-pencil-name="刘雪梅姓名及态度行"
+                style="align-items: center; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 0px; height: 18px; justify-content: space-between; width: 100%"
+              >
+                <div
+                  data-pencil-name="刘雪梅姓名"
+                  style='box-sizing: border-box; color: #1A1A2E; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 14px; font-style: normal; font-weight: 600; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+                >
+                  刘雪梅
+                </div>
+                <div
+                  data-pencil-name="刘雪梅态度分值"
+                  style='box-sizing: border-box; color: #4F6CF7; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 10px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+                >
+                  态度 1
+                </div>
+              </div>
+              <div
+                data-pencil-name="刘雪梅部门职务"
+                style='box-sizing: border-box; color: #62677C; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 11px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                财务部 · CFO
+              </div>
+              <div
+                data-pencil-name="刘雪梅角色维护人"
+                style='box-sizing: border-box; color: #717187; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 10px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                预算决策者 · 维护 张小小
+              </div>
+              <div
+                data-pencil-name="刘雪梅年度拜访频次"
+                style='box-sizing: border-box; color: #717187; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 10px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                年度拜访 1次/年
+              </div>
+            </div>
+            <svg
+              data-pencil-name="查看刘雪梅详情"
+              data-icon-name="chevron-right"
+              data-icon-set="lucide"
+              viewBox="0 0 13.99993896484375 14"
+              preserveAspectRatio="xMidYMid meet"
+              xmlns="http://www.w3.org/2000/svg"
+              style="box-sizing: border-box; flex-shrink: 0; height: 14px; width: 14px"
+            >
+              <path
+                d="M5.09619 2.93945q-0.25293 0.08545-0.37939 0.30762-0.04102 0.08545-0.04102 0.25293 0 0.16748 0.04102 0.25293 0.04443 0.08203 1.62353 1.66455l1.58252 1.58252-1.58252 1.58252q-1.5791 1.58252-1.62353 1.66797-0.04102 0.08203-0.04102 0.23584 0 0.15381 0.03418 0.23926 0.0376 0.08203 0.1333 0.18115 0.09912 0.0957 0.18115 0.1333 0.08545 0.03418 0.23926 0.03418 0.15381 0 0.24268-0.04785 0.09229-0.05127 1.90381-1.8628 1.81494-1.81494 1.86279-1.9038 0.05127-0.09229 0.05127-0.25977 0-0.16748-0.04443-0.24951-0.04102-0.08545-1.85938-1.90723l-1.44238-1.42871q-0.33496-0.33496-0.46143-0.41699-0.09912-0.07178-0.19824-0.07178l-0.04102 0q-0.14014 0-0.18115 0.01367z"
+                fill="#8E8EA0"
+              ></path>
+            </svg>
+          </div>
+          <div
+            data-pencil-name="张敏联系人卡片"
+            style="align-items: flex-start; background-color: #FFFFFF; border-radius: 12px; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 10px; height: 100px; justify-content: flex-start; padding: 12px; width: 100%"
+          >
+            <div
+              data-pencil-name="张敏头像"
+              style="align-items: center; background-color: #EEF1FF; border-radius: 17px; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 0px; height: 34px; justify-content: center; width: 34px"
+            >
+              <div
+                data-pencil-name="张敏头像文字"
+                style='box-sizing: border-box; color: #4F6CF7; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 14px; font-style: normal; font-weight: 600; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                张
+              </div>
+            </div>
+            <div
+              data-pencil-name="张敏联系人信息"
+              style="align-items: flex-start; box-sizing: border-box; display: flex; flex-direction: column; flex: 1 1 0; gap: 5px; height: 76px; justify-content: flex-start"
+            >
+              <div
+                data-pencil-name="张敏姓名及态度行"
+                style="align-items: center; box-sizing: border-box; display: flex; flex-direction: row; flex-shrink: 0; gap: 0px; height: 18px; justify-content: space-between; width: 100%"
+              >
+                <div
+                  data-pencil-name="张敏姓名"
+                  style='box-sizing: border-box; color: #1A1A2E; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 14px; font-style: normal; font-weight: 600; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+                >
+                  张敏
+                </div>
+                <div
+                  data-pencil-name="张敏态度分值"
+                  style='box-sizing: border-box; color: #4F6CF7; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 10px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+                >
+                  态度 1
+                </div>
+              </div>
+              <div
+                data-pencil-name="张敏部门职务"
+                style='box-sizing: border-box; color: #62677C; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 11px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                财务部 · 财务主管
+              </div>
+              <div
+                data-pencil-name="张敏角色维护人"
+                style='box-sizing: border-box; color: #717187; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 10px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                财务评估者 · 维护 王芳
+              </div>
+              <div
+                data-pencil-name="张敏年度拜访频次"
+                style='box-sizing: border-box; color: #717187; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 10px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: left; white-space: nowrap'
+              >
+                年度拜访 4次/年
+              </div>
+            </div>
+            <svg
+              data-pencil-name="查看张敏详情"
+              data-icon-name="chevron-right"
+              data-icon-set="lucide"
+              viewBox="0 0 13.99993896484375 14"
+              preserveAspectRatio="xMidYMid meet"
+              xmlns="http://www.w3.org/2000/svg"
+              style="box-sizing: border-box; flex-shrink: 0; height: 14px; width: 14px"
+            >
+              <path
+                d="M5.09619 2.93945q-0.25293 0.08545-0.37939 0.30762-0.04102 0.08545-0.04102 0.25293 0 0.16748 0.04102 0.25293 0.04443 0.08203 1.62353 1.66455l1.58252 1.58252-1.58252 1.58252q-1.5791 1.58252-1.62353 1.66797-0.04102 0.08203-0.04102 0.23584 0 0.15381 0.03418 0.23926 0.0376 0.08203 0.1333 0.18115 0.09912 0.0957 0.18115 0.1333 0.08545 0.03418 0.23926 0.03418 0.15381 0 0.24268-0.04785 0.09229-0.05127 1.90381-1.8628 1.81494-1.81494 1.86279-1.9038 0.05127-0.09229 0.05127-0.25977 0-0.16748-0.04443-0.24951-0.04102-0.08545-1.85938-1.90723l-1.44238-1.42871q-0.33496-0.33496-0.46143-0.41699-0.09912-0.07178-0.19824-0.07178l-0.04102 0q-0.14014 0-0.18115 0.01367z"
+                fill="#8E8EA0"
+              ></path>
+            </svg>
+          </div>
+        </div>
+        <div
+          data-pencil-name="点击联系人卡片提示"
+          style='box-sizing: border-box; color: #8E8EA0; font-family: "JetBrains Mono", system-ui, sans-serif; font-size: 11px; font-style: normal; font-weight: 400; letter-spacing: 0px; line-height: normal; text-align: center; width: 100%'
+        >
+          点击联系人卡片查看或编辑详情
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,124 @@
+[
+  {
+    "stage": "S0",
+    "question": "分析当前现状与证据缺口"
+  },
+  {
+    "stage": "S0",
+    "question": "下一步应该做什么，向客户追问哪些问题？"
+  },
+  {
+    "stage": "S0",
+    "question": "本阶段有哪些风险，依据是什么？"
+  },
+  {
+    "stage": "S1",
+    "question": "分析当前现状与证据缺口"
+  },
+  {
+    "stage": "S1",
+    "question": "下一步应该做什么，向客户追问哪些问题？"
+  },
+  {
+    "stage": "S1",
+    "question": "本阶段有哪些风险，依据是什么？"
+  },
+  {
+    "stage": "S2",
+    "question": "分析当前现状与证据缺口"
+  },
+  {
+    "stage": "S2",
+    "question": "下一步应该做什么，向客户追问哪些问题？"
+  },
+  {
+    "stage": "S2",
+    "question": "本阶段有哪些风险，依据是什么？"
+  },
+  {
+    "stage": "S3",
+    "question": "分析当前现状与证据缺口"
+  },
+  {
+    "stage": "S3",
+    "question": "下一步应该做什么，向客户追问哪些问题？"
+  },
+  {
+    "stage": "S3",
+    "question": "本阶段有哪些风险，依据是什么？"
+  },
+  {
+    "stage": "S4",
+    "question": "分析当前现状与证据缺口"
+  },
+  {
+    "stage": "S4",
+    "question": "下一步应该做什么，向客户追问哪些问题？"
+  },
+  {
+    "stage": "S4",
+    "question": "本阶段有哪些风险，依据是什么？"
+  },
+  {
+    "stage": "S5",
+    "question": "分析当前现状与证据缺口"
+  },
+  {
+    "stage": "S5",
+    "question": "下一步应该做什么，向客户追问哪些问题？"
+  },
+  {
+    "stage": "S5",
+    "question": "本阶段有哪些风险，依据是什么？"
+  },
+  {
+    "stage": "S6",
+    "question": "分析当前现状与证据缺口"
+  },
+  {
+    "stage": "S6",
+    "question": "下一步应该做什么，向客户追问哪些问题？"
+  },
+  {
+    "stage": "S6",
+    "question": "本阶段有哪些风险，依据是什么？"
+  },
+  {
+    "stage": "S7",
+    "question": "分析当前现状与证据缺口"
+  },
+  {
+    "stage": "S7",
+    "question": "下一步应该做什么，向客户追问哪些问题？"
+  },
+  {
+    "stage": "S7",
+    "question": "本阶段有哪些风险，依据是什么？"
+  },
+  {
+    "stage": "S8",
+    "question": "分析当前现状与证据缺口"
+  },
+  {
+    "stage": "S8",
+    "question": "下一步应该做什么，向客户追问哪些问题？"
+  },
+  {
+    "stage": "S8",
+    "question": "本阶段有哪些风险，依据是什么？"
+  },
+  {
+    "stage": "S3",
+    "question": "客户说竞品低8%，如何回应？"
+  },
+  {
+    "stage": "S1",
+    "businessMode": "commercial_industrial",
+    "question": "客户想知道多久回本，缺哪些输入？"
+  },
+  {
+    "stage": "S2",
+    "businessMode": "channel_project",
+    "question": "帮我生成伙伴评估与激活计划。"
+  }
+]

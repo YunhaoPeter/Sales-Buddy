@@ -1,0 +1,153 @@
+{
+  "date": "2026-10-27",
+  "method": "Exa public search and targeted content extraction; limited excerpts and selected relevant passages reviewed, not a full audit of all handbooks",
+  "sources": [
+    {
+      "id": "DOE-1",
+      "title": "Battery Energy Storage System Procurement Checklist | Department of Energy",
+      "url": "https://www.energy.gov/cmei/femp/articles/battery-energy-storage-system-procurement-checklist",
+      "retrievedAt": "2026-10-27T13:03:34.973Z",
+      "publishedAt": null
+    },
+    {
+      "id": "DOE-2",
+      "title": "Distributed Energy Interconnection Checklist | Department of Energy",
+      "url": "https://www.energy.gov/cmei/femp/articles/distributed-energy-interconnection-checklist",
+      "retrievedAt": "2026-10-27T13:03:34.973Z",
+      "publishedAt": "2021-09-07T16:23:15.000Z"
+    },
+    {
+      "id": "DOE-3",
+      "title": "Federal Distributed Energy Project Implementation Process Phase 4: Procurement | Department of Energy",
+      "url": "https://www.energy.gov/cmei/femp/federal-distributed-energy-project-implementation-process-phase-4-procurement",
+      "retrievedAt": "2026-10-27T13:03:34.973Z",
+      "publishedAt": null
+    },
+    {
+      "id": "EPRI-1",
+      "title": "Utility Battery Energy Storage System (BESS) Handbook - EPRI Storage Wiki",
+      "url": "https://storagewiki.epri.com/index.php/Utility_BESS_Handbook",
+      "retrievedAt": "2026-10-27T13:03:35.400Z",
+      "publishedAt": "2025-12-09T00:00:00.000Z"
+    },
+    {
+      "id": "EPRI-2",
+      "title": "Energy Storage Integration and Deployment - EPRI Storage Wiki",
+      "url": "https://storagewiki.epri.com/index.php/Energy_Storage_101/Integration_and_Deployment",
+      "retrievedAt": "2026-10-27T13:03:35.400Z",
+      "publishedAt": null
+    },
+    {
+      "id": "WB-1",
+      "title": "Guidelines to implement battery energy storage systems under public-private partnership structures",
+      "url": "https://documents1.worldbank.org/curated/en/099536501202316060/pdf/IDU0edcfc32c0825f040f509c0b0bbf49294e569.pdf",
+      "retrievedAt": "2026-10-27T13:03:44.029Z",
+      "publishedAt": null
+    },
+    {
+      "id": "WB-2",
+      "title": "PPPartnership Insights (MASTER) 2",
+      "url": "https://www.ifc.org/content/dam/ifc/doc/mgrt/ppp-insights-hybrid-solar-battery-storage.pdf",
+      "retrievedAt": "2026-10-27T13:03:44.029Z",
+      "publishedAt": null
+    },
+    {
+      "id": "WB-3",
+      "title": "PROCUREMENT PRACTICES WITH BATTERY PROJECTS",
+      "url": "https://www.esmap.org/sites/default/files/ESP/ESP%20Learning%20Academy/(3)%20210406-WB-BESS-Proc-RSA.pdf",
+      "retrievedAt": "2026-10-27T13:03:44.029Z",
+      "publishedAt": null
+    },
+    {
+      "id": "UK-1",
+      "title": "LoA Guidance",
+      "url": "https://www.neso.energy/document/308911/download",
+      "retrievedAt": "2026-10-27T13:03:46.897Z",
+      "publishedAt": "2025-07-02T00:00:00.000Z"
+    },
+    {
+      "id": "UK-3",
+      "title": "Decision: Gate 2 Criteria Methodology",
+      "url": "https://www.ofgem.gov.uk/sites/default/files/2025-04/Gate-2-Criteria-Methodology-Final-Decision.pdf",
+      "retrievedAt": "2026-10-27T13:03:46.897Z",
+      "publishedAt": "2025-04-15T00:00:00.000Z"
+    },
+    {
+      "id": "OPS-1",
+      "title": "DOE ESHB Chapter 21 Energy Storage System Commissioning",
+      "url": "https://www.sandia.gov/app/uploads/sites/163/2021/09/ESHB_Ch21_Commissioning_Schoenung.pdf",
+      "retrievedAt": "2026-10-27T13:03:47.924Z",
+      "publishedAt": null
+    },
+    {
+      "id": "OPS-3",
+      "title": "ESS Safety & Operational Best Practices",
+      "url": "https://www.sandia.gov/app/uploads/sites/273/2022/11/DOE_Clark-Paiss_Session-2_BCA.pdf",
+      "retrievedAt": "2026-10-27T13:03:47.924Z",
+      "publishedAt": null
+    },
+    {
+      "id": "AU-1",
+      "title": "Public Project Knowledge Sharing Report - Darlington Point Energy Storage System (DPESS) - Australian Renewable Energy Agency (ARENA)",
+      "url": "https://arena.gov.au/knowledge-bank/public-project-knowledge-sharing-report-darlington-point-energy-storage-system-dpess/",
+      "retrievedAt": "2026-10-27T13:03:45.582Z",
+      "publishedAt": null
+    },
+    {
+      "id": "AU-2",
+      "title": "ARENA Community Battery Round 1 Pre-Deployment Challenges & Best Practice Report - Australian Renewable Energy Agency (ARENA)",
+      "url": "https://arena.gov.au/knowledge-bank/arena-community-battery-round-1-pre-deployment-challenges-best-practice-report/",
+      "retrievedAt": "2026-10-27T13:03:45.582Z",
+      "publishedAt": null
+    },
+    {
+      "id": "AU-3",
+      "title": "YADLAMALKA ENERGY",
+      "url": "https://arena.gov.au/assets/2024/08/Yadlamalka-Spencer-Energy-Vanadium-Flow-Battery-Commissioning-Report.pdf",
+      "retrievedAt": "2026-10-27T13:03:45.582Z",
+      "publishedAt": null
+    },
+    {
+      "id": "FIN-1",
+      "title": "The Success of Global Energy Transitions Starts with Early-Stage Project Financing",
+      "url": "https://www.irena.org/News/articles/2025/Apr/The-Success-of-Global-Energy-Transitions-Starts-with-Early-Stage-Project-Financing",
+      "retrievedAt": "2026-10-27T13:03:50.655Z",
+      "publishedAt": "2025-04-03T00:00:00.000Z"
+    },
+    {
+      "id": "FIN-2",
+      "title": "Innovation in Energy",
+      "url": "https://www.ifc.org/en/what-we-do/sector-expertise/infrastructure/energy/innovation-in-energy",
+      "retrievedAt": "2026-10-27T13:03:50.655Z",
+      "publishedAt": null
+    },
+    {
+      "id": "FIN-3",
+      "title": "PPPartnership Insights (MASTER) 2",
+      "url": "https://www.ifc.org/content/dam/ifc/doc/mgrt/ppp-insights-hybrid-solar-battery-storage.pdf",
+      "retrievedAt": "2026-10-27T13:03:50.655Z",
+      "publishedAt": null
+    },
+    {
+      "id": "SAFE-1",
+      "title": "Battery Energy Storage System Procurement Checklist | Department of Energy",
+      "url": "https://www.energy.gov/cmei/femp/articles/battery-energy-storage-system-procurement-checklist",
+      "retrievedAt": "2026-10-27T13:03:53.217Z",
+      "publishedAt": null
+    },
+    {
+      "id": "SAFE-2",
+      "title": "Energy Storage Procurement Guidance Documents for ...",
+      "url": "https://www.sandia.gov/ess-ssl/publications/SAND2016-8544O.pdf",
+      "retrievedAt": "2026-10-27T13:03:53.217Z",
+      "publishedAt": null
+    },
+    {
+      "id": "SAFE-3",
+      "title": "Energy Storage Safety Strategic Plan",
+      "url": "https://www.energy.gov/sites/default/files/2024-05/EED_2827_FIG_SafetyStrategy%20240505v2.pdf",
+      "retrievedAt": "2026-10-27T13:03:53.217Z",
+      "publishedAt": null
+    }
+  ]
+}

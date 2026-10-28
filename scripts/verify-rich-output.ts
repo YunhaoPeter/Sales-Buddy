@@ -1,0 +1,13 @@
+import {writeFileSync} from 'node:fs';
+import {parseVisualization} from '../packages/visualization.ts';
+const base='http://127.0.0.1:3001';
+const login:any=await (await fetch(base+'/api/mock-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:'U-018'})})).json();
+const call=async(path:string,body?:any)=>{const r=await fetch(base+'/api'+path,{method:body?'POST':'GET',headers:{'Content-Type':'application/json',Authorization:'Bearer '+login.token},...(body?{body:JSON.stringify(body)}:{})});const j:any=await r.json();if(!r.ok)throw new Error(j.message);return j;};
+const c=await call('/conversations',{scope:{objectType:'opportunity',objectId:'OP-UK-026',customerId:'C-UK-0086'}});
+const run=await call('/conversations/'+c.id+'/messages',{mode:'live',question:'请依据当前S3阶段的内部销售活动指引，给出最多3项下一步关键活动。用一张echarts结构化表格列出活动、负责人角色、产出物、完成判定和CRM可执行动作，简短说明证据。不要创建任何记录，也不要泛泛引用公开文档。'});
+await (await fetch(base+'/api/runs/'+run.id+'/events',{headers:{Authorization:'Bearer '+login.token},signal:AbortSignal.timeout(180000)})).text();
+const history=await call('/conversations/'+c.id);const answer=history.messages.find((m:any)=>m.id===run.answerId);
+const blocks=[...(answer?.content||'').matchAll(/```echarts?\s*\n([\s\S]*?)```/g)].map(m=>parseVisualization(m[1]));
+const sources=answer?.sources?.filter((s:any)=>s.sourceKind==='knowledge')||[];
+const result={at:new Date().toISOString(),conversationId:c.id,runId:run.id,answerId:answer?.id,status:blocks.some(b=>b.type==='table')&&sources.length&&sources.every((s:any)=>!s.recordId.startsWith('KB-SRC-'))?'passed':'failed',tables:blocks.filter(b=>b.type==='table').length,knowledgeIds:sources.map((s:any)=>s.recordId),scope:'单条真实模型输出协议验证；不等于30题能力或专家评审通过'};
+writeFileSync('docs/rich-output-live-result.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result));if(result.status!=='passed')process.exitCode=1;

@@ -1,0 +1,53 @@
+{
+  "retrievedAt": "2026-10-27T13:07:21.028Z",
+  "results": [
+    {
+      "referenceId": "WB-1",
+      "title": "Guidelines to implement battery energy storage systems under public-private partnership structures",
+      "url": "https://documents1.worldbank.org/curated/en/099536501202316060/pdf/IDU0edcfc32c0825f040f509c0b0bbf49294e569.pdf",
+      "retrievedCharacters": 18000,
+      "reviewedPassages": "Reviewed title, available overview and query-targeted passages; use substantive source summaries in research report.",
+      "textSha256": "337ec619b004c2c03ad27dabada99507cf8dbaffa7a3f06da774ef5a98c96ae5"
+    },
+    {
+      "referenceId": "WB-2",
+      "title": "PPPartnership Insights (MASTER) 2",
+      "url": "https://www.ifc.org/content/dam/ifc/doc/mgrt/ppp-insights-hybrid-solar-battery-storage.pdf",
+      "retrievedCharacters": 17921,
+      "reviewedPassages": "Reviewed title, available overview and query-targeted passages; use substantive source summaries in research report.",
+      "textSha256": "8f5d955788233e8ec6ebe695abe445cacbb0608c12c95267f56596f02cb25c51"
+    },
+    {
+      "referenceId": "UK-1",
+      "title": "LoA Guidance",
+      "url": "https://www.neso.energy/document/308911/download",
+      "retrievedCharacters": 18000,
+      "reviewedPassages": "Reviewed title, available overview and query-targeted passages; use substantive source summaries in research report.",
+      "textSha256": "433ffda4dcb98d8f881e9fdf1ce69c42c8576d7ce16da0a5ab67cceb9954312d"
+    },
+    {
+      "referenceId": "OPS-1",
+      "title": "DOE ESHB Chapter 21 Energy Storage System Commissioning",
+      "url": "https://www.sandia.gov/app/uploads/sites/163/2021/09/ESHB_Ch21_Commissioning_Schoenung.pdf",
+      "retrievedCharacters": 18000,
+      "reviewedPassages": "Reviewed title, available overview and query-targeted passages; use substantive source summaries in research report.",
+      "textSha256": "d659ad938e4f00b167070a410ed59302523a62150df7cff0cc81eaa9c7af7afb"
+    },
+    {
+      "referenceId": "SAFE-2",
+      "title": "Guidance Documents for Municipalities",
+      "url": "https://www.sandia.gov/ess-ssl/publications/SAND2016-8544O.pdf",
+      "retrievedCharacters": 18000,
+      "reviewedPassages": "Reviewed title, available overview and query-targeted passages; use substantive source summaries in research report.",
+      "textSha256": "fef015e2996319edce1b91c9a547b56e0af6b184e746b1dc3ab98933191023a2"
+    },
+    {
+      "referenceId": "SAFE-3",
+      "title": "Energy Storage Safety Strategic Plan",
+      "url": "https://www.energy.gov/sites/default/files/2024-05/EED_2827_FIG_SafetyStrategy%20240505v2.pdf",
+      "retrievedCharacters": 18000,
+      "reviewedPassages": "Reviewed title, available overview and query-targeted passages; use substantive source summaries in research report.",
+      "textSha256": "32c18f6dd2df1cecdfc2911ba7aa9ef470a6eac3c46211105dd6a15952dbfd36"
+    }
+  ]
+}

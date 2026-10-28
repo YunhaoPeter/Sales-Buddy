@@ -1,0 +1,56 @@
+[
+  {
+    "id": "IEA-BAT",
+    "title": "IEA · Batteries and Secure Energy Transitions",
+    "url": "https://www.iea.org/reports/batteries-and-secure-energy-transitions/executive-summary",
+    "date": "2024-04-25",
+    "use": "储能应用与电力系统灵活性的背景，不引用预测为公司承诺",
+    "retrievedAt": "2026-10-26",
+    "kind": "public_primary_source"
+  },
+  {
+    "id": "EPRI-BESS",
+    "title": "EPRI · Utility BESS Handbook",
+    "url": "https://storagewiki.epri.com/index.php/Utility_BESS_Handbook",
+    "date": "2026-10-26",
+    "use": "项目全生命周期、职责与交接主题；检索摘要可用，正文访问不稳定",
+    "retrievedAt": "2026-10-26",
+    "kind": "public_primary_source"
+  },
+  {
+    "id": "UK-SAFE",
+    "title": "DESNZ · Grid scale electrical energy storage systems: health and safety",
+    "url": "https://www.gov.uk/government/publications/grid-scale-electrical-energy-storage-systems-health-and-safety",
+    "date": "2024-04-18",
+    "use": "安全关注贯穿项目阶段；不声称企业已获得任何认证",
+    "retrievedAt": "2026-10-26",
+    "kind": "public_primary_source"
+  },
+  {
+    "id": "PNNL-BTM",
+    "title": "PNNL · Analytical Sizing Methods for behind-the-meter Battery Storage",
+    "url": "https://www.pnnl.gov/publications/analytical-sizing-methods-behind-meter-battery-storage",
+    "date": "2017-08-01",
+    "use": "负荷、电价与电池约束影响测算；不承诺回收期",
+    "retrievedAt": "2026-10-26",
+    "kind": "public_primary_source"
+  },
+  {
+    "id": "ARENA-BAT",
+    "title": "ARENA · What is battery storage?",
+    "url": "https://arena.gov.au/renewable-energy/battery-storage/",
+    "date": "2026-09-22",
+    "use": "电网侧、表后及微网场景和知识共享背景",
+    "retrievedAt": "2026-10-26",
+    "kind": "public_primary_source"
+  },
+  {
+    "id": "IEA-MENA",
+    "title": "IEA · The Future of Electricity in the Middle East and North Africa",
+    "url": "https://www.iea.org/reports/the-future-of-electricity-in-the-middle-east-and-north-africa/executive-summary",
+    "date": "2025",
+    "use": "区域能源与灵活性背景；不把区域概况当作客户需求事实",
+    "retrievedAt": "2026-10-26",
+    "kind": "public_primary_source"
+  }
+]

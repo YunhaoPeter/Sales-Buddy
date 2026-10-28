@@ -1,0 +1,123 @@
+import {knowledgePillars,strategyTopics,strategyResearchSources} from './strategic-knowledge.ts';
+import {portraitList,getPortrait,readPortrait,changePortrait,portraitVersions} from './project-portrait.ts';
+import {webSearch,publicSearchConfig,saveSearchConfig,searchConfigured} from './web-search.ts';
+import {meetingRoutes} from './meeting-routes.ts';
+import {initMaterialLibrary} from './materials.ts';
+import {restartMeetingJobs} from './meetings.ts';
+import {userMode,testRuntime} from './runtime-mode.ts';
+import {visibleAnswer,SUGGESTIONS_VERSION} from './followups.ts';
+import {conversationLogs,backfillConversationLogs,recordTurn} from './conversation-log.ts';
+import 'dotenv/config';
+import express from 'express';
+import {StreamableHTTPServerTransport} from '@modelcontextprotocol/sdk/server/streamableHttp.js';
+import {createServer as createViteServer} from 'vite';
+import {fileURLToPath} from 'node:url';
+import {resolve} from 'node:path';
+import {z} from 'zod';
+import {db,put,get,list,events,uid,now,meta,setMeta,record,allRecords,saveRecord} from './db.ts';
+import {seed} from './seed.ts';
+import {users,session,fromToken,queryRecords,authorize,own,allowedRecord,makeDraft,reviseDraft} from './crm.ts';
+import {createMcpServer} from './mcp.ts';
+import {initKnowledge,profiles,sourceCatalog,reindex,salesDocuments,knowledgeVersion} from './knowledge.ts';
+import {adminMemories,reviseMemory,verifyMemory,retryMemoryJob,listMemories,readMemory,memoryVersions,changeMemory,archivedMemories,migrateMemories} from './memory.ts';
+import {publicModelConfig,saveModelConfig,testModelConfig} from './model-config.ts';
+import {modelStatus} from './model.ts';
+import {createConversation,history,recent,startRun,controllers,prepareAction,executeDraft,executeBatch} from './agent.ts';
+import {AppError,scopeSchema} from '../../../packages/contracts/index.ts';
+import {initEvaluations} from './evaluations.ts';
+if(process.env.SALES_BUDDY_TEST_MODE==='1'&&(!testRuntime()||process.env.APP_PORT==='3001'))throw new Error('固定响应仅允许隔离测试数据库与测试端口');
+seed();initKnowledge();migrateMemories();
+await initMaterialLibrary();restartMeetingJobs();
+initEvaluations();
+for(const a of list('answers'))if(a.suggestionsStatus==='generating'){put('answers',a.id,{...a,suggestionsStatus:'failed',suggestionsError:'服务重启，请重试生成追问'},a.userId,a.scope.objectId);}
+for(const r of list('runs'))if(r.status==='running'){const interrupted={...r,status:'failed',completedAt:new Date().toISOString(),code:'INTERRUPTED',error:'服务重启，未完成运行已中断'};put('runs',r.id,interrupted,r.userId,r.scope.objectId);recordTurn(interrupted,'failed',{completedAt:interrupted.completedAt,error:interrupted.error});}
+backfillConversationLogs();
+for(const w of list('workbenches'))if(!w.userId){const a=get('answers',w.answerId);if(a)put('workbenches',w.answerId,{...w,userId:a.userId},a.userId,w.scope.objectId);}
+export const app=express();app.disable('x-powered-by');app.use(express.json({limit:'256kb'}));
+const bearer=(req:express.Request)=>String(req.headers.authorization||'').replace(/^Bearer /,'');
+app.get('/api/health',(_,res)=>res.json({ok:true,seedVersion:meta('seedVersion',''),model:modelStatus(),mode:'live'}));
+app.get('/api/mock-users',(_,res)=>res.json(users()));
+app.post('/api/mock-session',(req,res)=>{const id=z.string().parse(req.body.userId);const token=session(id);res.json({token,user:fromToken(token)});});
+app.use(['/api','/mcp'],(req,res,next)=>{try{res.locals.user=fromToken(bearer(req));next();}catch(e){next(e)}});
+app.post('/mcp',async(req,res)=>{
+ const server=createMcpServer(res.locals.user);const transport=new StreamableHTTPServerTransport({sessionIdGenerator:undefined,enableJsonResponse:true});
+ res.on('close',()=>{void transport.close();void server.close();});await server.connect(transport);await transport.handleRequest(req,res,req.body);
+});
+app.get('/mcp',(_,res)=>res.status(405).json({error:'Use MCP POST transport'}));
+app.use('/api',meetingRoutes);
+app.get('/api/session',(_,res)=>res.json({user:res.locals.user,mode:'live',model:modelStatus()}));
+app.post('/api/mode',(req,res)=>{userMode(req.body.mode);res.json({mode:'live'});});
+app.get('/api/objects/search',(req,res)=>{
+ const q=String(req.query.q||'');const u=res.locals.user;
+ const rows=['customer','lead','opportunity'].flatMap(t=>queryRecords(u,t,{query:q,limit:30}).records);res.json(rows);
+});
+app.get('/api/conversation-logs',(req,res)=>{const scope=req.query.scope?scopeSchema.parse(JSON.parse(String(req.query.scope))):undefined;const rows=conversationLogs(res.locals.user,scope);const cursor=Math.max(0,Number(req.query.cursor)||0);res.json({records:rows.slice(cursor,cursor+30),total:rows.length,nextCursor:cursor+30<rows.length?cursor+30:null});});
+app.get('/api/advisor/recent',(_,res)=>res.json(recent(res.locals.user)));
+app.get('/api/crm/:type',(req,res)=>res.json(queryRecords(res.locals.user,req.params.type,{query:String(req.query.q||''),customerId:req.query.customerId,stage:req.query.stage,limit:30,cursor:Number(req.query.cursor||0)})));
+app.get('/api/records/:id',(req,res)=>res.json(allowedRecord(res.locals.user,req.params.id)));
+app.get('/api/records/:id/detail',(req,res)=>{
+ const r=allowedRecord(res.locals.user,req.params.id),customer=r.type==='customer'?null:allowedRecord(res.locals.user,r.customerId),parent=r.entityId?allowedRecord(res.locals.user,r.entityId):null;
+ const ids=new Set([r.contactId,r.primaryContactId,r.technicalContactId,r.procurementContactId,r.financeContactId,r.organizationUnitId,...(r.participantIds||[]),...(r.sourceContactIds||[])]);
+ if(['lead','opportunity'].includes(r.type))for(const link of allRecords('project_contact').filter(x=>x.entityId===r.id))ids.add(link.contactId);
+ const related=allRecords().filter(x=>x.id!==r.id&&x.customerId===r.customerId&&(r.type==='customer'||x.entityId===r.id||ids.has(x.id)||r.type==='contact'&&(x.contactId===r.id||x.participantIds?.includes(r.id)||x.sourceContactIds?.includes(r.id))||r.type==='organization'&&x.organizationUnitId===r.id));
+ res.json({record:r,customer,parent,related:related.slice(0,80),relatedTotal:related.length});
+});
+app.post('/api/conversations',(req,res)=>res.json(createConversation(res.locals.user,scopeSchema.parse(req.body.scope))));
+app.get('/api/conversations',(req,res)=>{const scope=req.query.scope?scopeSchema.parse(JSON.parse(String(req.query.scope))):undefined;res.json(history(res.locals.user,scope));});
+app.get('/api/conversations/:id',(req,res)=>{const c=own(res.locals.user,'conversations',req.params.id);const entity=record(c.scope.objectId);const predecessor=entity.type==='opportunity'&&entity.convertedFromLeadId?history(res.locals.user,{objectType:'lead',objectId:entity.convertedFromLeadId,customerId:entity.customerId}):[];res.json({...c,predecessorConversations:predecessor,messages:list('messages').filter(m=>m.conversationId===c.id&&m.userId===res.locals.user.id).reverse().map(m=>m.role==='assistant'?visibleAnswer({...m,...(get('answers',m.id)||{})}):m),runs:list('runs').filter(r=>r.conversationId===c.id&&r.userId===res.locals.user.id)});});
+app.post('/api/conversations/:id/messages',(req,res)=>res.json(startRun(res.locals.user,bearer(req),req.params.id,z.string().parse(req.body.question),userMode(req.body.mode))));
+app.get('/api/runs/:id/events',(req,res)=>{
+ own(res.locals.user,'runs',req.params.id);
+ res.setHeader('Content-Type','text/event-stream');res.setHeader('Cache-Control','no-cache');res.setHeader('Connection','keep-alive');res.flushHeaders();
+ let after=Number(req.query.after||0);let idle=0;
+ const send=()=>{for(const e of events(req.params.id,after)){res.write('id: '+e.seq+'\ndata: '+JSON.stringify(e)+'\n\n');after=e.seq;idle=0;}
+ const r=get('runs',req.params.id);if(r?.status!=='running'&&++idle>3){clearInterval(timer);res.end();}};
+ const timer=setInterval(send,200);send();req.on('close',()=>clearInterval(timer));
+});
+app.post('/api/runs/:id/cancel',(req,res)=>{own(res.locals.user,'runs',req.params.id);controllers.get(req.params.id)?.abort();res.json({ok:true});});
+app.get('/api/answers/:id/suggestions',(req,res)=>{const a=visibleAnswer(own(res.locals.user,'answers',req.params.id));res.json({answerId:a.id,actions:a.actions,tools:a.tools,status:a.suggestionsStatus,error:a.suggestionsError,version:SUGGESTIONS_VERSION});});
+app.post('/api/answers/:id/suggestions/retry',(req,res)=>{const a=visibleAnswer(own(res.locals.user,'answers',req.params.id));res.json({answerId:a.id,actions:a.actions,tools:a.tools,status:a.suggestionsStatus,version:SUGGESTIONS_VERSION});});
+app.get('/api/answers/:id/workbench',(req,res)=>{own(res.locals.user,'answers',req.params.id);res.json(own(res.locals.user,'workbenches',req.params.id));});
+app.get('/api/answers/:id/sources',(req,res)=>{const a=own(res.locals.user,'answers',req.params.id);for(const s of a.sources.filter((s:any)=>s.sourceKind==='crm'))allowedRecord(res.locals.user,s.recordId);res.json(a.sources.map((s:any)=>{const current=s.sourceKind==='crm'?record(s.recordId):s.sourceKind==='memory'?get('memories',s.recordId):null;return {...s,sourceUpdated:!!current&&(String(current.version||'')!==String(s.version||'')||current.updatedAt!==s.updatedAt||(s.sourceKind==='crm'&&(current.content||current.summary||current.description||'')!==s.excerpt))};}));});
+app.post('/api/actions/prepare',async(req,res)=>res.json(await prepareAction(res.locals.user,bearer(req),req.body.answerId,req.body.actionId,userMode(req.body.mode))));
+app.post('/api/drafts',(req,res)=>{const a=own(res.locals.user,'answers',req.body.answerId);res.json(makeDraft(res.locals.user,a.scope,req.body.kind,req.body.fields,a.id));});
+app.patch('/api/drafts/:id',(req,res)=>res.json(reviseDraft(res.locals.user,req.params.id,req.body.version,req.body.fields)));
+app.post('/api/drafts/:id/confirm',async(req,res)=>res.json(await executeDraft(res.locals.user,bearer(req),req.params.id,req.body.version)));
+app.post('/api/drafts/batch-confirm',async(req,res)=>res.json(await executeBatch(res.locals.user,bearer(req),z.array(z.object({id:z.string(),version:z.number().int()})).min(1).max(10).parse(req.body.items))));
+app.get('/api/stages',(_,res)=>res.json(profiles));
+app.get('/api/knowledge',(_,res)=>res.json({documents:salesDocuments,pillars:knowledgePillars.map(name=>({name,count:salesDocuments.filter(d=>d.pillar===name).length,subcategories:strategyTopics.filter(t=>t.pillar===name).map(t=>({id:t.id,title:t.title}))})),researchSources:strategyResearchSources,cards:db.prepare('SELECT * FROM knowledge ORDER BY id').all(),profiles,version:knowledgeVersion}));
+const admin=(res:express.Response)=>{if(res.locals.user.role!=='admin')throw new AppError('FORBIDDEN','需要Mock管理员',403);};
+app.get('/api/admin/settings/search',(_,res)=>{admin(res);res.json(publicSearchConfig());});
+app.put('/api/admin/settings/search',(req,res)=>{admin(res);res.json(saveSearchConfig(req.body));});
+app.post('/api/admin/settings/search/test',async(_,res)=>{admin(res);const r=await webSearch({query:'battery energy storage project development',numResults:1});res.json({ok:true,provider:r.provider,resultCount:r.results.length,durationMs:r.durationMs});});
+app.post('/api/web-search',async(req,res)=>{if(req.body.scope)authorize(res.locals.user,scopeSchema.parse(req.body.scope));res.json(await webSearch(req.body));});
+app.get('/api/admin/settings/model',(_,res)=>{admin(res);res.json(publicModelConfig());});
+app.put('/api/admin/settings/model',(req,res)=>{admin(res);if(list('runs').some(r=>r.status==='running'))throw new AppError('CONFLICT','请等待当前对话完成后保存配置',409);const result=saveModelConfig(req.body);put('settings_audit',uid('settings'),{userId:res.locals.user.id,operation:'model_config_saved',at:now(),model:result.model});res.json(result);});
+app.post('/api/admin/settings/model/test',async(req,res)=>{admin(res);res.json(await testModelConfig(req.body));});
+app.get('/api/project-portraits',(req,res)=>res.json(portraitList(res.locals.user,req.query.ownerId?String(req.query.ownerId):undefined)));
+app.post('/api/project-portraits/resolve',(req,res)=>res.json(getPortrait(res.locals.user,scopeSchema.parse(req.body.scope))));
+app.get('/api/project-portraits/:id',(req,res)=>res.json(readPortrait(res.locals.user,req.params.id)));
+app.get('/api/project-portraits/:id/versions',(req,res)=>res.json(portraitVersions(res.locals.user,req.params.id)));
+app.patch('/api/project-portraits/:id',(req,res)=>res.json(changePortrait(res.locals.user,req.params.id,req.body)));
+app.get('/api/memories',(req,res)=>res.json(listMemories(res.locals.user,req.query.ownerId?String(req.query.ownerId):undefined)));
+app.get('/api/memories/archives',(_,res)=>res.json(archivedMemories(res.locals.user)));
+app.get('/api/memories/:id/versions',(req,res)=>res.json(memoryVersions(res.locals.user,req.params.id)));
+app.get('/api/memories/:id',(req,res)=>res.json(readMemory(res.locals.user,req.params.id)));
+app.patch('/api/memories/:id',(req,res)=>{const body=z.object({operation:z.enum(['add','correct','disable','restore','confirm','rollback']),version:z.number().int().min(0),reason:z.string().trim().min(1).max(1000),content:z.string().trim().min(1).max(2000).optional(),category:z.enum(['稳定特征','长期偏好','关注主题','未决问题','下一步','待核实陈述']).optional(),entryId:z.string().optional(),rollbackVersion:z.number().int().positive().optional()}).parse(req.body);res.json(changeMemory(res.locals.user,req.params.id,body));});
+app.get('/api/admin/memory',(_,res)=>res.json(adminMemories(res.locals.user)));
+app.get('/api/admin/memory/versions',(req,res)=>{res.json(memoryVersions(res.locals.user,String(req.query.id))); });
+app.post('/api/admin/memory/revise',(req,res)=>res.json(reviseMemory(res.locals.user,req.body.id,req.body.reason,req.body.content,req.body.rollbackVersion,req.body.excludeSource)));
+app.post('/api/admin/memory/verify',(req,res)=>res.json(verifyMemory(res.locals.user,req.body.id,req.body.entryId,req.body.reason,req.body.evidenceIds)));
+app.post('/api/admin/memory/retry',async(req,res)=>res.json(await retryMemoryJob(res.locals.user,req.body.jobId)));
+let memoryWorkerBusy=false;setInterval(async()=>{if(memoryWorkerBusy)return;memoryWorkerBusy=true;try{const actor=users().find((u:any)=>u.role==='admin');for(const job of list('memory_jobs').filter(j=>j.status==='failed'&&(j.attempts||0)<3)){if(!job.memoryId&&!modelStatus().configured&&get('answers',job.answerId)?.mode==='live')continue;if(actor)await retryMemoryJob(actor,job.id||job.answerId||'projection:'+job.memoryId).catch(()=>{});}}finally{memoryWorkerBusy=false;}},30000).unref();
+app.get('/api/admin/runs',(_,res)=>{admin(res);res.json({runs:list('runs'),calls:list('run_calls'),mcpCalls:list('tool_calls'),executions:list('executions'),memoryJobs:list('memory_jobs'),events:db.prepare('SELECT COUNT(*) n FROM events').get()});});
+app.get('/api/admin/scenarios',(_,res)=>{admin(res);res.json({faults:meta('faults',{}),seedVersion:meta('seedVersion',''),counts:db.prepare('SELECT type,COUNT(*) count FROM records GROUP BY type').all()});});
+app.post('/api/admin/scenarios/faults',(req,res)=>{admin(res);const f=z.object({failTools:z.array(z.string()).default([]),timeoutTools:z.array(z.string()).default([]),responseLost:z.boolean().default(false)}).parse(req.body);setMeta('faults',f);res.json(f);});
+app.post('/api/admin/scenarios/convert',(req,res)=>{admin(res);const l=allowedRecord(res.locals.user,z.string().parse(req.body.leadId),'lead');if(l.status==='converted')throw new AppError('CONFLICT','线索已转换');const id=uid('OP');const o={...l,id,type:'opportunity',stage:'S1',status:'active',convertedFromLeadId:l.id,evidence:{need:true,budget:false},updatedAt:now()};db.exec('BEGIN');try{saveRecord(o);saveRecord({...l,status:'converted',convertedOpportunityId:id});put('conversion',uid('conv'),{leadId:l.id,opportunityId:id,at:now()});db.exec('COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}res.json(o);});
+app.get('/api/admin/evaluations',(_,res)=>{admin(res);initEvaluations();res.json({cases:list('evaluation_cases'),runs:list('evaluation_runs')});});
+app.get('/api/admin/export/:runId',(req,res)=>{admin(res);const run=get('runs',req.params.runId);if(!run)throw new AppError('NOT_FOUND','运行不存在');res.json({run,events:events(run.id),answer:get('answers',run.answerId),calls:list('run_calls').filter(c=>c.runId===run.id)});});
+if(process.argv.includes('--production')){app.use(express.static(resolve('dist/web')));app.get('/{*path}',(_,res)=>res.sendFile(resolve('dist/web/index.html')));}
+else{const vite=await createViteServer({configFile:resolve('vite.config.ts'),server:{middlewareMode:true},appType:'spa'});app.use(vite.middlewares);}
+app.use((err:any,_req:express.Request,res:express.Response,_next:express.NextFunction)=>{if(res.headersSent)return res.end();res.status(err.http||400).json({error:err.code||'INVALID_ARGUMENT',message:err instanceof z.ZodError?err.issues.map(i=>i.message).join('；'):err.message});});
+export const server=app.listen(Number(process.env.APP_PORT||3001),process.env.APP_HOST||'127.0.0.1',()=>console.log('Sales Buddy: http://127.0.0.1:'+(process.env.APP_PORT||3001)));
+

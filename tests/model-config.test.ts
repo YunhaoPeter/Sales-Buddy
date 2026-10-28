@@ -1,0 +1,15 @@
+import {test,after} from 'node:test';
+import assert from 'node:assert/strict';
+import {mkdtempSync,writeFileSync,readFileSync} from 'node:fs';
+import {join} from 'node:path';
+const path=join(mkdtempSync(join(process.cwd(),'data-test-config-')),'.env');
+process.env.MODEL_CONFIG_PATH=path;
+writeFileSync(path,'APP_PORT=3001\nMODEL_PROTOCOL=chat_completions\nMODEL_API_BASE_URL=https://example.test/v1\nMODEL_NAME=sample\nMODEL_API_KEY=test-secret\nMODEL_TIMEOUT_MS=120000\n# retained comment\n');
+const M=await import('../apps/server/src/model-config.ts');
+const input=()=>({...M.publicModelConfig(),apiKey:''});
+test('配置读取不返回密钥',()=>{const c=M.publicModelConfig();assert.equal(c.hasApiKey,true);assert.ok(!JSON.stringify(c).includes('test-secret'));assert.ok(!('apiKey' in c));});
+test('保存空密钥保留原值并立即生效',()=>{const next=M.saveModelConfig({...input(),model:'changed'});assert.equal(next.model,'changed');assert.equal(process.env.MODEL_API_KEY,'test-secret');assert.ok(readFileSync(path,'utf8').includes('# retained comment'));assert.ok(readFileSync(path,'utf8').includes('APP_PORT=3001'));});
+test('拒绝逗号多模型和携带凭据地址',()=>{assert.throws(()=>M.saveModelConfig({...input(),model:'a,b'}),/单个模型/);assert.throws(()=>M.saveModelConfig({...input(),baseUrl:'https://user:secret@example.test/v1'}),/不能含凭据/);});
+test('拒绝过期配置覆盖',()=>{const old=input();M.saveModelConfig({...old,model:'new-model'});assert.throws(()=>M.saveModelConfig(old),/重新加载/);});
+test('更新密钥不返回原文且拒绝换行',()=>{M.saveModelConfig({...input(),apiKey:'replacement-secret'});assert.equal(process.env.MODEL_API_KEY,'replacement-secret');assert.ok(!JSON.stringify(M.publicModelConfig()).includes('replacement-secret'));assert.throws(()=>M.saveModelConfig({...input(),apiKey:'bad\nkey'}),/换行/);});
+test('连接测试使用表单且不保存，服务错误不泄露响应',async()=>{const original=globalThis.fetch;const before=readFileSync(path,'utf8');try{globalThis.fetch=async()=>new Response(JSON.stringify({choices:[{message:{content:'OK'}}]}),{status:200});assert.equal((await M.testModelConfig(input())).ok,true);assert.equal(readFileSync(path,'utf8'),before);globalThis.fetch=async()=>new Response('replacement-secret',{status:401});await assert.rejects(()=>M.testModelConfig(input()),e=>e instanceof Error&&e.message.includes('401')&&!e.message.includes('replacement-secret'));}finally{globalThis.fetch=original;}});

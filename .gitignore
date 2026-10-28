@@ -1,0 +1,24 @@
+node_modules/
+dist/
+.env
+data/
+test-results/
+playwright-report/
+data-test-*/
+
+.env.tmp
+
+.build/
+
+# Credentials, local databases, uploads, memories and generated reports
+.env.*
+!.env.example
+*.sqlite
+*.sqlite-*
+*.db
+*.log
+coverage/
+docs/*.json
+docs/screenshots/
+.DS_Store
+Thumbs.db

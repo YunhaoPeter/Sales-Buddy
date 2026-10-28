@@ -1,0 +1,14 @@
+import 'dotenv/config';
+import {DatabaseSync} from 'node:sqlite';
+import {mkdirSync} from 'node:fs';
+import {resolve} from 'node:path';
+const path=resolve(process.env.DATABASE_PATH||'data/app.sqlite');
+mkdirSync(resolve('data/backups'),{recursive:true});
+const backup=resolve('data/backups/app-before-linked-'+new Date().toISOString().replace(/[:.]/g,'-')+'.sqlite');
+const before=new DatabaseSync(path);before.exec("VACUUM INTO '"+backup.replace(/'/g,"''")+"'");before.close();
+console.log('Backup:',backup);
+const {seed}=await import('../apps/server/src/seed.ts');seed();
+const {auditFixtureRelations}=await import('../apps/server/src/mock-fixtures-v2.ts');
+const {db,meta}=await import('../apps/server/src/db.ts');
+console.log(JSON.stringify({audit:auditFixtureRelations(),migration:meta('mockFixtureMigration',null)},null,2));
+db.close();
