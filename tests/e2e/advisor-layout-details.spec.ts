@@ -12,5 +12,5 @@ test('所有CRM实体返回结构化详情，跨客户权限仍受限制',async(
 });
 test('增量回答和整理状态在完成前可见',async({page,request})=>{
  await page.goto('/');await page.getByRole('button',{name:/张小小/}).click();await page.getByLabel('搜索客户或项目').fill('英国储能一期');await page.getByRole('button',{name:/商机.*英国储能一期/}).click();await page.getByRole('button',{name:'新对话',exact:true}).click();
- let streamed=false,status=false;await page.route('**/api/runs/*/events',async route=>{const response=await route.fetch();const body=await response.text();streamed=body.includes('answer_delta');status=body.includes('run_phase');await route.fulfill({response,body});});await page.getByLabel('发送问题').fill('分析现状');await page.getByRole('button',{name:'发送',exact:true}).click();await expect.poll(()=>streamed&&status).toBe(true);await expect(page.locator('.message.assistant').last()).toContainText('需要你确认');
+ let streamed=false,status=false;await page.route('**/api/runs/*/events',async route=>{const response=await route.fetch();const body=await response.text();streamed=body.includes('answer_delta');status=body.includes('run_phase');await route.fulfill({response,body});});await page.getByLabel('发送问题').fill('分析现状');await page.getByRole('button',{name:'发送',exact:true}).click();await expect.poll(()=>streamed&&status).toBe(true);await expect(page.locator('.message.assistant').last()).toContainText('下一步推进');
 });

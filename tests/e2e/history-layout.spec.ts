@@ -2,7 +2,7 @@ import {test,expect} from '@playwright/test';
 test('客户级对话进入最近清单、刷新保留且日志可打开原会话',async({page})=>{
  await page.goto('/');await page.getByRole('button',{name:/张小小/}).click();await page.getByLabel('搜索客户或项目').fill('Northstar');await page.getByRole('button',{name:/客户.*Northstar Energy/}).click();
  await page.getByRole('button',{name:'新对话',exact:true}).click();const question='客户级最近清单与日志验证 '+Date.now();await page.getByLabel('发送问题').fill(question);await page.getByRole('button',{name:'发送',exact:true}).click();await expect(page.getByText('常用工具',{exact:true})).toBeVisible();await expect(page.getByRole('group',{name:'建议提问'}).last()).toBeVisible();
- await page.getByRole('button',{name:'销售战略参谋',exact:true}).click();const card=page.locator('.recent-card').filter({has:page.getByRole('heading',{name:'Northstar Energy',exact:true})});await expect(card).toContainText(question);
+ await page.getByRole('button',{name:'赢单领航员',exact:true}).click();const card=page.locator('.recent-card').filter({has:page.getByRole('heading',{name:'Northstar Energy',exact:true})});await expect(card).toContainText(question);
  await page.reload();await expect(card).toContainText(question);await page.screenshot({path:'docs/screenshots/recent-customer-projects.png',fullPage:true});
  await page.getByRole('button',{name:'对话日志',exact:true}).click();const row=page.locator('tr').filter({hasText:question});await expect(row).toContainText('已完成');await page.screenshot({path:'docs/screenshots/conversation-logs.png',fullPage:true});await row.getByRole('button',{name:'打开原会话'}).click();await expect(page.getByRole('heading',{name:'Northstar Energy',exact:true})).toBeVisible();await expect(page.locator('.user-bubble').filter({hasText:question})).toBeVisible();
 });
