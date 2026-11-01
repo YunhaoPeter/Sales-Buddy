@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-async function openCustomer(page:any){await page.goto('/');await page.getByRole('button',{name:/张小小/}).click();await page.getByLabel('搜索客户或项目').fill('Northstar');await page.getByRole('button',{name:/客户.*Northstar Energy/}).click();}
+async function openCustomer(page:any){await page.goto('/');await page.getByRole('button',{name:/张小小/}).click();await page.getByLabel('搜索客户或项目').fill('Northstar');await page.getByRole('button',{name:/客户.*Northstar Energy/}).click();await page.getByRole('button',{name:'新建对话',exact:true}).click();}
 test('最近真实回复：历史宽表可读、可滚动、标题独立成行',async({page,request})=>{
  const login=await (await request.post('/api/mock-session',{data:{userId:'U-018'}})).json();
  const cs=await (await request.get('/api/conversations',{headers:{Authorization:'Bearer '+login.token}})).json();

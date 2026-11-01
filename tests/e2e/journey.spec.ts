@@ -6,7 +6,7 @@ test('完整旅程：搜索、MCP分析、来源、确认创建、CRM回查、�
  await expect(page.getByRole('heading',{name:'搜索你的客户 / 项目'})).toBeVisible();
  await page.screenshot({path:'docs/screenshots/home.png',fullPage:true});
  await page.getByLabel('搜索客户或项目').fill('英国储能一期');
- await page.getByRole('button',{name:/商机.*英国储能一期/}).click();
+ await page.getByRole('button',{name:/商机.*英国储能一期/}).click();await page.getByRole('button',{name:'新建对话',exact:true}).click();
  await expect(page.getByRole('heading',{name:'英国储能一期',exact:true})).toBeVisible();
  await page.getByRole('button',{name:'新对话',exact:true}).click();
  await page.getByLabel('发送问题').fill('分析当前现状，项目为什么还推不动，下一步做什么？');
@@ -32,8 +32,6 @@ test('完整旅程：搜索、MCP分析、来源、确认创建、CRM回查、�
  await draft.getByRole('button',{name:'',exact:true}).first().click();
  await page.screenshot({path:'docs/screenshots/conversation.png',fullPage:true});
  await page.reload();
- await page.getByLabel('搜索客户或项目').fill('英国储能一期');
- await page.getByRole('button',{name:/商机.*英国储能一期/}).click();
  await expect(page.getByText('常用工具',{exact:true})).toBeVisible();
  await page.getByRole('button',{name:'客户360 / CRM',exact:true}).click();
  await page.getByRole('button',{name:'待办',exact:true}).click();
