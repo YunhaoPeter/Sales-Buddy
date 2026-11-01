@@ -5,7 +5,7 @@ import {own,makeDraft} from './crm.ts';
 import {executeDraft} from './agent.ts';
 import {scopeSchema,AppError} from '../../../packages/contracts/index.ts';
 import {catalog,currentKnowledge,moduleSpec,prepareKnowledgeImport,confirmKnowledgeImport,restoreKnowledge,knowledgeVersions,exportKnowledge} from './navigator-knowledge.ts';
-import {navigatorState,navigatorProfiles,navigatorVersions,retryNavigatorProjection,startAssessment,readAssessment,answerAssessment,confirmAssessment,proposeNavigatorUpdate,confirmNavigatorProposal} from './navigator.ts';
+import {navigatorState,navigatorProfiles,navigatorVersions,retryNavigatorProjection,startAssessment,pauseAssessment,readAssessment,answerAssessment,confirmAssessment,proposeNavigatorUpdate,confirmNavigatorProposal} from './navigator.ts';
 export const navigatorRoutes=Router();
 const upload=multer({storage:multer.memoryStorage(),limits:{fileSize:8*1024*1024,files:1}});
 const admin=(res:any)=>{if(res.locals.user.role!=='admin')throw new AppError('FORBIDDEN','仅管理员可维护知识库',403);return res.locals.user;};
@@ -13,6 +13,7 @@ navigatorRoutes.get('/navigator/state',(req,res)=>res.json(navigatorState(res.lo
 navigatorRoutes.get('/navigator/profiles',(req,res)=>res.json(navigatorProfiles(res.locals.user,req.query.ownerId?String(req.query.ownerId):res.locals.user.id)));
 navigatorRoutes.get('/navigator/profiles/:id/versions',(req,res)=>res.json(navigatorVersions(res.locals.user,req.params.id)));
 navigatorRoutes.post('/navigator/assessments',(req,res)=>res.json(startAssessment(res.locals.user,scopeSchema.parse(req.body.scope),req.body.reset===true,req.body.candidates)));
+navigatorRoutes.post('/navigator/assessments/:id/pause',(req,res)=>res.json(pauseAssessment(res.locals.user,req.params.id,req.body)));
 navigatorRoutes.get('/navigator/assessments/:id',(req,res)=>res.json(readAssessment(res.locals.user,req.params.id)));
 navigatorRoutes.post('/navigator/assessments/:id/answers',async(req,res)=>res.json(await answerAssessment(res.locals.user,req.params.id,req.body)));
 navigatorRoutes.post('/navigator/assessments/:id/confirm',(req,res)=>res.json(confirmAssessment(res.locals.user,req.params.id,req.body.revision)));
