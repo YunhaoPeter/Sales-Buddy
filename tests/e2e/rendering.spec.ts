@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-async function openCustomer(page:any){await page.goto('/');await page.getByRole('button',{name:/张小小/}).click();await page.getByLabel('搜索客户或项目').fill('Northstar');await page.getByRole('button',{name:/客户.*Northstar Energy/}).click();}
+async function openCustomer(page:any){await page.goto('/');await page.getByRole('button',{name:/张小小/}).click();await page.getByLabel('搜索客户或项目').fill('Northstar');await page.getByRole('button',{name:/客户.*Northstar Energy/}).click();await page.getByRole('button',{name:'新建对话',exact:true}).click();}
 test('最近真实回复：历史宽表可读、可滚动、标题独立成行',async({page,request})=>{
  const login=await (await request.post('/api/mock-session',{data:{userId:'U-018'}})).json();
  const cs=await (await request.get('/api/conversations',{headers:{Authorization:'Bearer '+login.token}})).json();
@@ -13,7 +13,7 @@ test('最近真实回复：历史宽表可读、可滚动、标题独立成行',
  await expect(wide).toBeVisible();
  await expect.poll(()=>wide.evaluate(el=>el.isConnected&&el.clientWidth>0&&el.scrollWidth>el.clientWidth)).toBe(true);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
- await page.screenshot({path:'docs/screenshots/history-tables.png',fullPage:true});
+ await page.screenshot({path:'runtime/reports/screenshots/history-tables.png',fullPage:true});
 });
 test('echarts表格和图形：搜索分页、CSV、SVG、格式错误与历史回放',async({page})=>{
  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
@@ -26,7 +26,7 @@ test('echarts表格和图形：搜索分页、CSV、SVG、格式错误与历史�
  await tableCard.getByRole('textbox').fill('OP-11');await expect(tableCard.locator('tbody tr')).toHaveCount(1);
  const dl=page.waitForEvent('download');await tableCard.getByRole('button',{name:'导出 CSV'}).click();expect((await dl).suggestedFilename()).toBe('项目推进清单.csv');
  await expect(page.locator('.chart-card svg')).toBeVisible();await expect(page.getByText('可视化数据格式不完整，以下保留原始内容。')).toBeVisible();
- await page.screenshot({path:'docs/screenshots/echarts-output.png',fullPage:true});
+ await page.screenshot({path:'runtime/reports/screenshots/echarts-output.png',fullPage:true});
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);expect(errors).toEqual([]);
 });
 
@@ -38,6 +38,6 @@ test('知识库展示原创活动指引并可下载MD',async({page,request})=>{
  const body=page.getByRole('article',{name:'销售指引正文'});await expect(body.getByRole('heading',{name:'活动1：需求基线澄清会'})).toBeVisible();
  await expect(body).toContainText('产出物');await expect(body).toContainText('完成判定');await expect(body).toContainText('CRM闭环');
  const download=page.waitForEvent('download');await page.getByRole('button',{name:'下载 MD'}).click();expect((await download).suggestedFilename()).toBe('KB-S3-playbook.md');
- await page.screenshot({path:'docs/screenshots/sales-playbooks.png',fullPage:true});
+ await page.screenshot({path:'runtime/reports/screenshots/sales-playbooks.png',fullPage:true});
  const login=await (await request.post('/api/mock-session',{data:{userId:'U-018'}})).json();const data=await (await request.get('/api/knowledge',{headers:{Authorization:'Bearer '+login.token}})).json();expect(data.documents).toHaveLength(58);expect(data.sources).toBeUndefined();expect(data.cards.every((d:any)=>!d.id.startsWith('KB-SRC-'))).toBe(true);
 });

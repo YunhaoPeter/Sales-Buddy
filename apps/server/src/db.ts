@@ -1,3 +1,4 @@
+import {databasePath} from '../../../packages/paths.ts';
 import 'dotenv/config';
 import {DatabaseSync} from 'node:sqlite';
 import {mkdirSync,readFileSync,writeFileSync,existsSync} from 'node:fs';
@@ -5,7 +6,7 @@ import {dirname,resolve} from 'node:path';
 import {randomUUID} from 'node:crypto';
 export const now=()=>process.env.BUSINESS_CLOCK||'2026-10-25T09:00:00+08:00';
 export const uid=(prefix='id')=>prefix+'-'+randomUUID().slice(0,12);
-export const dbPath=resolve(process.env.DATABASE_PATH||'data/app.sqlite');
+export const dbPath=databasePath();
 mkdirSync(dirname(dbPath),{recursive:true});
 export const db=new DatabaseSync(dbPath);
 db.exec(`
