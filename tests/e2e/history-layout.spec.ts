@@ -16,4 +16,3 @@ test('120个会话仅滚动左栏，输入框与主标题保持在视口内',asy
  await page.screenshot({path:'runtime/reports/screenshots/many-session-layout.png',fullPage:true});
  await page.setViewportSize({width:1280,height:720});await expect(input).toBeVisible();const smaller=await input.boundingBox();expect(smaller!.y+smaller!.height).toBeLessThan(720);expect(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight+1)).toBe(true);
 });
-
