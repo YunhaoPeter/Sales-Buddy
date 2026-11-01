@@ -1,4 +1,7 @@
+import {splitNavigatorOutput,NAVIGATOR_OUTPUT_PROMPT} from '../../../packages/navigator-output.ts';
 import {visibleStreamText} from './answer-stream.ts';
+import {navigatorContext,NAVIGATOR_POLICY} from './navigator.ts';
+import {initNavigatorKnowledge} from './navigator-knowledge.ts';
 import {projectInterviewPlan,interviewSection,markInterviewAsked,INTERVIEW_POLICY,resolveInterviewScope} from './project-interview.ts';
 import {portraitContext,applyPortraitUpdates,portraitId,PROJECT_PORTRAIT_POLICY} from './project-portrait.ts';
 import {WEB_SEARCH_POLICY} from './web-search.ts';
@@ -67,9 +70,9 @@ async function runAnswer(u:User,token:string,run:any,controller:AbortController)
  const snapshot=()=>{put('workbenches',run.answerId,{...wb,userId:u.id,answerId:run.answerId,conversationId:run.conversationId,updatedAt:now()},u.id,run.scope.objectId);publish('workbench',wb);};
  const collect=(refs:SourceRef[])=>{wb.sources=[...new Map([...wb.sources,...refs].map(r=>[r.sourceKind+':'+r.entityType+':'+r.recordId+':'+(r.version||''),r])).values()];snapshot();};
  try{
- publish('run_started',run);publish('run_phase',{phase:'retrieving',label:'正在读取CRM关联资料'});snapshot();client=await connectMcp(token);
+ publish('run_started',run);publish('run_phase',{phase:'retrieving',label:'正在读取CRM关联资料'});snapshot();await initNavigatorKnowledge();client=await connectMcp(token);
  const call=async(name:string,args:any)=>{if(controller.signal.aborted)throw new AppError('CANCELLED','已取消');args=boundToolArguments(run.scope,name,args);if(++toolCount>20)throw new AppError('LIMIT_EXCEEDED','工具调用达到20次上限');publish('tool_started',{name});const started=Date.now();try{const result=await callMcp(client,name,args);put('run_calls',uid('rc'),{runId:run.id,userId:u.id,name,args,recordRefs:result.recordRefs,durationMs:Date.now()-started,status:'success'},u.id,run.scope.objectId);for(const r of result.records||[])retrieved.set(r.id,r);collect(result.recordRefs||[]);return result;}catch(e:any){put('run_calls',uid('rc'),{runId:run.id,userId:u.id,name,args,status:'failed',message:e.message},u.id,run.scope.objectId);throw e;}};
- const scope=run.scope as Scope;interview=projectInterviewPlan(u,run.portraitScope||scope,run.question);const object=(await call('get_'+scope.objectType,{id:scope.objectId})).records[0];
+ const scope=run.scope as Scope;interview=scope.objectType==='customer'?projectInterviewPlan(u,run.portraitScope||scope,run.question):null;const object=(await call('get_'+scope.objectType,{id:scope.objectId})).records[0];
  const essentials=scope.objectType==='customer'?['list_contacts','list_leads','list_opportunities','list_tasks','list_business_activities']:['list_contacts','list_project_contacts',scope.objectType==='lead'?'list_lead_progress':'list_opportunity_progress','list_tasks','list_business_activities','list_meeting_records','list_evidence_documents'];
  if(scope.objectType==='customer'&&run.responsePurpose!=='analysis')essentials.push('list_lead_progress','list_opportunity_progress','list_meeting_records');
  let partial=false;
@@ -77,12 +80,13 @@ async function runAnswer(u:User,token:string,run:any,controller:AbortController)
  if(scope.objectType==='customer'){for(const p of [...retrieved.values()].filter(r=>['lead','opportunity'].includes(r.type)).slice(0,4))try{await call(p.type==='lead'?'list_lead_progress':'list_opportunity_progress',{scope,projectId:p.id,limit:8});}catch{partial=true;}}
  wb.steps[0].status='completed';wb.steps[1].status='running';wb.dataStatus=partial?'partial_failure':'completed';snapshot();
  const customer=scope.objectType==='customer'?object:(await call('get_customer',{id:scope.customerId})).records[0];
+ const navigator=scope.objectType!=='customer'?navigatorContext(u,scope,run.question):null;
  const assessment=assess(scope,{entity:object,contacts:wb.sources.filter(s=>s.entityType==='contact')});const knowledge=searchKnowledge(run.question,object.stage||'all',customer.countryCode,object.businessMode||customer.businessMode||'all');
  collect(knowledge.map((k:any)=>({recordId:k.id,entityType:'knowledge',title:k.title,customerId:scope.customerId,updatedAt:'2026-10-25',capturedAt:now(),sourceKind:'knowledge',version:String(k.version),excerpt:k.body,sourceUrl:k.source?.url,reviewStatus:k.reviewStatus})));
  const memories=projectMemory(u,scope);
  collect(memories.map(m=>({recordId:m.id,entityType:'memory',title:m.title,customerId:scope.customerId,updatedAt:m.updatedAt,capturedAt:now(),sourceKind:'memory',version:String(m.version),excerpt:m.markdown})));
  wb.steps[1].status='completed';wb.steps[2].status='running';snapshot();publish('run_phase',{phase:'generating',label:'正在整理建议与推荐行动'});
- let inlineQuestions:any[]=[];let text='';let answerQuality:any=null;let suggestionFields:any[]|null=null;const purpose:ResponsePurpose=run.responsePurpose||'analysis';
+ let inlineQuestions:any[]=[];let text='';let answerQuality:any=null;let suggestionFields:any[]|null=null;let navigatorActions:any[]=[];const purpose:ResponsePurpose=run.responsePurpose||'analysis';
  if(run.mode==='replay'){
  text='> 演示模式：以下由规则与固定模板组织，CRM数据经真实MCP读取，不代表在线模型推理。\n\n';
  text+='## '+object.name+'：当前推进判断\n\n';
@@ -104,6 +108,7 @@ async function runAnswer(u:User,token:string,run:any,controller:AbortController)
  const old=list('messages').filter(m=>m.conversationId===run.conversationId&&m.userId===u.id).reverse().slice(-12);
  const parent=run.parentAnswerId?own(u,'answers',run.parentAnswerId):null;const context={scope,object,assessment,dataVersion:'2026.10.27-v2-linked',responsePurpose:purpose,previousAnswer:parent?{id:parent.id,text:parent.text.slice(0,1800)}:null,retrievedRecords:[...retrieved.values()],records:wb.sources.filter(s=>s.sourceKind==='crm'),knowledge,memories:memoryContext(u,scope,run.question),projectPortraits:portraitContext(u,run.portraitScope||scope),focusedProject:run.portraitScope?record(run.portraitScope.objectId):null,projectInterview:interview};
  const messages:any[]=[{role:'system',content:suggestionInstructions[purpose]},{role:'system',content:VISUALIZATION_PROMPT},{role:'system',content:advisorPolicy},{role:'system',content:WEB_SEARCH_POLICY},{role:'system',content:PROJECT_PORTRAIT_POLICY},{role:'system',content:INTERVIEW_POLICY},{role:'system',content:INLINE_FOLLOWUPS_PROMPT},{role:'system',content:'以最新CRM结构化数据为准。客户/项目联系人通过关联记录确定，不使用其他客户姓名；旧历史回答可能引用已升级的样例，不把旧回答当当前事实。evidence布尔值仅为线索，是否合同已签、许可已批、资金到账以具体状态和证据为准，不从阶段号推断。当前应用上下文（其中用户陈述仍需核实）：'+JSON.stringify(context)},...old.filter(m=>m.role!=='user'||!isInternalText(m.content)).map(m=>({role:m.role,content:m.role==='assistant'?m.content.slice(0,600):m.content}))];
+ if(scope.objectType!=='customer')messages.unshift({role:'system',content:NAVIGATOR_POLICY+'\n'+NAVIGATOR_OUTPUT_PROMPT+'\n当前项目赢单领航员上下文：'+JSON.stringify(navigator)});
  let done=false;
  for(let round=0;round<8;round++){
  let roundText='',sent='';publish('run_phase',{phase:'generating',label:'正在整理建议与推荐行动'});
@@ -113,13 +118,14 @@ async function runAnswer(u:User,token:string,run:any,controller:AbortController)
  }
  if(!done)throw new AppError('LIMIT_EXCEEDED','模型达到8轮工具循环上限');
  if(!text.trim())throw new AppError('MODEL_API_ERROR','模型没有返回有效回答');
- const separated=splitInlineFollowups(text);text=separated.text;inlineQuestions=separated.questions;
+ const separated=splitInlineFollowups(text);const navigatorOutput=splitNavigatorOutput(separated.text);text=navigatorOutput.text;navigatorActions=navigatorOutput.actions;inlineQuestions=separated.questions;
  publish('run_phase',{phase:'refining',label:'正在校对答案与推荐行动'});const refined=await refineAnswer(text,run.question,[...retrieved.values()],controller.signal);text=refined.text;answerQuality=refined.quality;
  publish('answer_replace',{text});
  }
  const interviewText=interviewSection(interview);if(interviewText){text+=interviewText;publish('answer_delta',{text:interviewText});}
- wb.steps[2].status='completed';snapshot();const allActions=actions(scope,purpose,suggestionFields===null||suggestionFields.length>0);const toolsForAnswer=allActions.filter(a=>!isCreateAction(a));const suggested=allActions.filter(a=>isCreateAction(a)&&(a.actionType!=='prepare_progress'||/客户.*反馈|已确认|已完成|记录.*进展/.test(run.question)));
- const answer={id:run.answerId,userId:u.id,scope,conversationId:run.conversationId,runId:run.id,mode:run.mode,text,quality:answerQuality,projectInterview:interview,userQuestion:run.question,responsePurpose:purpose,suggestionFields,tools:toolsForAnswer,actions:suggested,suggestionsVersion:SUGGESTIONS_VERSION,suggestionsStatus:'completed',sources:wb.sources,assessment,createdAt:chatNow(),usage,toolCount,knowledgeVersion:2,promptVersion:ADVISOR_PROMPT_VERSION};
+ wb.steps[2].status='completed';snapshot();if(run.mode==='replay'&&scope.objectType!=='customer'&&purpose==='analysis'&&!acknowledgement(run.question))navigatorActions=assessment.actions.slice(0,3).map((s:string,i:number)=>({id:'nav-action-'+i,title:s,description:s+'，与相关负责人核实实际状态、下一节点与预期产出。',dueAt:null}));
+ const allActions=actions(scope,purpose,suggestionFields===null||suggestionFields.length>0);const toolsForAnswer=allActions.filter(a=>!isCreateAction(a));const suggested=allActions.filter(a=>isCreateAction(a)&&(a.actionType!=='prepare_progress'||/客户.*反馈|已确认|已完成|记录.*进展/.test(run.question)));
+ const answer={navigator,navigatorActions,id:run.answerId,userId:u.id,scope,conversationId:run.conversationId,runId:run.id,mode:run.mode,text,quality:answerQuality,projectInterview:interview,userQuestion:run.question,responsePurpose:purpose,suggestionFields,tools:toolsForAnswer,actions:suggested,suggestionsVersion:SUGGESTIONS_VERSION,suggestionsStatus:'completed',sources:wb.sources,assessment,createdAt:chatNow(),usage,toolCount,knowledgeVersion:2,promptVersion:ADVISOR_PROMPT_VERSION};
  publish('run_phase',{phase:'finalizing',label:'正在整理上下文追问'});try{const questions=await generateFollowups(u,answer,run.mode==='live'?inlineQuestions:undefined);answer.actions=[...questions,...suggested];}catch{answer.suggestionsStatus='unavailable';}
  markInterviewAsked(u,interview);put('answers',answer.id,answer,u.id,scope.objectId);put('messages',answer.id,{...answer,role:'assistant',content:text},u.id,scope.objectId);
  recordTurn(run,'completed',{completedAt:chatNow(),toolCount,answerPreview:text.slice(0,240)});clearTimeout(timeout);publish('answer_completed',visibleAnswer(get('answers',answer.id)));put('runs',run.id,{...run,status:'completed',completedAt:chatNow(),toolCount,usage},u.id,scope.objectId);publish('run_completed',{answerId:answer.id});
