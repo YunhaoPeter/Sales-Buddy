@@ -1,8 +1,9 @@
+import {readProfileProposal,updateProjectProfileSkill} from './navigator-profile-skill.ts';
 import {Router} from 'express';
 import multer from 'multer';
 import {get,put,allRecords} from './db.ts';
 import {own,makeDraft} from './crm.ts';
-import {executeDraft} from './agent.ts';
+import {executeDraft,startRun} from './agent.ts';
 import {scopeSchema,AppError} from '../../../packages/contracts/index.ts';
 import {catalog,currentKnowledge,moduleSpec,prepareKnowledgeImport,confirmKnowledgeImport,restoreKnowledge,knowledgeVersions,exportKnowledge} from './navigator-knowledge.ts';
 import {navigatorState,navigatorProfiles,navigatorVersions,retryNavigatorProjection,startAssessment,pauseAssessment,readAssessment,answerAssessment,confirmAssessment,proposeNavigatorUpdate,confirmNavigatorProposal} from './navigator.ts';
@@ -17,8 +18,10 @@ navigatorRoutes.post('/navigator/assessments/:id/pause',(req,res)=>res.json(paus
 navigatorRoutes.get('/navigator/assessments/:id',(req,res)=>res.json(readAssessment(res.locals.user,req.params.id)));
 navigatorRoutes.post('/navigator/assessments/:id/answers',async(req,res)=>res.json(await answerAssessment(res.locals.user,req.params.id,req.body)));
 navigatorRoutes.post('/navigator/assessments/:id/confirm',(req,res)=>res.json(confirmAssessment(res.locals.user,req.params.id,req.body.revision)));
+navigatorRoutes.post('/navigator/proposals/chat',(req,res)=>{const c=own(res.locals.user,'conversations',req.body.conversationId);res.json(startRun(res.locals.user,String(req.headers.authorization||'').replace(/^Bearer /,''),c.id,'请根据本次会话分析项目画像，整理更新建议，先让我确认，再更新。',process.env.SALES_BUDDY_TEST_MODE==='1'?'replay':'live',{profileUpdate:true,origin:'tool_shortcut'}));});
+navigatorRoutes.get('/navigator/proposals/:id',(req,res)=>res.json(readProfileProposal(res.locals.user,req.params.id)));
 navigatorRoutes.post('/navigator/proposals',async(req,res)=>res.json(await proposeNavigatorUpdate(res.locals.user,scopeSchema.parse(req.body.scope),req.body.conversationId)));
-navigatorRoutes.post('/navigator/proposals/:id/confirm',(req,res)=>res.json(confirmNavigatorProposal(res.locals.user,req.params.id,req.body.selected)));
+navigatorRoutes.post('/navigator/proposals/:id/confirm',(req,res)=>res.json(updateProjectProfileSkill(res.locals.user,req.params.id,req.body.selected)));
 navigatorRoutes.post('/navigator/tasks/:answerId/:actionId',async(req,res)=>{const u=res.locals.user,a=own(u,'answers',req.params.answerId),action=a.navigatorActions?.find((r:any)=>r.id===req.params.actionId);if(!action)throw new AppError('INVALID_ARGUMENT','行动不属于当前回答');const k=u.id+':'+a.id+':'+action.id;let d=get('navigator_task_drafts',k);if(!d){const fields={title:req.body.title,description:req.body.description,dueAt:req.body.dueAt,assigneeId:u.id,priority:'P1'};const existing=allRecords('task').find(r=>r.entityId===a.scope.objectId&&r.assigneeId===u.id&&r.status!=='completed'&&(r.title||r.name)===fields.title);if(existing){res.json({id:existing.id,existing:true});return;}d=makeDraft(u,a.scope,'task',fields,a.id);put('navigator_task_drafts',k,d,u.id,a.scope.objectId);}const r=await executeDraft(u,String(req.headers.authorization||'').replace(/^Bearer /,''),d.id,d.version);res.json({id:r.result?.records?.[0]?.id||d.id,result:r});});
 navigatorRoutes.get('/navigator/knowledge',(_req,res)=>res.json({modules:catalog(),matrix:currentKnowledge('matrix').rows,stages:currentKnowledge('stages').rows}));
 navigatorRoutes.get('/admin/navigator-knowledge/modules',(_req,res)=>{admin(res);res.json(catalog());});

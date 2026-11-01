@@ -46,3 +46,14 @@ test('阶段事项固定，日常对话重复更新同一槽位，历史自由�
  D.put('messages','fixed-m2',{id:'fixed-m2',userId:u.id,conversationId:'fixed-c',role:'user',origin:'user_input',content:'并网目前获批容量已经调整为80MW'});d=await N.proposeNavigatorUpdate(u,scope,'fixed-c');p=N.confirmNavigatorProposal(u,d.id,d.changes.map((q:any)=>q.id));assert.deepEqual(p.checkpoints.map((q:any)=>q.checkpointKey),keys);assert.equal(p.checkpoints.find((q:any)=>q.checkpointKey==='M1:1').factId,id);
  D.put('navigator_projects',p.id,{...p,facts:[...p.facts,{id:'old-free-answer',axis:'M',stage:'M1',title:'新的自由追问标题',description:'历史原话保留',status:'confirmed'}]});assert.deepEqual(N.navigatorState(u,scope).checkpoints.map((q:any)=>q.checkpointKey),keys);assert.ok(!N.navigatorState(u,scope).markdown.includes('新的自由追问标题'));
 });
+test('同一阶段回填有效画像答案，修改后更新槽位；切换阶段不套用旧答案',async()=>{
+ const before=N.navigatorState(u,scope),grid=before.checkpoints.find((q:any)=>q.checkpointKey==='M1:1');let a=N.startAssessment(u,scope,true,{M:'M1'});assert.deepEqual(a.axes,['M']);assert.equal(a.draftAnswers.find((r:any)=>r.index===1).text,grid.description);
+ await assert.rejects(()=>N.answerAssessment(u,a.id,{revision:a.revision,advance:true}),/基础问题/);
+ a=await N.answerAssessment(u,a.id,{revision:a.revision,review:true,answers:[{index:1,state:'confirmed',text:'并网批复已更新，容量80MW，期限待核实'}]});a=await N.answerAssessment(u,a.id,{revision:a.revision,advance:true});const next=N.confirmAssessment(u,a.id,a.revision);assert.equal(next.checkpoints.find((q:any)=>q.checkpointKey==='M1:1').description,'并网批复已更新，容量80MW，期限待核实');assert.equal(next.stages.M,'M1');
+ a=N.startAssessment(u,scope,true,{M:'M2'});assert.deepEqual(a.draftAnswers,[]);
+});
+test('对话画像提案不会更新，确认后通过Skill更新，重复确认不重复记录',async()=>{
+ const S=await import('../apps/server/src/navigator-profile-skill.ts');const before=N.navigatorState(u,scope);const d=await N.proposeNavigatorUpdate(u,scope,'fixed-c');assert.ok(d.analysis);assert.equal(S.readProfileProposal(u,d.id).conversationId,'fixed-c');assert.equal(N.navigatorState(u,scope).version,before.version);assert.ok(!D.get('navigator_skill_executions','profile-skill:'+d.id));
+ assert.throws(()=>S.updateProjectProfileSkill(C.user('U-020'),d.id,d.changes.map((q:any)=>q.id)),/无权/);assert.throws(()=>S.updateProjectProfileSkill(u,d.id,[]),/请选择/);
+ const selected=d.changes.map((q:any)=>q.id),next=S.updateProjectProfileSkill(u,d.id,selected);assert.equal(next.version,before.version+1);assert.equal(next.skillReceipt.skill,'update_project_profile');assert.equal(S.updateProjectProfileSkill(u,d.id,selected).version,next.version);assert.ok(D.get('answers','profile-skill:'+d.id+':result'));assert.ok(D.get('workbenches','profile-skill:'+d.id+':result'));assert.equal(D.list('messages').filter(m=>m.id==='profile-skill:'+d.id+':confirmation').length,1);
+});
