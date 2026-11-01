@@ -1,6 +1,7 @@
 import {knowledgePillars,strategyTopics,strategyResearchSources} from './strategic-knowledge.ts';
 import {initNavigatorKnowledge} from './navigator-knowledge.ts';
 import {navigatorRoutes} from './navigator-routes.ts';
+import {deploymentAccess} from './deployment-access.ts';
 import {portraitList,getPortrait,readPortrait,changePortrait,portraitVersions} from './project-portrait.ts';
 import {webSearch,publicSearchConfig,saveSearchConfig,searchConfigured} from './web-search.ts';
 import {meetingRoutes} from './meeting-routes.ts';
@@ -37,6 +38,7 @@ for(const r of list('runs'))if(r.status==='running'){const interrupted={...r,sta
 backfillConversationLogs();
 for(const w of list('workbenches'))if(!w.userId){const a=get('answers',w.answerId);if(a)put('workbenches',w.answerId,{...w,userId:a.userId},a.userId,w.scope.objectId);}
 export const app=express();app.disable('x-powered-by');app.use(express.json({limit:'256kb'}));
+app.use(deploymentAccess());
 const bearer=(req:express.Request)=>String(req.headers.authorization||'').replace(/^Bearer /,'');
 app.get('/api/health',(_,res)=>res.json({ok:true,seedVersion:meta('seedVersion',''),model:modelStatus(),mode:'live'}));
 app.get('/api/mock-users',(_,res)=>res.json(users()));
