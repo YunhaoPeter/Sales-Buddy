@@ -82,6 +82,7 @@ npm run scenario:reset -- --confirm=RESET_MOCK
 - [赢单领航员：产品设计与落地实施方案](docs/赢单领航员-产品与落地实施方案.md)（原型与规划，尚未开发）
 - [赢单领航员：MPT策略、画像活动与资源知识库](docs/赢单领航员-MPT策略与画像活动知识库设计.md)
 - [赢单领航员：原型分区、统一组件与审查](docs/赢单领航员-原型组件与分区审查.md)
+- [赢单领航员：知识库后台与批量维护原型](docs/赢单领航员-知识库后台原型与批量维护.md)
 - [建设方案](../Sales-Buddy-本地Mock系统建设与验证方案-v1.0.md)
 - [验收报告](docs/acceptance-report.md)
 - [建设方案执行映射](docs/implementation-map.md)
