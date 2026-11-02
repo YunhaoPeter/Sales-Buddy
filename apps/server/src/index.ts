@@ -1,6 +1,8 @@
 import {knowledgePillars,strategyTopics,strategyResearchSources} from './strategic-knowledge.ts';
 import {initNavigatorKnowledge} from './navigator-knowledge.ts';
 import {navigatorRoutes} from './navigator-routes.ts';
+import {workbenchRoutes} from './workbench-routes.ts';
+import {startWorkbenchWorker} from './home-workbench.ts';
 import {portraitList,getPortrait,readPortrait,changePortrait,portraitVersions} from './project-portrait.ts';
 import {webSearch,publicSearchConfig,saveSearchConfig,searchConfigured} from './web-search.ts';
 import {meetingRoutes} from './meeting-routes.ts';
@@ -49,6 +51,7 @@ app.post('/mcp',async(req,res)=>{
 app.get('/mcp',(_,res)=>res.status(405).json({error:'Use MCP POST transport'}));
 app.use('/api',meetingRoutes);
 app.use('/api',navigatorRoutes);
+app.use('/api',workbenchRoutes);
 app.get('/api/session',(_,res)=>res.json({user:res.locals.user,mode:'live',model:modelStatus()}));
 app.post('/api/mode',(req,res)=>{userMode(req.body.mode);res.json({mode:'live'});});
 app.get('/api/objects/search',(req,res)=>{
@@ -69,7 +72,7 @@ app.get('/api/records/:id/detail',(req,res)=>{
 app.post('/api/conversations',(req,res)=>res.json(createConversation(res.locals.user,scopeSchema.parse(req.body.scope))));
 app.get('/api/conversations',(req,res)=>{const scope=req.query.scope?scopeSchema.parse(JSON.parse(String(req.query.scope))):undefined;res.json(history(res.locals.user,scope));});
 app.get('/api/conversations/:id',(req,res)=>{const c=own(res.locals.user,'conversations',req.params.id);const entity=record(c.scope.objectId);const predecessor=entity.type==='opportunity'&&entity.convertedFromLeadId?history(res.locals.user,{objectType:'lead',objectId:entity.convertedFromLeadId,customerId:entity.customerId}):[];res.json({...c,predecessorConversations:predecessor,messages:list('messages').filter(m=>m.conversationId===c.id&&m.userId===res.locals.user.id).reverse().map(m=>m.role==='assistant'?visibleAnswer({...m,...(get('answers',m.id)||{})}):m),runs:list('runs').filter(r=>r.conversationId===c.id&&r.userId===res.locals.user.id)});});
-app.post('/api/conversations/:id/messages',(req,res)=>res.json(startRun(res.locals.user,bearer(req),req.params.id,z.string().parse(req.body.question),userMode(req.body.mode))));
+app.post('/api/conversations/:id/messages',(req,res)=>res.json(startRun(res.locals.user,bearer(req),req.params.id,z.string().parse(req.body.question),userMode(req.body.mode),req.body.origin==='system'?{origin:'system'}:{})));
 app.get('/api/runs/:id/events',(req,res)=>{
  own(res.locals.user,'runs',req.params.id);
  res.setHeader('Content-Type','text/event-stream');res.setHeader('Cache-Control','no-cache');res.setHeader('Connection','keep-alive');res.flushHeaders();
@@ -125,3 +128,5 @@ else{const vite=await createViteServer({configFile:resolve('vite.config.ts'),ser
 app.use((err:any,_req:express.Request,res:express.Response,_next:express.NextFunction)=>{if(res.headersSent)return res.end();res.status(err.http||400).json({error:err.code||'INVALID_ARGUMENT',message:err instanceof z.ZodError?err.issues.map(i=>i.message).join('；'):err.message});});
 export const server=app.listen(Number(process.env.APP_PORT||3001),process.env.APP_HOST||'127.0.0.1',()=>console.log('Sales Buddy: http://127.0.0.1:'+(process.env.APP_PORT||3001)));
 
+
+startWorkbenchWorker();

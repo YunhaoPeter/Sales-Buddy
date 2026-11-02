@@ -2,19 +2,19 @@ import {test,expect} from '@playwright/test';
 test('完整旅程：搜索、MCP分析、来源、确认创建、CRM回查、历史恢复',async({page})=>{
  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto('/');
- await page.getByRole('button',{name:/张小小/}).click();
+ await page.getByRole('button',{name:/张小小/}).click();await page.getByRole('button',{name:'赢单领航员',exact:true}).click();
  await expect(page.getByRole('heading',{name:'搜索你的客户 / 项目'})).toBeVisible();
  await page.screenshot({path:'runtime/reports/screenshots/home.png',fullPage:true});
  await page.getByLabel('搜索客户或项目').fill('英国储能一期');
  await page.getByRole('button',{name:/商机.*英国储能一期/}).click();await page.getByRole('button',{name:'新建对话',exact:true}).click();
- await expect(page.getByRole('heading',{name:'英国储能一期',exact:true})).toBeVisible();
+ await expect(page.getByRole('heading',{name:'英国储能一期',exact:true,level:2})).toBeVisible();
  await page.getByRole('button',{name:'新对话',exact:true}).click();
  await page.getByLabel('发送问题').fill('分析当前现状，项目为什么还推不动，下一步做什么？');
  await page.getByRole('button',{name:'发送',exact:true}).click();
  await expect(page.getByRole('heading',{name:'英国储能一期：当前推进判断',exact:true})).toBeVisible();await expect(page.getByLabel('运行模式')).toHaveCount(0);await expect(page.getByText('演示 / Replay',{exact:true})).toHaveCount(0);
  await expect(page.getByText('常用工具',{exact:true})).toBeVisible();
  await expect(page.locator('.errorbar')).toHaveCount(0);
- await page.getByRole('button',{name:'查看全部来源',exact:true}).click();
+ await page.getByRole('button',{name:'本轮数据来源',exact:true}).last().click();
  const dialog=page.getByRole('dialog',{name:'本轮分析来源'});
  await expect(dialog).toBeVisible();
  await expect(dialog.getByText('OP-UK-026',{exact:true}).first()).toBeVisible();
@@ -48,7 +48,7 @@ test('管理员查看记忆与真实MCP日志',async({page})=>{
  await expect(page.getByRole('heading',{name:'最近MCP调用'})).toBeVisible();
  await expect(page.getByRole('cell',{name:'create_task',exact:true}).first()).toBeVisible();
 });
-test('界面只有在线模型，没有演示切换入口',async({page,request})=>{await page.goto('/');await page.getByRole('button',{name:/张小小/}).click();await expect(page.getByLabel('运行模式')).toHaveCount(0);await expect(page.locator('.top-actions .pill')).toHaveText('在线模型');const status=await (await request.get('/api/health')).json();expect(status.mode).toBe('live');});
+test('界面只有在线模型，没有演示切换入口',async({page,request})=>{await page.goto('/');await page.getByRole('button',{name:/张小小/}).click();await page.getByRole('button',{name:'赢单领航员',exact:true}).click();await expect(page.getByLabel('运行模式')).toHaveCount(0);await expect(page.locator('.top-actions .pill')).toHaveText('在线模型');const status=await (await request.get('/api/health')).json();expect(status.mode).toBe('live');});
 
 test('管理员编辑API配置，隐藏密钥并校验单模型',async({page,request})=>{
  await page.goto('/');await page.getByRole('button',{name:/演示管理员/}).click();

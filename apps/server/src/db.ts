@@ -4,7 +4,9 @@ import {DatabaseSync} from 'node:sqlite';
 import {mkdirSync,readFileSync,writeFileSync,existsSync} from 'node:fs';
 import {dirname,resolve} from 'node:path';
 import {randomUUID} from 'node:crypto';
-export const now=()=>process.env.BUSINESS_CLOCK||'2026-10-25T09:00:00+08:00';
+// Legacy local .env files may still contain the old demo date. Only isolated
+// test databases may override the clock; never freeze a user's runtime data.
+export const now=()=>process.env.BUSINESS_CLOCK&&/[\\/]data-test-[^\\/]+[\\/]/.test(dbPath)?process.env.BUSINESS_CLOCK:new Date().toISOString();
 export const uid=(prefix='id')=>prefix+'-'+randomUUID().slice(0,12);
 export const dbPath=databasePath();
 mkdirSync(dirname(dbPath),{recursive:true});
