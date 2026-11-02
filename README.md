@@ -153,4 +153,6 @@ P11会晤交互与匹配规则已修订：[背景追问、流式回复、中文�
 
 ### CI检查
 
+Linux受控试用部署、完整数据快照、PPT独立运行路径及访问口令保护见[ECS部署与迁移说明](docs/ECS受控试用部署与迁移.md)。密钥、真实运行数据和验收报告不进入Git仓库。
+
 PR和分支推送自动运行 `npm run security:check -- --tracked`、`npm run test:ci` 和 `npm run build`。可移植测试不包括依赖本机Artifact运行时的P11完整生成/导出测试；后者仍需在已配置运行时的本地运行 `npm test` 和对应浏览器旅程。
