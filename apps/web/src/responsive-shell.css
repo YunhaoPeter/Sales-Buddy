@@ -8,7 +8,7 @@
 .mobile-page-toolbar{display:none}.hub-navigator-context{display:flex;flex-direction:column;gap:5px;margin-top:9px;font-size:12px;line-height:1.6;color:#56708e;white-space:normal;overflow-wrap:anywhere}.hub-navigator-context i{font-style:normal;color:#91a1b8;font-size:11px;margin-left:5px}
 @media(max-width:820px){.mobile-page-toolbar{display:flex;align-items:center;position:sticky;top:0;z-index:40;flex:none;min-height:48px;padding:4px 14px;background:#f7f9fdee;backdrop-filter:blur(16px)}.mobile-page-toolbar>button{display:flex;align-items:center;gap:5px;min-width:64px;min-height:40px;padding:6px;color:#4773ad;font-size:13px}.mobile-page-toolbar>button:disabled{opacity:.3}.app>main.chat-main .chat-shell{height:calc(100% - 48px)}.general-chat>header>button,.navigator-overview>.overview-back,.app .object-bar>.icon-button:first-child{display:none}.hub-navigator-context{font-size:11px;gap:4px}.hub-navigator-context i{font-size:10px}}
 
-.customer-operations{display:none}.customer-operation-menu{margin-top:28px}@media(max-width:820px){.customer-operations{display:block}}
+.customer-operations{display:block;max-width:1060px}.customer-operation-menu{margin-top:28px}@media(max-width:820px){.customer-operations{display:block}}
 
 .customer-record-list{display:block;max-width:960px}.customer-record-list .mobile-project-card{background:#fff}.customer-record-list h1{margin-bottom:24px}
 
@@ -17,3 +17,5 @@
 .general-chat>header{gap:0}.general-chat>header .conversation-history-bubble{margin-left:-8px}@media(max-width:820px){.general-chat>header>button.conversation-history-bubble{display:inline-flex}.general-chat>header{padding-bottom:12px}}
 
 .general-chat>header>button.chat-new-button{display:inline-flex;align-items:center;justify-content:center;gap:6px;margin-left:auto;margin-right:-6px;min-height:40px;padding:8px 6px;border:0;border-radius:10px;background:transparent;color:#6689b6;box-shadow:none;font-size:13px}.general-chat>header>button.chat-new-button:hover{background:#eaf2fc;color:#356eb5}.general-chat>header>button.chat-new-button:focus-visible{outline:2px solid #78a3de;outline-offset:2px}.general-chat>header>button.chat-new-button:disabled{opacity:.5}
+
+.customer-list-back{display:inline-flex;align-items:center;margin-bottom:20px;padding:0;background:transparent;color:#6387b5;font-size:13px}@media(max-width:820px){.customer-list-back{display:none}}
