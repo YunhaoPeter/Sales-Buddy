@@ -1,3 +1,4 @@
+import {startGeneralRun,visibleNavigatorLinks} from './general-conversation.ts';
 import {knowledgePillars,strategyTopics,strategyResearchSources} from './strategic-knowledge.ts';
 import {initNavigatorKnowledge} from './navigator-knowledge.ts';
 import {navigatorRoutes} from './navigator-routes.ts';
@@ -36,7 +37,7 @@ await initNavigatorKnowledge();
 await initMaterialLibrary();restartMeetingJobs();
 initEvaluations();
 for(const a of list('answers'))if(a.suggestionsStatus==='generating'){put('answers',a.id,{...a,suggestionsStatus:'failed',suggestionsError:'服务重启，请重试生成追问'},a.userId,a.scope.objectId);}
-for(const r of list('runs'))if(r.status==='running'){const interrupted={...r,status:'failed',completedAt:new Date().toISOString(),code:'INTERRUPTED',error:'服务重启，未完成运行已中断'};put('runs',r.id,interrupted,r.userId,r.scope.objectId);recordTurn(interrupted,'failed',{completedAt:interrupted.completedAt,error:interrupted.error});}
+for(const r of list('runs'))if(r.status==='running'){const interrupted={...r,status:'failed',completedAt:new Date().toISOString(),code:'INTERRUPTED',error:'服务重启，未完成运行已中断'};put('runs',r.id,interrupted,r.userId,r.scope?.objectId||null);recordTurn(interrupted,'failed',{completedAt:interrupted.completedAt,error:interrupted.error});}
 backfillConversationLogs();
 for(const w of list('workbenches'))if(!w.userId){const a=get('answers',w.answerId);if(a)put('workbenches',w.answerId,{...w,userId:a.userId},a.userId,w.scope.objectId);}
 export const app=express();app.disable('x-powered-by');app.use(express.json({limit:'256kb'}));
@@ -71,10 +72,10 @@ app.get('/api/records/:id/detail',(req,res)=>{
  const related=allRecords().filter(x=>x.id!==r.id&&x.customerId===r.customerId&&(r.type==='customer'||x.entityId===r.id||ids.has(x.id)||r.type==='contact'&&(x.contactId===r.id||x.participantIds?.includes(r.id)||x.sourceContactIds?.includes(r.id))||r.type==='organization'&&x.organizationUnitId===r.id));
  res.json({record:r,customer,parent,related:related.slice(0,80),relatedTotal:related.length});
 });
-app.post('/api/conversations',(req,res)=>res.json(createConversation(res.locals.user,scopeSchema.parse(req.body.scope))));
+app.post('/api/conversations',(req,res)=>{const body=z.object({scope:scopeSchema.optional(),kind:z.enum(['general','navigator']).optional()}).strict().parse(req.body);const scope=body.scope;if(body.kind==='navigator'&&scope?.objectType!=='opportunity')throw new AppError('INVALID_ARGUMENT','赢单领航员只关联具体商机');if(body.kind==='general'&&scope)throw new AppError('INVALID_ARGUMENT','普通对话不绑定客户或项目');res.json(createConversation(res.locals.user,scope));});
 app.get('/api/conversations',(req,res)=>{const scope=req.query.scope?scopeSchema.parse(JSON.parse(String(req.query.scope))):undefined;res.json(history(res.locals.user,scope));});
-app.get('/api/conversations/:id',(req,res)=>{const c=own(res.locals.user,'conversations',req.params.id);const entity=record(c.scope.objectId);const predecessor=entity.type==='opportunity'&&entity.convertedFromLeadId?history(res.locals.user,{objectType:'lead',objectId:entity.convertedFromLeadId,customerId:entity.customerId}):[];res.json({...c,predecessorConversations:predecessor,messages:list('messages').filter(m=>m.conversationId===c.id&&m.userId===res.locals.user.id).reverse().map(m=>m.role==='assistant'?visibleAnswer({...m,...(get('answers',m.id)||{})}):m),runs:list('runs').filter(r=>r.conversationId===c.id&&r.userId===res.locals.user.id)});});
-app.post('/api/conversations/:id/messages',(req,res)=>res.json(startRun(res.locals.user,bearer(req),req.params.id,z.string().parse(req.body.question),userMode(req.body.mode),req.body.origin==='system'?{origin:'system'}:{})));
+app.get('/api/conversations/:id',(req,res)=>{const c=own(res.locals.user,'conversations',req.params.id);const entity=c.scope?record(c.scope.objectId):null;const predecessor=entity?.type==='opportunity'&&entity.convertedFromLeadId?history(res.locals.user,{objectType:'lead',objectId:entity.convertedFromLeadId,customerId:entity.customerId}):[];res.json({...c,predecessorConversations:predecessor,kind:c.scope?.objectType==='opportunity'?'navigator':'general',messages:list('messages').filter(m=>m.conversationId===c.id&&m.userId===res.locals.user.id).reverse().map(m=>m.role==='assistant'?visibleAnswer({...m,...(get('answers',m.id)||{}),navigatorLinks:visibleNavigatorLinks(res.locals.user,(get('answers',m.id)||m).navigatorLinks||[])}):m),runs:list('runs').filter(r=>r.conversationId===c.id&&r.userId===res.locals.user.id)});});
+app.post('/api/conversations/:id/messages',(req,res)=>{const c=own(res.locals.user,'conversations',req.params.id);const question=z.string().parse(req.body.question),mode=userMode(req.body.mode);res.json(c.scope?startRun(res.locals.user,bearer(req),c.id,question,mode,req.body.origin==='system'?{origin:'system'}:{}):startGeneralRun(res.locals.user,c.id,question,mode));});
 app.get('/api/runs/:id/events',(req,res)=>{
  own(res.locals.user,'runs',req.params.id);
  res.setHeader('Content-Type','text/event-stream');res.setHeader('Cache-Control','no-cache');res.setHeader('Connection','keep-alive');res.flushHeaders();

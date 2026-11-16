@@ -3,7 +3,7 @@ test('完整旅程：搜索、MCP分析、来源、确认创建、CRM回查、�
  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto('/');
  await page.getByRole('button',{name:/张小小/}).click();await page.getByRole('button',{name:'赢单领航员',exact:true}).click();
- await expect(page.getByRole('heading',{name:'搜索你的客户 / 项目'})).toBeVisible();
+ await expect(page.getByRole('heading',{name:'搜索你的商机'})).toBeVisible();
  await page.screenshot({path:'runtime/reports/screenshots/home.png',fullPage:true});
  await page.getByLabel('搜索客户或项目').fill('英国储能一期');
  await page.getByRole('button',{name:/商机.*英国储能一期/}).click();await page.getByRole('button',{name:'新建对话',exact:true}).click();
