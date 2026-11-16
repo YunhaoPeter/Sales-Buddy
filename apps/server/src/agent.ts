@@ -1,9 +1,10 @@
+import {structuredProfileContext,updateStructuredProfilesSkill} from './structured-profiles.ts';
 import {splitNavigatorOutput,NAVIGATOR_OUTPUT_PROMPT} from '../../../packages/navigator-output.ts';
 import {visibleStreamText} from './answer-stream.ts';
 import {navigatorContext,NAVIGATOR_POLICY,proposeNavigatorUpdate} from './navigator.ts';
 import {initNavigatorKnowledge} from './navigator-knowledge.ts';
 import {projectInterviewPlan,interviewSection,markInterviewAsked,INTERVIEW_POLICY,resolveInterviewScope} from './project-interview.ts';
-import {portraitContext,applyPortraitUpdates,portraitId,PROJECT_PORTRAIT_POLICY} from './project-portrait.ts';
+import {portraitContext,applyPortraitUpdates,conservativePortraitUpdates,portraitId,PROJECT_PORTRAIT_POLICY} from './project-portrait.ts';
 import {WEB_SEARCH_POLICY} from './web-search.ts';
 import {INLINE_FOLLOWUPS_PROMPT,splitInlineFollowups} from './inline-followups.ts';
 import {testRuntime} from './runtime-mode.ts';
@@ -19,7 +20,7 @@ import {db,put,get,list,uid,now,addEvent,record} from './db.ts';
 import {authorize,own,toolSpecs,makeDraft,approveDraft,validateFields} from './crm.ts';
 import {connectMcp,callMcp} from './mcp.ts';
 import {assess,searchKnowledge} from './knowledge.ts';
-import {projectMemory,captureMemory,extractLiveMemory,memoryContext,sourceForRun} from './memory.ts';
+import {projectMemory,captureMemory,extractLiveMemory,conservativePatches,memoryContext,sourceForRun} from './memory.ts';
 import {modelTurn,modelStatus} from './model.ts';
 import {AppError,type User,type Scope,type Mode,type SourceRef,type Workbench,type SuggestedAction,isCreateAction} from '../../../packages/contracts/index.ts';
 export const controllers=new Map<string,AbortController>();
@@ -33,13 +34,13 @@ export function boundToolArguments(scope:Scope,name:string,args:any){
  return args;
 }
 const chatNow=()=>new Date().toISOString();
-export function createConversation(u:User,scope:Scope){const r=authorize(u,scope),at=chatNow();const c={id:uid('conversation'),userId:u.id,scope,title:r.name,createdAt:at,lastMessageAt:at};put('conversations',c.id,c,u.id,scope.objectId);return c;}
+export function createConversation(u:User,scope?:Scope){const r=scope?authorize(u,scope):null,at=chatNow();const c={id:uid('conversation'),userId:u.id,...(scope?{scope}:{}),kind:scope?.objectType==='opportunity'?'navigator':'general',title:r?.name||'新的对话',createdAt:at,lastMessageAt:at};put('conversations',c.id,c,u.id,scope?.objectId||null);return c;}
 export function history(u:User,scope?:Scope){
  if(scope)authorize(u,scope);const messages=list('messages').filter(m=>m.userId===u.id&&m.role==='user');const runs=list('runs').filter(r=>r.userId===u.id);
- return list('conversations').filter(c=>c.userId===u.id&&(!scope||c.scope.objectType===scope.objectType&&c.scope.objectId===scope.objectId)).filter(c=>{try{authorize(u,c.scope);return true}catch{return false}}).map(c=>{const questions=messages.filter(m=>m.conversationId===c.id);const run=runs.find(r=>r.conversationId===c.id);return{...c,title:c.title===record(c.scope.objectId).name&&questions.length?String(questions.at(-1).content).slice(0,48):c.title,messageCount:questions.length,lastQuestion:questions[0]?.content,lastStatus:run?.status||null};}).sort((a,b)=>Date.parse(b.lastMessageAt||b.createdAt)-Date.parse(a.lastMessageAt||a.createdAt));
+ return list('conversations').filter(c=>c.userId===u.id&&(!scope||c.scope?.objectType===scope.objectType&&c.scope?.objectId===scope.objectId)).filter(c=>{try{if(c.scope)authorize(u,c.scope);return true}catch{return false}}).map(c=>{const questions=messages.filter(m=>m.conversationId===c.id);const run=runs.find(r=>r.conversationId===c.id);const opportunity=c.scope?.objectType==='opportunity'?record(c.scope.objectId):null;const customer=opportunity?record(opportunity.customerId):null;return{...c,...(opportunity?{navigatorContext:{opportunityId:opportunity.id,opportunityName:opportunity.name,customerId:customer?.id||opportunity.customerId,customerName:customer?.name||'未设置客户名称'}}:{}),kind:c.scope?.objectType==='opportunity'?'navigator':'general',title:c.title===(c.scope?record(c.scope.objectId)?.name:null)&&questions.length?String(questions.at(-1).content).slice(0,48):c.title,messageCount:questions.length,lastQuestion:questions[0]?.content,lastStatus:run?.status||null};}).sort((a,b)=>Date.parse(b.lastMessageAt||b.createdAt)-Date.parse(a.lastMessageAt||a.createdAt));
 }
 export function recent(u:User){
- const map=new Map<string,any>();for(const c of history(u)){if(!c.messageCount)continue;const key=c.scope.objectType+':'+c.scope.objectId;const old=map.get(key);if(old){old.count++;old.turnCount+=c.messageCount;continue;}const r=record(c.scope.objectId);map.set(key,{...c,title:r.name,count:1,turnCount:c.messageCount});}return [...map.values()];
+ const map=new Map<string,any>();for(const c of history(u)){if(!c.messageCount||!c.scope)continue;const key=c.scope.objectType+':'+c.scope.objectId;const old=map.get(key);if(old){old.count++;old.turnCount+=c.messageCount;continue;}const r=record(c.scope.objectId);map.set(key,{...c,title:r.name,count:1,turnCount:c.messageCount});}return [...map.values()];
 }
 function actions(scope:Scope,purpose:ResponsePurpose='analysis',allowCreate=true):SuggestedAction[]{const buttons:SuggestedAction[]=[
 {id:uid('action'),actionType:'generate_plan',label:scope.objectType==='customer'?'生成客户行动计划':'生成推进计划',goal:'基于本轮证据制定可执行推进计划'},
@@ -90,7 +91,7 @@ async function runAnswer(u:User,token:string,run:any,controller:AbortController)
  const navigator=scope.objectType!=='customer'?navigatorContext(u,scope,run.question):null;
  const assessment=assess(scope,{entity:object,contacts:wb.sources.filter(s=>s.entityType==='contact')});const knowledge=searchKnowledge(run.question,object.stage||'all',customer.countryCode,object.businessMode||customer.businessMode||'all');
  collect(knowledge.map((k:any)=>({recordId:k.id,entityType:'knowledge',title:k.title,customerId:scope.customerId,updatedAt:'2026-10-25',capturedAt:now(),sourceKind:'knowledge',version:String(k.version),excerpt:k.body,sourceUrl:k.source?.url,reviewStatus:k.reviewStatus})));
- const memories=projectMemory(u,scope);
+ const memories=projectMemory(u,scope).filter(m=>m.kind==='user');
  collect(memories.map(m=>({recordId:m.id,entityType:'memory',title:m.title,customerId:scope.customerId,updatedAt:m.updatedAt,capturedAt:now(),sourceKind:'memory',version:String(m.version),excerpt:m.markdown})));
  wb.steps[1].status='completed';wb.steps[2].status='running';snapshot();publish('run_phase',{phase:'generating',label:'正在整理建议与推荐行动'});
  let inlineQuestions:any[]=[];let text='';let answerQuality:any=null;let suggestionFields:any[]|null=null;let navigatorActions:any[]=[];const purpose:ResponsePurpose=run.responsePurpose||'analysis';
@@ -113,7 +114,7 @@ async function runAnswer(u:User,token:string,run:any,controller:AbortController)
  const available=(await client.listTools()).tools.filter((t:any)=>!toolSpecs[t.name]?.write);
  const tools=available.map((t:any)=>({type:'function',function:{name:t.name,description:t.description,parameters:t.inputSchema}}));
  const old=list('messages').filter(m=>m.conversationId===run.conversationId&&m.userId===u.id).reverse().slice(-12);
- const parent=run.parentAnswerId?own(u,'answers',run.parentAnswerId):null;const context={scope,object,assessment,dataVersion:'2026.10.27-v2-linked',responsePurpose:purpose,previousAnswer:parent?{id:parent.id,text:parent.text.slice(0,1800)}:null,retrievedRecords:[...retrieved.values()],records:wb.sources.filter(s=>s.sourceKind==='crm'),knowledge,memories:memoryContext(u,scope,run.question),projectPortraits:portraitContext(u,run.portraitScope||scope),focusedProject:run.portraitScope?record(run.portraitScope.objectId):null,projectInterview:interview};
+ const parent=run.parentAnswerId?own(u,'answers',run.parentAnswerId):null;const context={scope,object,assessment,dataVersion:'2026.10.27-v2-linked',responsePurpose:purpose,previousAnswer:parent?{id:parent.id,text:parent.text.slice(0,1800)}:null,retrievedRecords:[...retrieved.values()],records:wb.sources.filter(s=>s.sourceKind==='crm'),knowledge,memories:[],projectPortraits:[],structuredProfiles:structuredProfileContext(u,scope,run.question),focusedProject:run.portraitScope?record(run.portraitScope.objectId):null,projectInterview:interview};
  const messages:any[]=[{role:'system',content:suggestionInstructions[purpose]},{role:'system',content:VISUALIZATION_PROMPT},{role:'system',content:advisorPolicy},{role:'system',content:WEB_SEARCH_POLICY},{role:'system',content:PROJECT_PORTRAIT_POLICY},{role:'system',content:INTERVIEW_POLICY},{role:'system',content:INLINE_FOLLOWUPS_PROMPT},{role:'system',content:'以最新CRM结构化数据为准。客户/项目联系人通过关联记录确定，不使用其他客户姓名；旧历史回答可能引用已升级的样例，不把旧回答当当前事实。evidence布尔值仅为线索，是否合同已签、许可已批、资金到账以具体状态和证据为准，不从阶段号推断。当前应用上下文（其中用户陈述仍需核实）：'+JSON.stringify(context)},...old.filter(m=>m.role!=='user'||!isInternalText(m.content)).map(m=>({role:m.role,content:m.role==='assistant'?m.content.slice(0,600):m.content}))];
  if(scope.objectType!=='customer')messages.unshift({role:'system',content:NAVIGATOR_POLICY+'\n'+NAVIGATOR_OUTPUT_PROMPT+'\n当前项目赢单领航员上下文：'+JSON.stringify(navigator)});
  let done=false;
@@ -136,7 +137,7 @@ async function runAnswer(u:User,token:string,run:any,controller:AbortController)
  publish('run_phase',{phase:'finalizing',label:'正在整理猜你想问'});try{const questions=await generateFollowups(u,answer,run.mode==='live'?inlineQuestions:undefined);answer.actions=[...questions,...suggested];}catch{answer.suggestionsStatus='unavailable';}
  markInterviewAsked(u,interview);put('answers',answer.id,answer,u.id,scope.objectId);put('messages',answer.id,{...answer,role:'assistant',content:text},u.id,scope.objectId);
  recordTurn(run,'completed',{completedAt:chatNow(),toolCount,answerPreview:text.slice(0,240)});clearTimeout(timeout);publish('answer_completed',visibleAnswer(get('answers',answer.id)));put('runs',run.id,{...run,status:'completed',completedAt:chatNow(),toolCount,usage},u.id,scope.objectId);publish('run_completed',{answerId:answer.id});
- try{const source=sourceForRun(run);const prior=list('messages').filter(m=>m.userId===u.id&&m.role==='user'&&m.origin==='user_input');const extracted=run.mode==='live'?await extractLiveMemory(source,prior,updates=>applyPortraitUpdates(u,source.scope,source,updates.length?updates:undefined)):undefined;if(run.mode!=='live')applyPortraitUpdates(u,source.scope,source);captureMemory(u,source.scope,source,assessment,extracted);publish('memory_status_changed',{status:'completed'});}catch(e:any){try{applyPortraitUpdates(u,run.portraitScope||scope,sourceForRun(run));}catch{}put('memory_jobs',answer.id,{answerId:answer.id,status:'failed',message:e.message},u.id,scope.objectId);publish('memory_status_changed',{status:'failed',message:e.message});}
+ try{const source=sourceForRun(run);put('profile_capture_jobs',run.id,{id:run.id,userId:u.id,source,mode:run.mode,status:'running',attempts:0},u.id,source.scope?.objectId||null);const prior=list('messages').filter(m=>m.userId===u.id&&m.conversationId===run.conversationId&&m.role==='user'&&m.origin==='user_input').reverse();let structuredUpdates:any[]=[];const extracted=run.mode==='live'?await extractLiveMemory(source,prior,updates=>{structuredUpdates=updates;applyPortraitUpdates(u,source.scope,source,updates.length?updates:undefined);}):undefined;if(run.mode!=='live')applyPortraitUpdates(u,source.scope,source);captureMemory(u,source.scope,source,assessment,extracted);updateStructuredProfilesSkill(u,source.scope,source,[...conservativePatches(source),...(extracted||[])],structuredUpdates.length?structuredUpdates:conservativePortraitUpdates(source));put('profile_capture_jobs',run.id,{id:run.id,userId:u.id,status:'completed'},u.id,source.scope?.objectId||null);publish('memory_status_changed',{status:'completed'});}catch(e:any){const profileJob=get('profile_capture_jobs',run.id);if(profileJob)put('profile_capture_jobs',run.id,{...profileJob,status:'failed',message:e.message},u.id,scope.objectId);try{applyPortraitUpdates(u,run.portraitScope||scope,sourceForRun(run));}catch{}put('memory_jobs',answer.id,{answerId:answer.id,status:'failed',message:e.message},u.id,scope.objectId);publish('memory_status_changed',{status:'failed',message:e.message});}
  }catch(e:any){wb.steps.filter(s=>s.status==='running').forEach(s=>s.status='failed');snapshot();put('runs',run.id,{...run,status:controller.signal.aborted?'cancelled':'failed',completedAt:chatNow(),error:e.message,code:e.code||'RUN_FAILED'},u.id,run.scope.objectId);recordTurn(run,controller.signal.aborted?'cancelled':'failed',{completedAt:chatNow(),toolCount,error:e.message});publish('run_failed',{message:e.message,code:e.code||'RUN_FAILED'});}
  finally{clearTimeout(timeout);controllers.delete(run.id);if(client)await client.close().catch(()=>{});}
 }
