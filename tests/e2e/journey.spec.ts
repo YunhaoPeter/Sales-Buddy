@@ -42,7 +42,7 @@ test('完整旅程：搜索、MCP分析、来源、确认创建、CRM回查、�
 test('管理员查看记忆与真实MCP日志',async({page})=>{
  await page.goto('/');await page.getByRole('button',{name:/演示管理员/}).click();
  await page.getByRole('button',{name:'记忆管理',exact:true}).click();
- await page.getByLabel('筛选记忆用户').selectOption('U-018');await expect(page.getByRole('navigation',{name:'我的记忆文件'}).getByRole('button').first()).toBeVisible();await page.getByRole('navigation',{name:'我的记忆文件'}).getByRole('button').first().click();await expect(page.getByRole('heading',{name:'条目与版本管理'})).toBeVisible();
+ await expect(page.getByRole('tab',{name:'个人画像',exact:true})).toBeVisible();await expect(page.getByLabel('筛选记忆用户')).toHaveCount(0);await page.getByRole('tab',{name:'项目画像',exact:true}).click();await expect(page.getByLabel('选择画像对象')).toBeVisible();
  await page.screenshot({path:'runtime/reports/screenshots/memory.png',fullPage:true});
  await page.getByRole('button',{name:'执行与MCP日志',exact:true}).click();
  await expect(page.getByRole('heading',{name:'最近MCP调用'})).toBeVisible();

@@ -1,3 +1,6 @@
+import {retryProfileCaptureJobs} from './profile-capture.ts';
+import {profileRoutes} from './profile-routes.ts';
+import {retryStructuredProjections} from './structured-profiles.ts';
 import {startGeneralRun,visibleNavigatorLinks} from './general-conversation.ts';
 import {knowledgePillars,strategyTopics,strategyResearchSources} from './strategic-knowledge.ts';
 import {initNavigatorKnowledge} from './navigator-knowledge.ts';
@@ -38,6 +41,7 @@ await initMaterialLibrary();restartMeetingJobs();
 initEvaluations();
 for(const a of list('answers'))if(a.suggestionsStatus==='generating'){put('answers',a.id,{...a,suggestionsStatus:'failed',suggestionsError:'服务重启，请重试生成追问'},a.userId,a.scope.objectId);}
 for(const r of list('runs'))if(r.status==='running'){const interrupted={...r,status:'failed',completedAt:new Date().toISOString(),code:'INTERRUPTED',error:'服务重启，未完成运行已中断'};put('runs',r.id,interrupted,r.userId,r.scope?.objectId||null);recordTurn(interrupted,'failed',{completedAt:interrupted.completedAt,error:interrupted.error});}
+for(const job of list('profile_capture_jobs'))if(['running','pending'].includes(job.status))put('profile_capture_jobs',job.id,{...job,status:'failed',message:'服务重启后继续画像提取'},job.userId,job.source?.scope?.objectId||null);
 backfillConversationLogs();
 for(const w of list('workbenches'))if(!w.userId){const a=get('answers',w.answerId);if(a)put('workbenches',w.answerId,{...w,userId:a.userId},a.userId,w.scope.objectId);}
 export const app=express();app.disable('x-powered-by');app.use(express.json({limit:'256kb'}));
@@ -53,7 +57,7 @@ app.post('/mcp',async(req,res)=>{
 });
 app.get('/mcp',(_,res)=>res.status(405).json({error:'Use MCP POST transport'}));
 app.use('/api',meetingRoutes);
-app.use('/api',navigatorRoutes);
+app.use('/api',navigatorRoutes);app.use('/api',profileRoutes);let profileRetryBusy=false;setInterval(async()=>{if(profileRetryBusy)return;profileRetryBusy=true;try{retryStructuredProjections();await retryProfileCaptureJobs();}finally{profileRetryBusy=false;}},30000).unref();
 app.use('/api',workbenchRoutes);
 app.get('/api/session',(_,res)=>res.json({user:res.locals.user,mode:'live',model:modelStatus()}));
 app.post('/api/mode',(req,res)=>{userMode(req.body.mode);res.json({mode:'live'});});
