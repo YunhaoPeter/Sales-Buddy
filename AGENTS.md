@@ -1,5 +1,7 @@
 # Repository workflow
 
+- At the start of a new task, read `docs/项目交接与新会话启动指引.md` when present, then verify current Git/PR/deployment state; the handoff is a snapshot, not authority to overwrite newer work or private data.
+
 - `main` is the stable baseline. `develop` is the integration branch.
 - After the initial repository import, start every implementation on a new `codex/<short-task>` branch based on the latest `develop`. Human-authored branches may use `feature/`, `fix/`, or `docs/`.
 - Do not implement or commit routine changes directly on `main` or `develop`. Push the task branch and open a pull request targeting `develop`. Promote verified releases with a separate PR from `develop` to `main`.
