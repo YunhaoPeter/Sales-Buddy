@@ -23,7 +23,7 @@ export function seedNavigatorDemo(){
   doc('conversations',id,{id,userId,scope,kind:'navigator',title:e.title,lastMessageAt:at});
   doc('messages',messageId,{id:messageId,userId,scope,conversationId:id,runId,role:'user',content:e.question,origin:'system'});
   const answer={id:answerId,userId,scope,conversationId:id,runId,mode:'replay',role:'assistant',origin:'demo_fixture',text:intro+e.text,content:intro+e.text,userQuestion:e.question,responsePurpose:'analysis',navigator:{responsePolicy:policy,resources:[]},navigatorActions:e.actions.map(([title,description],i)=>({id:'nav-action-'+i,title,description,dueAt:null})),tools:[],actions:[],sources:[ref(customer),ref(project),ref(progress)],suggestionsVersion:SUGGESTIONS_VERSION,suggestionsStatus:'completed',promptVersion:6};
-  doc('answers',answerId,answer);doc('messages',answerId,answer);
+  doc('answers',answerId,answer);doc('messages',answerId,answer);doc('workbenches',answerId,{answerId,userId,scope,conversationId:id,goal:e.question,steps:[{id:'demo',title:'预置虚构业务示例',status:'completed'}],sources:answer.sources,dataStatus:'completed'});
   doc('runs',runId,{id:runId,userId,scope,conversationId:id,answerId,userMessageId:messageId,question:e.question,mode:'replay',origin:'system',status:'completed',completedAt:at});
  }
  return{projectId:objectId,recordsAdded:added,conversationIds:examples.map(e=>'NAV-DEMO-CONV-'+e.key)};
