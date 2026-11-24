@@ -4,7 +4,7 @@ import {parseEnv} from 'node:util';
 import {join} from 'node:path';
 const root='/opt/sales-buddy',env=parseEnv(readFileSync(root+'/shared/app.env','utf8'));
 const db=new DatabaseSync(env.DATABASE_PATH,{readOnly:true});
-const active=db.prepare("SELECT COUNT(*) n FROM documents WHERE collection IN ('runs','presentation_jobs','workbench_generations') AND json_extract(data,'$.status')='running'").get().n;
+const active=db.prepare("SELECT COUNT(*) n FROM documents WHERE collection IN ('runs','presentation_jobs','workbench_generations','workbench_jobs','profile_capture_jobs') AND json_extract(data,'$.status')='running'").get().n;
 if(active){db.close();console.log('Backup deferred: active jobs exist. Existing backups remain intact.');process.exit(0);}
 const dir=join(root,'backups','scheduled',new Date().toISOString().replace(/[:.]/g,'-'));mkdirSync(dir,{recursive:true,mode:0o700});
 db.exec("VACUUM INTO '"+join(dir,'app.sqlite').replaceAll("'","''")+"'");db.close();
