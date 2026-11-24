@@ -3,7 +3,7 @@ import {businessDay} from '../../packages/workbench';
 async function login(page:any,request:any){
  const session=await(await request.post('/api/mock-session',{data:{userId:'U-018'}})).json();
  const headers={Authorization:'Bearer '+session.token};
- await request.post('/api/workbench-generations',{headers,data:{}});
+ await request.get('/api/home-workbench',{headers});
  await expect.poll(async()=>((await(await request.get('/api/workbench-generations',{headers})).json()).generation?.status)).not.toBe('running');
  await page.addInitScript((token:string)=>localStorage.setItem('sb-token',token),session.token);await page.goto('/home');
  await expect(page.getByRole('heading',{name:'小Cue',exact:true})).toBeVisible();await expect(page.locator('.magic-cue-card').first()).toBeVisible({timeout:30000});return headers;
