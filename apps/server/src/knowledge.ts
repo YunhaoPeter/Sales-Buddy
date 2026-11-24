@@ -36,11 +36,11 @@ export function reindex(){
  writeJson('knowledge/sales/glossary/terms.json',{BESS:'电池储能系统',PCS:'功率变换系统',EMS:'能量管理系统',FAT:'工厂验收测试',SAT:'现场验收测试',RFP:'建议书征询',scope:'供货边界',decision:'决策路径'});
  writeJson('knowledge/sales/demo-policy.json',{fictional:true,title:'演示商务政策',rule:'没有有效授权资料时，不作底价、折扣、交期、质保或收益承诺。内部策略不是公司正式授权政策。'});
 }
-export function searchKnowledge(query:string,stage='all',country='',mode='all'){
+export function searchKnowledge(query:string,stage='all',country='',mode='all',includeResources=true){
  const region=({GB:'欧洲',DE:'欧洲',ES:'欧洲',US:'北美',CA:'北美',SA:'中东',AE:'中东',OM:'中东',AU:'亚太',JP:'亚太',SG:'亚太'} as Record<string,string>)[country];
  const terms=tokens(query).split(' ').filter(Boolean);let matched=new Set<string>();
  if(terms.length)try{matched=new Set((db.prepare('SELECT id FROM knowledge_fts WHERE knowledge_fts MATCH ? LIMIT 50').all(terms.slice(0,20).map(t=>'"'+t.replaceAll('"','')+'"').join(' OR ')) as any[]).map(x=>x.id));}catch{}
- const candidates=salesDocuments.filter(d=>(d.mode==='all'||mode==='all'||d.mode===mode)&&(d.region==='all'||d.region===region));
+ const candidates=salesDocuments.filter(d=>(includeResources||d.pillar!=='递资源')&&(d.mode==='all'||mode==='all'||d.mode===mode)&&(d.region==='all'||d.region===region));
  const score=(d:typeof salesDocuments[number])=>(d.stage===stage&&stage!=='all'?5:d.stages?.includes(stage)?3:0)+(d.mode===mode&&mode!=='all'?2:0)+(d.region===region?1.5:0)+(matched.has(d.id)?1:0)+terms.reduce((sum,t)=>sum+(d.title.includes(t)?1.5:0)+(d.summary.includes(t)?0.8:0)+(d.body.includes(t)?0.12:0),0);
  const ranked=candidates.sort((a,b)=>score(b)-score(a));const current=ranked.find(d=>d.stage===stage&&stage!=='all');const specialist=/竞品|降价|价格异议|便宜/.test(query)?ranked.find(d=>d.id==='KB-PLAY-competition'):/伙伴|渠道|激活/.test(query)?ranked.find(d=>d.id==='KB-MODE-channel_project'):undefined;const balanced=['定方向','识风险','递资源'].map(p=>ranked.find(d=>d.pillar===p));const selected=[...new Map([...(current?[current]:[]),...(specialist?[specialist]:[]),...balanced.filter(Boolean),...ranked].map(d=>[d!.id,d!])).values()].slice(0,6);
  return selected.map(d=>({...d,countries:'[]',source_id:d.id,path:'knowledge/sales/guides/'+d.id+'.md',source:{kind:'internal_playbook',title:d.title},reviewStatus:d.reviewStatus}));

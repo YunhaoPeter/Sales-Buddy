@@ -14,7 +14,6 @@ r.post('/my-tasks/capture',async(req,res)=>res.json(await parseTaskCapture(res.l
 r.post('/my-tasks/:id/insight-links',(req,res)=>res.json(linkTaskInsight(res.locals.user,String(req.params.id),z.object({insightId:z.string().min(1)}).strict().parse(req.body).insightId)));
 r.get('/home-workbench',(_,res)=>{requestGeneration(res.locals.user);res.json(homeWorkbench(res.locals.user));});
 r.get('/workbench-generations',(_,res)=>res.json({generation:currentGeneration(res.locals.user)}));
-r.post('/workbench-generations',(_,res)=>res.status(202).json({generation:requestGeneration(res.locals.user,true)}));
 r.get('/magic-cues',(req,res)=>res.json(cuePage(res.locals.user,z.enum(['in_progress','completed']).default('in_progress').parse(req.query.status),page.parse(req.query.page))));
 r.get('/magic-cues/:id',(req,res)=>res.json(cueDetail(res.locals.user,String(req.params.id))));
 r.patch('/magic-cues/:id',(req,res)=>{const b=z.object({status:z.enum(['in_progress','completed']).optional(),feedback:z.enum(['like','dislike']).nullable().optional()}).strict().parse(req.body);res.json(setCueState(res.locals.user,String(req.params.id),b.status,b.feedback));});
