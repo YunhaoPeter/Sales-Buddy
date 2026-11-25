@@ -1,6 +1,6 @@
 # 工作台 · 小Cue：D365实施与角色场景取数方案
 
-日期：2026-11-25　版本：V1.0　适用：业务负责人、D365实施伙伴、Sales Buddy产品与研发
+日期：2026-11-25　版本：V1.1　适用：业务负责人、D365实施伙伴、Sales Buddy产品与研发
 
 ## 1. 实施结论与范围
 
@@ -19,7 +19,7 @@
 | F01 | 身份及管理范围 | 同一小Cue入口按实际组织身份展示 | 查当前用户、SPP成员角色、Leader及区域总裁映射；业务管理范围与CRM读取权限取交集，管理员身份不自动得到团队汇总 |
 | F02 | 每日生成 | 北京时间08:00后自动产生当日内容 | 按用户/日期/规则版本建唯一任务；后台执行，首访只补缺失任务，不提供刷新接口 |
 | F03 | 今日简报 | 小Cue形象、标题及描述；“小Cue提醒您，今日需优先……” | 从已验证候选生成简报，无足够事实则明确无重点提醒；不显示虚构客户、任务数量或数据覆盖宣传语 |
-| F04 | 提醒列表 | 进行中/已完成两Tab，每页8条；窄高比适配移动端 | 读取提醒及独立用户状态；当天优先安排最多8条，不删除仍成立的历史进行中提醒，按页加载 |
+| F04 | 提醒列表 | 进行中/已完成两Tab，每页8条；窄高比适配移动端 | 读取提醒内容及个人状态字段；当天优先安排最多8条，不删除仍成立的历史进行中提醒，按页加载 |
 | F05 | 详情与信息来源 | 标题、描述、关联客户/线索/商机/商务活动、推进建议 | 每次读取重验源记录权限；保留来源版本与摘录，不展示无权限的旧快照 |
 | F06 | 完成与恢复 | 勾选按钮切换完成/进行中 | 只修改Cue用户状态；不关闭关联CRM任务；撤销和恢复持久化 |
 | F07 | 个人反馈 | 点赞/点踩互斥、可取消 | 写个人状态，首版不自动改变业务规则或形成团队考核 |
@@ -89,7 +89,7 @@ PC与移动端共用规则及数据。移动端底部为对话、客户经营、
 | 编号/业务场景 | 数据来源 | 取数与触发逻辑 | 输出与管理动作 |
 |---|---|---|---|
 | R01 S级客户经营覆盖缺口 | 区域→SPP→S级客户，以及活动/进展 | 对每个所管SPP执行L01的近7天反关联查询，按团队汇总及客户下钻 | “XX SPP有若干S级客户近期缺少跟进记录”；只展示授权范围内计数和明细，与Leader确认安排 |
-| R02 重点项目长期无明确推进 | L02数据、每日缺口观察记录 | 当前仍满足L02，且同一团队/商机的缺口firstSeen持续≥7天；一旦计划补齐关闭观察，复发重新计时 | 标明持续时间、项目和SPP Leader，要求明确处置安排；不是将Leader卡片延时升级 |
+| R02 重点项目长期无明确推进 | L02数据、每日缺口观察记录 | 当前仍满足L02，且同一团队/商机的缺口firstSeen持续≥7天，观察检查未超过48h中断；一旦计划补齐关闭观察，复发重新计时 | 标明持续时间、项目和SPP Leader，要求明确处置安排；不是将Leader卡片延时升级 |
 | R03 重点项目重大变化 | 所管SPP重点商机近7天已确认重大变化及共享画像 | 同L03，按团队/商机整理；只取已确认事实 | 提示对关键项目及区域经营的已知影响，不自动推算合同金额损失或承诺资源 |
 | R04 跨SPP资源或决策请求 | 明确open管理请求、所需日期、跨团队协调标识、关联项目 | T<neededBy≤T+7d且requiresRegionalCoordination=true，属于所管SPP | 直接列跨团队需要协调什么、何时、由谁跟进；未提出请求时不因项目大就自动拉高层介入 |
 | R05 团队销售记录覆盖持续偏低 | 与L05相同，增加前一28天记录窗口 | 当前28天和此前28天两个窗口，相同销售都零记录或低于其团队当期平均；每团队至少2名有效销售 | 按SPP列持续差异及口径，请Leader核实；不排名PM/PD、不比较不同团队原始记录数量，不作为绩效评分 |
@@ -114,43 +114,137 @@ PC与移动端共用规则及数据。移动端底部为对话、客户经营、
 
 若需新建上述来源表，其名称也遵循catl_esspilot_，但应纳入对应CRM/组织/画像专项设计，不在小Cue方案内重复列一批替代CRM表。CRM字段映射形成“实际实体逻辑名、列逻辑名、类型、枚举、关联、空值含义、权限”工作簿，实施前逐项签认。
 
-## 9. 小Cue新增实体及最小字段设计
+## 9. 小Cue必要实体与详细字段设计
 
-小Cue运行数据建议6张自定义表。提醒与用户操作分离，生成更新不覆盖用户完成和反馈；来源单列支持授权下钻；缺口观察支持持续7天规则。任务和日程继续使用CRM。
+### 9.1 结论：新增3张表，复用现有CRM与会话
 
-| 表名 | 逻辑名 | 保存内容 | 唯一性/主要关系 |
+此前6表方案将同一接收人的提醒、状态、来源拆开，日简报与日生成任务也分开，没有必要。首版收敛为以下3张表；这是“业务结果、定时任务和持续观察均落在D365”的最小推荐方案，不是声称任何架构都必须3表。
+
+| 中文表名 | English table name | 实体逻辑名 | 一条记录表示什么 | 必须承担的功能 |
+|---|---|---|---|---|
+| 小Cue提醒 | Cue Item | catl_esspilot_cue | 一个接收人、一个场景、一个具体行动周期的提醒 | 标题/描述/建议、来源证据、排序、完成/恢复、点赞/点踩、关联会话；跨日保留稳定身份 |
+| 小Cue每日生成 | Cue Daily Run | catl_esspilot_cuegeneration | 一个接收人在一个北京业务日、一个规则版本的生成任务及成功简报 | 防重复生成、任务领取/重试、快照、当日简报、发布结果与故障状态；合并原dailybriefing |
+| 小Cue持续观察 | Cue Observation | catl_esspilot_cueobservation | 一个场景、一个SPP、一项商机的事实缺口观察 | 记录首次发现/最后检查/解决时间，计算R02是否持续7天；不随用户完成提醒而清零 |
+
+**移除3张独立表：** dailybriefing合并进cuegeneration；cuestate合并进cue；cuesource改为cue中的证据JSON。没有另外的反馈表、场景配置表、待办表、日程表或小Cue会话表。CRM任务/活动、组织、商机画像和现有聊天存储直接复用。
+
+保留观察表是因为它的粒度是“SPP×商机×缺口”，而提醒是“接收人×场景×行动”。Leader变更、不同接收人、模型生成失败或用户完成提醒都不能丢失客观持续时间。若将任务与观察留在Sales Buddy自有持久库，D365可仅新增cue表，但那属于另一种存储边界；本方案不同时维护两套权威记录。
+
+### 9.2 字段约定与通用系统字段
+
+以下是实施字段字典。自定义业务字段保留catl_前缀；英文显示名与逻辑名分别列出。必填指服务端写入约束，条件必填见含义；默认值不等于允许客户端任意修改。所有Text(n)长度单位为字符。
+
+时间戳采用Dataverse Date and Time / User Local，以UTC传输并在Sales Buddy统一按Asia/Shanghai展示；业务日期采用Date Only、DateOnly行为，不参与时区换日。JSON是**多行文本中的应用层格式**，不是Dataverse原生JSON列，不支持直接拿子属性做通用关系查询。类型依据见微软[列数据类型](https://learn.microsoft.com/en-us/power-apps/maker/data-platform/types-of-fields)。
+
+| 中文名 | English name | 逻辑名 | 类型 | 功能与约束 |
+|---|---|---|---|---|
+| 记录主键 | Record ID | catl_esspilot_cueid / catl_esspilot_cuegenerationid / catl_esspilot_cueobservationid | Unique Identifier / GUID | 分别为三表自动生成主键；实际名称以元数据为准，不另加catl_id |
+| 所有者 | Owner | ownerid | Owner Lookup：systemuser/team | 三表采用用户/团队所有；cue/run设为接收人，观察设为受限服务团队；不重复加recipientid存同一用户，cue/run禁止转给团队或任意改Owner |
+| 创建时间 | Created On | createdon | Date and Time | 系统记录行首次创建时间，不一定等于业务缺口发生时间 |
+| 修改时间 | Modified On | modifiedon | Date and Time | 系统最后修改时间；点赞也会变化，不能当作最近事实核实时间 |
+| 创建人/修改人 | Created By / Modified By | createdby / modifiedby | Lookup：systemuser | 原生审计主体，可能为应用账号，不等于提醒接收人或项目主责 |
+| 版本号 | Version Number | versionnumber | Big Integer，系统只读 | 对应并发控制依据，API使用ETag条件更新，不新增自定义行版本 |
+| 系统状态/状态原因 | Status / Status Reason | statecode / statuscode | 原生Choice | 保持表标准Active/Inactive；不代替提醒完成状态、任务状态或事实缺口状态 |
+
+原生业务单元、委派创建/修改等平台系统列随表生成，不作为小Cue新增业务字段。三张表的主名称列均使用catl_name，具体含义如下表。
+
+### 9.3 表一：小Cue提醒 catl_esspilot_cue
+
+**功能：** 存储可交互提醒；一条属于一个接收人。团队汇总给Leader/总裁各生成自己的记录，不共享同一行的点赞或完成状态。后台只更新生成内容字段，个人操作只更新状态字段，即使在同一表也不会相互覆盖。
+
+| 中文显示名 | English display name | 字段逻辑名 | 字段类型 | 必填/默认 | 字段含义与使用规则 |
+|---|---|---|---|---|---|
+| 提醒标题 | Cue Title | catl_name | Text(200)，主名称列 | 是 | 直接显示卡片标题，不另建title列重复保存 |
+| 提醒唯一键 | Cue Key | catl_key | Text(64)，备用键 | 是 | 服务端对接收人+场景+业务范围+实质行动周期做SHA-256；不含当天日期或生成措辞 |
+| 场景代码 | Scenario Code | catl_scenario | Text(3) | 是 | S01–S05、L01–L05、R01–R05白名单；角色从代码派生，不另存persona |
+| 业务范围键 | Scope Key | catl_scopekey | Text(200) | 是 | 如opportunity:GUID或spp:业务ID，用于查询同范围提醒；服务端构造，不是授权凭据 |
+| 行动周期标识 | Action Cycle ID | catl_actionid | Text(100) | 是 | 分配事件、任务约定、变化事件或团队行动周期ID；决定是否为新实质行动 |
+| 提醒描述 | Description | catl_description | Multiline Text(4000) | 是 | 事实情况和提醒理由，直接供卡片及详情展示，不保存模型长篇思维过程 |
+| 推进建议 | Recommended Action | catl_suggestion | Multiline Text(4000) | 是 | 建议下一步；不代表已确认任务，不自动写CRM待办 |
+| 优先级 | Priority | catl_priority | Choice | 是 | 1=高，2=中，3=一般；规则决定，模型不能改写；与task的P1映射分开 |
+| 展示顺序 | Display Rank | catl_rank | Whole Number，0–999999 | 是/0 | 同优先级内的服务器排序；不是用户手工顺序 |
+| 是否仍满足场景 | Is Applicable | catl_isapplicable | Yes/No | 是/Yes | 最近一次有效规则计算是否仍触发；不等于用户是否已完成 |
+| 最近核实时间 | Last Validated At | catl_lastvalidatedat | Date and Time | 是 | 最近成功用源事实验证的时间；用户反馈不更新此列 |
+| 最近生成任务 | Last Generation | catl_generationid | Lookup：cuegeneration | 是 | 指向最后更新内容的日任务；规则/模型版本从任务读取，避免重复存每条提醒 |
+| 信息来源证据 | Source Evidence | catl_evidencejson | Multiline Text(100000)，JSON v1 | 是 | 保存授权可追溯的源引用、版本、短摘录及聚合明细；详见9.6；不复制完整CRM或私人画像 |
+| 完成状态 | Completion Status | catl_completionstatus | Choice | 是/0 | 0=in_progress进行中，1=completed已完成；用户完成与场景是否成立相互独立 |
+| 完成时间 | Completed At | catl_completedat | Date and Time | 否 | 完成时设UTC当前时间，恢复进行中时清空；完整操作历史交由审计 |
+| 个人反馈 | Personal Feedback | catl_feedback | Choice | 是/0 | 0=none无，1=like赞，2=dislike踩；互斥，可取消 |
+| 会话引用 | Conversation Reference | catl_conversationref | Text(100) | 否 | 现有聊天系统返回的会话ID；不是D365原生Lookup，不重建聊天实体 |
+| 会话启动状态 | Conversation Launch Status | catl_launchstatus | Choice | 是/0 | 0=idle，1=starting，2=succeeded，3=failed；启动成功后复用会话 |
+| 会话启动租约 | Conversation Lease Until | catl_launchleaseuntil | Date and Time | 否 | 启动中断后的重试边界；成功/失败结束后清空，防止永久卡在starting |
+
+接收人直接读取ownerid，创建后不可转派。记录本身固定为AI/系统整理来源，无需每行重复固定origin；进入会话/记忆管道时必须显式传origin=ai_generated及cue ID，不能冒充用户确认。聊天幂等键由cue主键稳定派生，发送给既有会话创建服务；下游必须支持同键复用，不能仅依赖launchstatus避免崩溃后的重复会话。
+
+### 9.4 表二：小Cue每日生成 catl_esspilot_cuegeneration
+
+**功能：** 每人每天的任务及发布结果；同一行保存成功简报，无需独立dailybriefing。只有catl_runstatus=2（completed）的任务提供首页简报；当日失败/运行中时读取最近一条成功任务，不清空旧内容。
+
+| 中文显示名 | English display name | 字段逻辑名 | 字段类型 | 必填/默认 | 字段含义与使用规则 |
+|---|---|---|---|---|---|
+| 任务名称 | Run Name | catl_name | Text(200)，主名称列 | 是 | 例如“2026-11-25 · 用户业务ID · v2”，不存隐私正文 |
+| 任务唯一键 | Run Key | catl_key | Text(64)，备用键 | 是 | SHA-256(接收人+北京业务日+规则版本)，重试不新建一行 |
+| 业务日期 | Business Date | catl_businessdate | Date Only | 是 | 北京日期，不由服务器UTC日期直接截取 |
+| 规则版本 | Rule Version | catl_ruleversion | Text(50) | 是 | 锁定场景与优先级算法版本；版本发布本身不自动重跑已完成日任务 |
+| 执行状态 | Run Status | catl_runstatus | Choice | 是/0 | 0=queued，1=running，2=completed，3=failed；failed是否可重试结合attempts/nextattemptat |
+| 尝试次数 | Attempt Count | catl_attempts | Whole Number，0–4 | 是/0 | 每次真正领取执行后加1，总计最多4次 |
+| 租约持有者 | Lease Token | catl_leasetoken | Text(64) | 否 | 每次领取生成随机token；续租/发布需匹配当前token，阻止过期Worker继续写入 |
+| 租约到期 | Lease Until | catl_leaseuntil | Date and Time | 否 | 初始3分钟，长调用续租；到期才可竞争接管 |
+| 下次尝试时间 | Next Attempt At | catl_nextattemptat | Date and Time | 否 | 可重试失败后按1/5/15分钟设置；终态清空 |
+| 事实快照时间 | Snapshot At | catl_snapshotat | Date and Time | 否 | 第一次取得有效候选的时间；失败重试复用快照前重验权限 |
+| 候选快照 | Candidate Snapshot | catl_snapshotjson | Multiline Text(500000)，JSON v1 | 否 | 最小事实、候选键、来源及规则优先级；只给Worker，不能直接返回前端 |
+| 模型版本 | Model Version | catl_modelversion | Text(100) | 否 | 实际使用的模型部署/版本；无候选未调用模型时为空 |
+| 提示词版本 | Prompt Version | catl_promptversion | Text(50) | 否 | 便于复现表达及校验规则；不存密钥或完整私有聊天 |
+| 简报标题 | Briefing Title | catl_briefingtitle | Text(200) | 成功时必填 | “小Cue提醒您，今日需优先……”或无重点提醒标题 |
+| 简报描述 | Briefing Description | catl_briefingdescription | Multiline Text(4000) | 成功时必填 | 仅基于验证后的候选事实生成 |
+| 本次发布提醒数 | Published Cue Count | catl_resultcount | Whole Number，0–8 | 是/0 | 本次写入/更新的选定提醒数，非用户全部进行中数量；0可为成功空结果 |
+| 完成时间 | Finished At | catl_finishedat | Date and Time | 否 | 成功或本次失败结束时间；通过runstatus区分，不把失败时间当生成成功时间 |
+| 错误代码 | Error Code | catl_errorcode | Text(100) | 否 | 结构化错误如SOURCE_FORBIDDEN、MODEL_TIMEOUT；成功后清空 |
+| 安全错误摘要 | Safe Error Summary | catl_errormessage | Text(1000) | 否 | 脱敏运维说明，不含源数据正文、凭据或模型完整输入；前端只返回友好错误 |
+
+任务的接收人同样用ownerid。候选快照按500000字符封顶，超限应分批计算或使用获准外部受控快照存储，不静默截断后误判“无记录”。首版不存每次尝试明细表，技术重试轨迹进入既有运行日志。前端仅获取任务状态、简报及必要时间，不能直接读snapshot或内部错误。
+
+### 9.5 表三：小Cue持续观察 catl_esspilot_cueobservation
+
+**功能：** 服务R02“重点项目缺少安排持续7天”，并可向L02提供同一事实持续时间；无需按每个接收人重复观察。用户点完成提醒不修改这张表。
+
+| 中文显示名 | English display name | 字段逻辑名 | 字段类型 | 必填/默认 | 字段含义与使用规则 |
+|---|---|---|---|---|---|
+| 观察名称 | Observation Name | catl_name | Text(200)，主名称列 | 是 | 如“XX SPP · XX商机 · 推进安排缺口” |
+| 观察唯一键 | Observation Key | catl_key | Text(64)，备用键 | 是 | SHA-256(观察场景+SPP业务ID+商机GUID)，与接收人无关 |
+| 观察场景 | Observation Scenario | catl_scenario | Text(50) | 是 | 首版仅project_next_action，不为S/L/R同事实复制三种观察 |
+| SPP团队标识 | SPP Team Reference | catl_teamref | Text(100) | 是 | 伙伴SPP主数据稳定ID；若伙伴有正式SPP实体可在实施映射中换为Lookup，不能用团队显示名 |
+| 关联商机 | Opportunity | catl_opportunityid | Lookup：opportunity | 是 | 事实所属商机，查询时验证业务SPP归属；团队迁移关闭旧观察、新团队重新计时 |
+| 当前存在缺口 | Has Open Gap | catl_hasgap | Yes/No | 是/Yes | 最近一次成功检查是否缺少有效推进安排，不等于Cue进行中 |
+| 本轮首次发现 | First Detected At | catl_firstseenat | Date and Time | 是 | 本轮缺口首次被成功观察到的时间；解决后保留，复发时重置为新一轮时间 |
+| 最近成功检查 | Last Checked At | catl_lastcheckedat | Date and Time | 是 | 数据读全且规则成功执行才更新；读取失败不能标成缺口或已解决 |
+| 缺口解决时间 | Resolved At | catl_resolvedat | Date and Time | 否 | 确认补齐计划/商机关闭/迁出团队后填写；新一轮缺口出现时清空 |
+
+持续时长由firstseenat计算，不新增“持续天数”冗余列。日任务未执行不能证明每一天事实连续：若lastcheckedat距本次检查超过48小时，R02暂停“持续7天”的肯定表述，重新建立本轮观察起点；该48小时是本方案的首版明确技术口径，试用时可按业务日历调整。商机关闭或取消须结束观察。
+
+### 9.6 证据JSON的精确结构与取舍
+
+证据从提醒表移入JSON是减少一张“只随父提醒读写”的从表，不是把全部业务数据塞成大文本。需筛选、分页、统计的属性（场景、优先级、完成、日期、范围）保留独立列。证据主要供详情和会话按单卡读取；首版不要求D365按证据子属性做报表或反向关联分析。
+
+| JSON属性（英文） | 中文含义 | JSON类型 | 约束 |
 |---|---|---|---|
-| 每日简报 | catl_esspilot_dailybriefing | 每人每日标题、描述、生成任务、生成时间和版本 | catl_key=用户+业务日+规则版本；关联generation及接收人 |
-| 小Cue提醒 | catl_esspilot_cue | 稳定提醒身份、场景、标题/描述/建议、排序、有效性、最后核实时间 | catl_key=接收人+场景+业务对象+实质行动标识；跨日保持 |
-| 提醒用户状态 | catl_esspilot_cuestate | 完成/进行中、反馈、完成时间、关联会话 | catl_key=接收人+提醒；关联cue、systemuser；生成器无状态改写权限 |
-| 提醒来源 | catl_esspilot_cuesource | 可追溯源实体、ID、版本、短摘录、发生时间 | 关联cue、最近generation；catl_key=提醒+源实体+源ID+证据类型；不把摘录视为可永久访问 |
-| 生成任务 | catl_esspilot_cuegeneration | 日任务、重试、租约、状态、规则/模型版本、候选快照、错误码 | catl_key=用户+北京日期+规则版本；后台创建，不开放用户触发 |
-| 推进缺口观察 | catl_esspilot_cueobservation | 重点项目缺计划的首次发现、最近检查、解决时间 | catl_key=场景+SPP+商机；持续时间不依赖Cue是否被完成 |
+| schemaVersion | 结构版本 | integer | 固定1，升级须兼容旧数据 |
+| sources | 原始依据数组 | array<object> | 每项保存logicalName:string实体逻辑名、recordId:string GUID、version:string可空、occurredAt:string ISO8601可空、excerpt:string≤1000、origin:string、confirmed:boolean；源实体白名单 |
+| members | 团队汇总对象数组 | array<object> | 仅管理汇总使用；每项targetType:string、targetId:string、responsibleUserId:string可空、sourceIndexes:integer[]；关联sources索引，支持按对象撤权过滤 |
+| metrics | 规则计算证据 | object | 按场景白名单，例如windowStart/windowEnd、coveredDays、workingDays、teamAverage；不存无约束模型对象 |
 
-### 9.1 字段明细
+sources至少1项，最多100项；members最多100项，总文本≤100000字符，服务端验证引用索引、类型、长度及去重。超过上限按团队/对象集合拆分为稳定分组卡，不截断后保留虚假“全量”计数。来源显示名和可跳转链接按当前权限从源实体解析，不在JSON重复保存一份永久显示数据。
 
-以下均为拟定**自定义业务列**，按需使用Text、Choice、Lookup、DateTime或Integer。标准主键、ownerid、createdon、modifiedon、versionnumber保持系统名称，不为满足字段前缀而改名。主键自动生成名称以实际元数据为准。
+JSON引用不提供Lookup完整性或权限继承。任何详情/会话读取都须重新查询源权限，删除、撤权或不能核实时过滤相应对象并重算摘要；若卡片原文本含已撤权对象，整卡暂不展示直至安全重建，不能只隐藏来源链接。若后续明确需要D365原生按来源报表、多对多检索或独立证据权限，再增加来源从表；不提前建。
 
-| 表 | 最小业务字段（列名：含义/类型） |
-|---|---|
-| dailybriefing | catl_key：唯一Text；catl_recipientid：systemuser Lookup；catl_businessdate：DateOnly；catl_title、catl_description：Text；catl_generationid：Lookup；catl_ruleversion：Text；catl_generatedat：UTC DateTime；catl_origin：Choice，固定AI/系统整理 |
-| cue | catl_key：唯一Text；catl_recipientid：Lookup；catl_scenario：Choice；catl_persona：Choice；catl_teamref：伙伴SPP标识；catl_targettype、catl_targetid：Text；catl_actionidentity：Text；catl_title、catl_description、catl_suggestion：Text；catl_priority、catl_rank：Integer；catl_active：Boolean；catl_firstseenat、catl_lastvalidatedat：DateTime；catl_generationid：Lookup；catl_ruleversion、catl_origin：Text/Choice |
-| cuestate | catl_key：唯一Text；catl_cueid、catl_recipientid：Lookup；catl_status：in_progress/completed；catl_feedback：none/like/dislike；catl_completedat：DateTime；catl_conversationref：既有会话ID；catl_launchkey：幂等Text；catl_launchstatus：idle/starting/completed/failed |
-| cuesource | catl_key：唯一Text；catl_cueid、catl_generationid：Lookup；catl_sourcetype、catl_sourcelogicalname、catl_sourceid：Text；catl_sourceversion：Text；catl_excerpt：Multiline Text；catl_occurredat：DateTime；catl_evidencekind：Choice；catl_sourceorigin、catl_confirmed：来源及人工确认标识 |
-| cuegeneration | catl_key：唯一Text；catl_recipientid：Lookup；catl_businessdate：DateOnly；catl_status：queued/running/completed/failed；catl_attempts：Integer；catl_leaseuntil、catl_nextattemptat、catl_snapshotat、catl_completedat：DateTime；catl_ruleversion、catl_modelversion、catl_promptversion：Text；catl_snapshot：受控JSON Text；catl_errorcode：Text；catl_resultcount：Integer |
-| cueobservation | catl_key：唯一Text；catl_scenario、catl_teamref：Text；catl_opportunityid：opportunity Lookup；catl_firstseenat、catl_lastcheckedat、catl_resolvedat：DateTime；catl_active：Boolean |
+### 9.7 同表状态保护、权限与发布
 
-不为反馈再建一张表：当前反馈只需个人最新状态，操作历史可按审计策略保留。首版场景配置以版本化代码发布，不增加规则编辑后台或规则实体。
-
-来源的“类型+ID”需要支持不同业务实体，因此示例采用受控文本引用；**不会自动建立Dataverse引用完整性或继承权限**。后端只允许配置中的实体类型并重新查询权限；正式实施可对固定来源补充Lookup。不要提供可由用户提交任意表名的通用查询API。
-
-### 9.2 权限、并发和存储
-
-- dailybriefing、cue、cuestate、cuesource按接收人做用户/团队所有表，并配置最小角色读取深度；Owner不等于绝对私有，仍需核对层级安全、共享和管理员权限。Leader不能直接浏览下属个人Cue，收到的是独立生成的管理汇总。
-- generation仅服务账号及获准运维可读写，用户经API只读必要状态，不返回候选快照；observation为受限团队经营数据，不暴露私人画像。
-- 使用Dataverse备用键约束catl_key唯一性，以ETag条件更新防止完成/反馈互相覆盖。唯一键不代替任务领取租约；租约竞争用条件更新并在长调用期间续租。参考微软[备用键](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/define-alternate-keys-entity)及[ETag条件操作](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/perform-conditional-operations-using-web-api)。
-- 发布新简报、提醒、来源及任务完成标识应采用受控事务提交，失败不能将旧结果先置空；用户状态不包含在生成覆盖字段中。跨服务会话创建用业务幂等键协调，不能假定一次HTTP请求天然事务化。
-- 候选快照仅保存规则相关必要事实，设置大小上限、按表的保留期和清理策略；建议任务快照30天、普通运行日志90天，最终按企业合规确认。会话/个人画像/凭据不复制进快照。
+- cue后台生成器只允许更新标题、描述、建议、证据、排序、最近生成和核实等列；不得写completionstatus、completedat、feedback及会话列。新增记录时才初始化个人状态。用户操作使用专用接口及ETag局部PATCH；不能整行Upsert覆盖。必要时用受控Custom API/插件落实字段白名单，避免应用账号绕过约束。
+- 唯一键与ETag分别解决重复记录和并发覆盖，依据微软[备用键](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/define-alternate-keys-entity)及[条件操作](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/perform-conditional-operations-using-web-api)。租约发布还需校验token，旧Worker不能在接管后继续提交。
+- cue由接收人所有，但Owner不意味着绝对私有，需核对角色深度、层级安全、共享及管理员权限。run虽按接收人确定归属，仍仅后台服务/获准运维直接读取；业务用户通过接口读投影。observation仅获准服务读取，不含个人画像。
+- 发布所选提醒、来源JSON及run成功简报须受控事务提交；失败保留旧成功任务和旧提醒。生成与用户操作并发冲突时重新读版本，仅重放生成字段，不覆盖用户操作。
+- 所有提醒都属于AI/系统衍生结果，源事实确认状态与提醒完成状态不同。写入聊天须明确来源，不自动写成用户确认的画像记忆。
+- run候选快照建议保留30天后清空，但保留任务唯一键、状态与成功简报；运行日志建议90天。有效Cue与观察持续保留，已结束记录保留策略按企业要求确认，不删除唯一键后重发旧提醒。
 
 ## 10. 去重、状态与数据更新规则
 
@@ -211,12 +305,12 @@ sequenceDiagram
     else 无候选
         B->>B: 生成简洁无重点提醒文案，不调用措辞模型
     end
-    B->>D: 重验权限，事务写简报/提醒/来源/任务完成
+    B->>D: 重验权限，事务写提醒及证据/任务成功简报
     U->>B: 打开工作台
     B->>D: 读缓存结果和个人状态，再验源权限
     B-->>U: 小Cue列表及简报；待办/日程独立返回
     U->>B: 勾选完成或发起会话
-    B->>D: 更新个人状态/登记会话幂等键
+    B->>D: 局部更新提醒状态/登记会话引用
     Note over B,D: 不修改关联任务，不将AI提醒写为用户确认画像
 ```
 
@@ -226,10 +320,10 @@ sequenceDiagram
 
 | Sales Buddy接口 | 处理逻辑 | 主要D365对象 |
 |---|---|---|
-| GET /api/home-workbench | 读缓存简报/提醒、独立聚合本人目标数据；缺当日任务补建 | dailybriefing、cue、cuestate、task、活动 |
-| GET /api/magic-cues 与 /:id | 两状态分页及详情，来源权限校验 | cue、cuestate、cuesource及原CRM |
-| PATCH /api/magic-cues/:id | 完成/恢复/互斥反馈，条件写入 | cuestate |
-| POST /api/magic-cues/:id/conversation | 重新校验源范围，幂等创建现有AI会话 | cuestate及现有会话系统 |
+| GET /api/home-workbench | 读缓存简报/提醒、独立聚合本人目标数据；缺当日任务补建 | cuegeneration（成功简报）、cue、task、活动 |
+| GET /api/magic-cues 与 /:id | 两状态分页及详情，来源权限校验 | cue（含个人状态与证据JSON）及原CRM |
+| PATCH /api/magic-cues/:id | 完成/恢复/互斥反馈，条件写入 | cue（个人状态字段） |
+| POST /api/magic-cues/:id/conversation | 重新校验源范围，幂等创建现有AI会话 | cue（会话引用）及现有会话系统 |
 | GET /api/workbench-generations | 返回当前用户生成状态，不返回私有快照 | cuegeneration |
 | GET/POST /api/my-tasks、PATCH /:id/status | 本人列表/确认创建/完成与恢复，专用字段写入 | task及CRM关联 |
 | GET /api/my-goals/tasks、/api/my-daily-report | 目标分组与日报，沿用既有逻辑 | task及现有日报能力 |
@@ -261,7 +355,7 @@ D365实施方负责实体、字段映射、组织主责、权限、安全角色�
 ## 14. 实施顺序与验收
 
 1. **数据盘点**：锁定15场景、映射CRM与画像、确认组织关系和记录有效性，补齐缺列及样例。缺字段的场景明确停用，不让模型代猜。
-2. **D365基础**：建6张运行表、备用键、权限、审计和解决方案；复用现有CRM/组织/画像，打通只读适配。
+2. **D365基础**：建3张运行表、备用键、权限、审计和解决方案；复用现有CRM/组织/画像，打通只读适配。
 3. **影子运行**：每天08:00计算但不展示给销售，对照业务样例核查；修正活动有效性、稳定去重、确认信号边界及记录覆盖口径。
 4. **闭环联调**：启用缓存首页、详情/反馈/完成、会话幂等、任务确认写入与状态恢复；PC及移动端共验。
 5. **小范围试用**：至少一个SPP与其区域总裁参与，累计持续缺口样本，确认噪声与漏报后扩大范围。
