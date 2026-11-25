@@ -1,6 +1,6 @@
 # 工作台 · 小Cue：D365实施与角色场景取数方案
 
-日期：2026-11-25　版本：V1.1　适用：业务负责人、D365实施伙伴、Sales Buddy产品与研发
+日期：2026-11-25　版本：V1.2　适用：业务负责人、D365实施伙伴、Sales Buddy产品与研发
 
 ## 1. 实施结论与范围
 
@@ -23,7 +23,7 @@
 | F05 | 详情与信息来源 | 标题、描述、关联客户/线索/商机/商务活动、推进建议 | 每次读取重验源记录权限；保留来源版本与摘录，不展示无权限的旧快照 |
 | F06 | 完成与恢复 | 勾选按钮切换完成/进行中 | 只修改Cue用户状态；不关闭关联CRM任务；撤销和恢复持久化 |
 | F07 | 个人反馈 | 点赞/点踩互斥、可取消 | 写个人状态，首版不自动改变业务规则或形成团队考核 |
-| F08 | 发起AI会话 | 卡片发起会话，启动中防重复 | 幂等关联现有会话系统；有明确商机才绑定该商机，团队汇总不绑定列表第一条商机；AI委托带系统来源标识 |
+| F08 | 发起AI会话 | 卡片发起会话，启动中防重复 | 读取事项作为上下文创建新session，会话由现有会话系统保存，小Cue不回写会话信息；有明确商机才绑定该商机，团队汇总不绑定列表第一条商机；AI委托带系统来源标识 |
 | F09 | 我的待办 | 移动端进入“目标”，支持分组、查看全部、添加、完成/恢复 | 复用CRM task，执行人当前用户，创建前确认；按截止时间分逾期/今日/本周/以后/已完成；不另建个人便签 |
 | F10 | 待办辅助 | 快速输入、关联洞察、日报呈现 | 沿用现有捕获/确认及日报逻辑；AI解析为草稿，确认才创建；日报同步失败单独重试，不伪造任务创建失败 |
 | F11 | 我的日程 | “目标”下按日期查看商务活动及详情 | 当前口径是本人创建的活动；按北京时间查询，不猜内部参会人、结束时间、可用空档或会议链接；无会前讨论按钮 |
@@ -122,7 +122,7 @@ PC与移动端共用规则及数据。移动端底部为对话、客户经营、
 
 | 中文表名 | English table name | 实体逻辑名 | 一条记录表示什么 | 必须承担的功能 |
 |---|---|---|---|---|
-| 小Cue提醒 | Cue Item | catl_esspilot_cue | 一个接收人、一个场景、一个具体行动周期的提醒 | 标题/描述/建议、来源证据、排序、完成/恢复、点赞/点踩、关联会话；跨日保留稳定身份 |
+| 小Cue提醒 | Cue Item | catl_esspilot_cue | 一个接收人、一个场景、一个具体行动周期的提醒 | 标题/描述/建议、来源证据、排序、完成/恢复、点赞/点踩；跨日保留稳定身份 |
 | 小Cue每日生成 | Cue Daily Run | catl_esspilot_cuegeneration | 一个接收人在一个北京业务日、一个规则版本的生成任务及成功简报 | 防重复生成、任务领取/重试、快照、当日简报、发布结果与故障状态；合并原dailybriefing |
 | 小Cue持续观察 | Cue Observation | catl_esspilot_cueobservation | 一个场景、一个SPP、一项商机的事实缺口观察 | 记录首次发现/最后检查/解决时间，计算R02是否持续7天；不随用户完成提醒而清零 |
 
@@ -170,11 +170,8 @@ PC与移动端共用规则及数据。移动端底部为对话、客户经营、
 | 完成状态 | Completion Status | catl_completionstatus | Choice | 是/0 | 0=in_progress进行中，1=completed已完成；用户完成与场景是否成立相互独立 |
 | 完成时间 | Completed At | catl_completedat | Date and Time | 否 | 完成时设UTC当前时间，恢复进行中时清空；完整操作历史交由审计 |
 | 个人反馈 | Personal Feedback | catl_feedback | Choice | 是/0 | 0=none无，1=like赞，2=dislike踩；互斥，可取消 |
-| 会话引用 | Conversation Reference | catl_conversationref | Text(100) | 否 | 现有聊天系统返回的会话ID；不是D365原生Lookup，不重建聊天实体 |
-| 会话启动状态 | Conversation Launch Status | catl_launchstatus | Choice | 是/0 | 0=idle，1=starting，2=succeeded，3=failed；启动成功后复用会话 |
-| 会话启动租约 | Conversation Lease Until | catl_launchleaseuntil | Date and Time | 否 | 启动中断后的重试边界；成功/失败结束后清空，防止永久卡在starting |
 
-接收人直接读取ownerid，创建后不可转派。记录本身固定为AI/系统整理来源，无需每行重复固定origin；进入会话/记忆管道时必须显式传origin=ai_generated及cue ID，不能冒充用户确认。聊天幂等键由cue主键稳定派生，发送给既有会话创建服务；下游必须支持同键复用，不能仅依赖launchstatus避免崩溃后的重复会话。
+接收人直接读取ownerid，创建后不可转派。记录本身固定为AI/系统整理来源，无需每行重复固定origin；进入会话/记忆管道时必须显式传origin=ai_generated及cue ID，不能冒充用户确认。每次用户主动发起会话，读取当前事项的标题、描述、建议及获准来源，作为初始上下文创建新的session；会话记录和上下文由现有会话系统保存，不回写session ID、启动状态或租约到小Cue表。同一次点击的网络重试使用请求级幂等键，由会话服务去重；用户再次主动点击应创建新session，不以cue ID长期复用同一会话。
 
 ### 9.4 表二：小Cue每日生成 catl_esspilot_cuegeneration
 
@@ -239,7 +236,7 @@ JSON引用不提供Lookup完整性或权限继承。任何详情/会话读取都
 
 ### 9.7 同表状态保护、权限与发布
 
-- cue后台生成器只允许更新标题、描述、建议、证据、排序、最近生成和核实等列；不得写completionstatus、completedat、feedback及会话列。新增记录时才初始化个人状态。用户操作使用专用接口及ETag局部PATCH；不能整行Upsert覆盖。必要时用受控Custom API/插件落实字段白名单，避免应用账号绕过约束。
+- cue后台生成器只允许更新标题、描述、建议、证据、排序、最近生成和核实等列；不得写completionstatus、completedat、feedback。新增记录时才初始化个人状态。用户操作使用专用接口及ETag局部PATCH；不能整行Upsert覆盖。必要时用受控Custom API/插件落实字段白名单，避免应用账号绕过约束。
 - 唯一键与ETag分别解决重复记录和并发覆盖，依据微软[备用键](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/define-alternate-keys-entity)及[条件操作](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/perform-conditional-operations-using-web-api)。租约发布还需校验token，旧Worker不能在接管后继续提交。
 - cue由接收人所有，但Owner不意味着绝对私有，需核对角色深度、层级安全、共享及管理员权限。run虽按接收人确定归属，仍仅后台服务/获准运维直接读取；业务用户通过接口读投影。observation仅获准服务读取，不含个人画像。
 - 发布所选提醒、来源JSON及run成功简报须受控事务提交；失败保留旧成功任务和旧提醒。生成与用户操作并发冲突时重新读版本，仅重放生成字段，不覆盖用户操作。
@@ -284,6 +281,7 @@ sequenceDiagram
     participant B as Sales Buddy后端
     participant D as D365 Dataverse
     participant L as 大模型
+    participant C as 现有会话系统
     participant U as PC/移动端用户
     W->>B: 申请用户+北京日期+规则版本任务
     B->>D: 唯一键建任务并条件领取租约
@@ -309,8 +307,16 @@ sequenceDiagram
     U->>B: 打开工作台
     B->>D: 读缓存结果和个人状态，再验源权限
     B-->>U: 小Cue列表及简报；待办/日程独立返回
-    U->>B: 勾选完成或发起会话
-    B->>D: 局部更新提醒状态/登记会话引用
+    alt 用户勾选完成
+        U->>B: 完成或恢复提醒
+        B->>D: 局部更新提醒完成状态
+    else 用户发起会话
+        U->>B: 发起新会话
+        B->>D: 只读事项及来源，重新校验权限
+        B->>C: 携带事项上下文创建新session
+        C-->>U: 返回新会话入口
+        Note over B,D: 不向小Cue回写任何会话字段
+    end
     Note over B,D: 不修改关联任务，不将AI提醒写为用户确认画像
 ```
 
@@ -323,7 +329,7 @@ sequenceDiagram
 | GET /api/home-workbench | 读缓存简报/提醒、独立聚合本人目标数据；缺当日任务补建 | cuegeneration（成功简报）、cue、task、活动 |
 | GET /api/magic-cues 与 /:id | 两状态分页及详情，来源权限校验 | cue（含个人状态与证据JSON）及原CRM |
 | PATCH /api/magic-cues/:id | 完成/恢复/互斥反馈，条件写入 | cue（个人状态字段） |
-| POST /api/magic-cues/:id/conversation | 重新校验源范围，幂等创建现有AI会话 | cue（会话引用）及现有会话系统 |
+| POST /api/magic-cues/:id/conversation | 校验源权限，读取事项作为上下文创建新session；请求级重试由会话服务去重 | cue及原CRM只读；新session写入现有会话系统，不更新小Cue |
 | GET /api/workbench-generations | 返回当前用户生成状态，不返回私有快照 | cuegeneration |
 | GET/POST /api/my-tasks、PATCH /:id/status | 本人列表/确认创建/完成与恢复，专用字段写入 | task及CRM关联 |
 | GET /api/my-goals/tasks、/api/my-daily-report | 目标分组与日报，沿用既有逻辑 | task及现有日报能力 |
@@ -369,7 +375,7 @@ D365实施方负责实体、字段映射、组织主责、权限、安全角色�
 | 模型质量 | 无候选不调用措辞；不编日期、金额、容量、资源承诺；每项有可追溯证据；推断不充当确认 |
 | 状态稳定 | 点赞/点踩取消、完成/恢复持久；生成不覆盖操作；汇总名单变化及跨日不重复推送同一行动 |
 | 持续观察 | 缺口首次发现、连续7天、补计划关闭、复发重新计时及团队转移均可验证 |
-| 任务/会话 | Cue完成与CRM任务独立；任务创建只一次；会话启动重复点击复用，失败可重试 |
+| 任务/会话 | Cue完成与CRM任务独立；任务创建只一次；每次主动发起创建新session并带入事项上下文；同次请求重试不重复创建，失败可重试；小Cue无会话字段及回写 |
 | 故障恢复 | 模型失败、429、超时、租约中断重试可观测；旧有效结果保留，快照不向业务用户泄漏 |
 | 体验 | 手机F12适配、8条分页、目标中待办/日程；不恢复刷新、会前讨论和无依据时长等已删除内容 |
 
