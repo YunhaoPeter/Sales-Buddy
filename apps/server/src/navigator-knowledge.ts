@@ -4,6 +4,7 @@ import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {db,get,put,list,uid,resolve} from './db.ts';
 import {AppError,type User} from '../../../packages/contracts/index.ts';
+import {encodeResourceChannel,resourceContact} from '../../../packages/resource-contact.ts';
 export const kbModules=[
  {id:'stages',name:'阶段定义',file:'01_阶段定义.xlsx',count:18,headers:'所属维度|阶段|阶段名称|阶段说明|判断要点|常见误判',required:[0,1,2,3,4]},
  {id:'rules',name:'阶段判断规则',file:'02_阶段判断规则.xlsx',count:46,headers:'规则名称|适用维度|目标阶段|适用条件|应确认事项|判定标准|信息不足时如何追问|例外说明',required:[0,1,2,3,4,5,6]},
@@ -36,6 +37,21 @@ export async function initNavigatorKnowledge(){for(const m of kbModules){if(get(
 export function catalog(){return kbModules.map(m=>{const v=currentKnowledge(m.id);return{...moduleSpec(m.id),count:v.rows.length,version:v.id,versionNumber:v.number,updatedAt:v.createdAt};});}
 export function knowledgeSnapshot(){return Object.fromEntries(kbModules.map(m=>[m.id,currentKnowledge(m.id)]));}
 export function knowledgeRows(id:string,version?:string){return currentKnowledge(id,version).rows as string[][];}
+export function updateResourceContact(u:User,input:any){
+ admin(u);const old=currentKnowledge('resources');if(old.id!==input.baseVersion)throw new AppError('CONFLICT','资源清单已更新，请重新打开详情',409);
+ if(!Number.isInteger(input.index)||!old.rows[input.index]||typeof input.name!=='string'||!input.name.trim()||input.name.length>80||!/^\d{6,12}$/.test(input.employeeId||'')||typeof input.channel!=='string')throw new AppError('INVALID_ARGUMENT','请填写联系人、有效工号和联系渠道');
+ const contact=resourceContact(['','','','','','','','',input.name,input.employeeId,input.channel]);
+ if(!contact.available||encodeResourceChannel(contact.channel!,contact.email)!==input.channel)throw new AppError('INVALID_ARGUMENT','联系渠道须为COME3.0或有效邮箱');
+ const rows=old.rows.map((r:string[],i:number)=>i===input.index?[...r.slice(0,8),input.name.trim(),input.employeeId,input.channel]:r);
+ return commit('resources',rows,old.instructions,u.id,'维护资源联系人及渠道');
+}
+/** Explicit local demo preparation only. Existing named contacts and historical versions are preserved. */
+export function seedResourceContactExamples(){
+ if(get('navigator_contact_demo_seed','contacts-v1'))return{changed:0};const old=currentKnowledge('resources'),rows=old.rows.map((r:string[])=>[...r]);
+ const examples=[{name:'付涛',id:'60139635',channel:'COME3.0'},{name:'张云昊',id:'60269059',channel:'邮箱：zhang.yunhao.demo@catl.com'}];let changed=0;
+ for(const e of examples){const row=rows.find((r:string[])=>!r[8]||/待补|待确认|待企业/.test(r[8]));if(!row)break;row[7]='[演示] '+(row[7]||'资源支持部门');row[8]=e.name;row[9]=e.id;row[10]=e.channel;changed++;}
+ if(changed)commit('resources',rows,old.instructions,'system','添加用户指定的演示联系人（非真实资源授权）',undefined,()=>put('navigator_contact_demo_seed','contacts-v1',{id:'contacts-v1',changed,at:clock()}));return{changed};
+}
 export function knowledgeDiff(id:string,rows:string[][]){const key=(r:string[])=>['stages','matrix'].includes(id)?r[0]+':'+r[1]:r[0].trim(),old=currentKnowledge(id).rows as string[][];const before=new Map(old.map(r=>[key(r),r])),after=new Map(rows.map(r=>[key(r),r]));return{added:rows.filter(r=>!before.has(key(r))),removed:old.filter(r=>!after.has(key(r))),changed:rows.filter(r=>before.has(key(r))&&JSON.stringify(before.get(key(r)))!==JSON.stringify(r)).map(r=>({before:before.get(key(r)),after:r})),unchanged:rows.filter(r=>JSON.stringify(before.get(key(r)))===JSON.stringify(r)).length};}
 export async function prepareKnowledgeImport(u:User,id:string,bytes:Buffer){admin(u);const source=await readExcel(bytes),checked=validateRows(id,source.data);const v=currentKnowledge(id);const draft={id:uid('kbi'),module:id,userId:u.id,baseVersion:v.id,rows:checked.rows,instructions:source.instructions.length?source.instructions:v.instructions,errors:checked.errors,diff:checked.errors.length?null:knowledgeDiff(id,checked.rows),createdAt:clock(),hash:createHash('sha256').update(bytes).digest('hex')};put('navigator_kb_imports',draft.id,draft,u.id);return draft;}
 export function confirmKnowledgeImport(u:User,id:string){admin(u);const d=get('navigator_kb_imports',id);if(!d||d.userId!==u.id)throw new AppError('FORBIDDEN','导入记录不属于当前用户',403);if(d.result)return d.result;if(d.errors.length)throw new AppError('INVALID_ARGUMENT','先修正导入错误');if(Date.now()-Date.parse(d.createdAt)>3600000)throw new AppError('CONFLICT','导入预览已过期，请重新上传',409);if(currentKnowledge(d.module).id!==d.baseVersion)throw new AppError('CONFLICT','模块已被更新，请重新上传对比',409);const result=commit(d.module,d.rows,d.instructions,u.id,'Excel完整清单导入',undefined,v=>put('navigator_kb_imports',id,{...d,result:v},u.id));return result;}
