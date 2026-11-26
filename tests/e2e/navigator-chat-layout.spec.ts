@@ -9,11 +9,11 @@ test('领航员提示可折叠，阶段栏和输入区气泡适配手机与PC',a
  await page.goto('/advisor/opportunity/OP-UK-026');
  await page.getByRole('button',{name:'新建对话',exact:true}).click();
  const bar=page.locator('.mobile-navigator-entry'),bubbles=page.locator('.navigator-composer-bubbles');
- await expect(bar.getByRole('button',{name:'开始评估',exact:true})).toBeEnabled();
+ await expect(page.locator('.navigator-central-assessment')).toBeEnabled();for(const width of [390,1440]){await page.setViewportSize({width,height:900});const msg=await page.locator('.messages').boundingBox(),button=await page.locator('.navigator-central-assessment').boundingBox();expect(Math.abs(button!.x+button!.width/2-(msg!.x+msg!.width/2))).toBeLessThan(5);expect(Math.abs(button!.y+button!.height/2-(msg!.y+msg!.height/2))).toBeLessThan(130);await expect(page.getByRole('button',{name:'会话工作台',exact:true})).toHaveCount(0);await expect(page.getByText('当前阶段重点事项',{exact:true})).toHaveCount(0);}await page.setViewportSize({width:390,height:844});
  await bar.getByRole('button',{name:'折叠MPT评估提示'}).click();
- await expect(bar.getByRole('button',{name:'开始评估',exact:true})).toBeHidden();
+ await expect(page.locator('.navigator-central-assessment')).toBeVisible();
  await bar.getByRole('button',{name:'展开MPT评估提示'}).click();
- await expect(bar.getByRole('button',{name:'开始评估',exact:true})).toBeVisible();
+ await expect(page.locator('.navigator-central-assessment')).toBeVisible();
  await expect(bar.getByRole('button',{name:'项目画像详情',exact:true})).toHaveCount(0);
  await expect(page.locator('.composer').getByRole('button',{name:'准备会晤资料'})).toHaveCount(0);
  await expect(page.locator('.composer .common-tools')).toHaveCount(0);
@@ -28,7 +28,7 @@ test('领航员提示可折叠，阶段栏和输入区气泡适配手机与PC',a
  assessed=true;await page.reload();
  const stages=bar.getByLabel('当前项目阶段');await expect(stages).toContainText('S3');
  for(const stage of ['M2','P2','T1'])await expect(stages).toContainText(stage);
- await expect(bar.getByRole('button',{name:'开始评估',exact:true})).toHaveCount(0);
+ await expect(page.locator('.navigator-central-assessment')).toHaveCount(0);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  await page.screenshot({path:'runtime/reports/screenshots/navigator-chat-mobile.png'});
  await page.setViewportSize({width:1440,height:1000});
