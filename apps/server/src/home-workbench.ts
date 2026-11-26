@@ -21,7 +21,7 @@ const scopeFor=(r:any):Scope=>({objectType:r.entityType||'customer',objectId:r.e
 const finished=(r:any)=>['completed','cancelled','closed'].includes(r.status);
 function accessible(u:User,r:any){try{allowedRecord(u,r.id);return true}catch{return false}}
 export function personalTasks(u:User){return allRecords('task').filter(r=>r.assigneeId===u.id&&accessible(u,r)).sort((a,b)=>Number(finished(a))-Number(finished(b))||String(a.priority||'P3').localeCompare(String(b.priority||'P3'))||Date.parse(a.dueAt||'9999-01-01')-Date.parse(b.dueAt||'9999-01-01'));}
-export function personalActivities(u:User,day:string){return allRecords('activity').filter(r=>r.createdBy===u.id&&accessible(u,r)&&!['cancelled','closed'].includes(r.status)&&r.scheduledAt&&!Number.isNaN(Date.parse(r.scheduledAt))&&businessDay(r.scheduledAt)===day).sort((a,b)=>Date.parse(a.scheduledAt)-Date.parse(b.scheduledAt));}
+export function personalActivities(u:User,day:string,end=day){return allRecords('activity').filter(r=>r.createdBy===u.id&&accessible(u,r)&&!['cancelled','closed'].includes(r.status)&&r.scheduledAt&&!Number.isNaN(Date.parse(r.scheduledAt))&&businessDay(r.scheduledAt)>=day&&businessDay(r.scheduledAt)<=end).sort((a,b)=>Date.parse(a.scheduledAt)-Date.parse(b.scheduledAt));}
 export function personalProjects(u:User){return allRecords().filter(r=>['lead','opportunity'].includes(r.type)&&r.ownerId===u.id&&!['converted','closed','cancelled'].includes(r.status)&&accessible(u,r));}
 export const candidates=scenarioCandidates;
 function checkCue(u:User,c:any){

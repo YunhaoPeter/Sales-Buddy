@@ -21,5 +21,5 @@ r.post('/magic-cues/:id/conversation',(req,res)=>res.json(launchCueConversation(
 r.get('/my-tasks',(req,res)=>res.json(taskPage(res.locals.user,z.enum(['pending','completed']).default('pending').parse(req.query.status),page.parse(req.query.page))));
 r.post('/my-tasks',(req,res)=>res.status(201).json(createPersonalTask(res.locals.user,req.body)));
 r.patch('/my-tasks/:id/status',(req,res)=>res.json(setTaskStatus(res.locals.user,String(req.params.id),z.object({status:z.enum(['pending','completed'])}).strict().parse(req.body).status)));
-r.get('/my-schedule',(req,res)=>{const day=z.string().regex(/^\d{4}-\d{2}-\d{2}$/).refine(v=>!Number.isNaN(Date.parse(v))&&businessDay(v+'T12:00:00+08:00')===v,'日期无效').parse(req.query.date||businessDay(now()));res.json({date:day,records:personalActivities(res.locals.user,day)});});
+r.get('/my-schedule',(req,res)=>{const day=dayQuery(req.query.date),end=dayQuery(req.query.end||day);z.boolean().refine(Boolean,'日程范围需在42天以内').parse(end>=day&&Date.parse(end)-Date.parse(day)<=41*86400000);res.json({date:day,end,records:personalActivities(res.locals.user,day,end)});});
 export const workbenchRoutes=r;
