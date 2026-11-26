@@ -11,7 +11,7 @@ test('PC直接填报MPT固定事项，最终提交才更新阶段并在画像保
  for(const stage of ['M1','P2','T2']){
   await dialog.getByRole('button',{name:new RegExp('^'+stage+' ·')}).click();await dialog.getByRole('button',{name:'选择此阶段，填写事项',exact:true}).click();
   await dialog.getByRole('radio',{name:/已确认/}).click();await dialog.getByLabel('评估情况补充').fill(stage+'用户确认的详细记录，不需AI分析。');
-  if(stage==='M1'){await dialog.getByRole('button',{name:'暂存，稍后继续'}).click();if(!before.assessed)await page.locator('.navigator-central-assessment').click();else{await page.locator('.navigator-composer-bubbles').getByRole('button',{name:'MPT画布',exact:true}).click();await page.getByRole('button',{name:'继续评估',exact:true}).click();}await expect(dialog.getByLabel('评估情况补充')).toHaveValue(stage+'用户确认的详细记录，不需AI分析。');}
+  await expect(dialog.getByRole('button',{name:'暂存，稍后继续',exact:true})).toHaveCount(0);
   await dialog.getByRole('button',{name:'提交',exact:true}).click();await expect(dialog.getByText(/本维度核实结果|继续核实关键问题/)).toHaveCount(0);
  }
  expect((await(await request.get('/api/navigator/state?scope='+encodeURIComponent(JSON.stringify(scope)),{headers})).json()).version).toBe(before.version);
