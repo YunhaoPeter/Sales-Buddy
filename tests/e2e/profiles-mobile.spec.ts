@@ -13,7 +13,7 @@ test('PC与手机共用六模块画像，真实对话产生关键事项且无横
   await opener.getByRole('button',{name:'项目画像详情',exact:true}).click();const d=page.getByRole('dialog',{name:'项目画像详情',exact:true});
   await expect(d.locator('.profile-module')).toHaveCount(6);
   for(const title of ['项目概况','当前阶段','关键人物与竞争','当前卡点','下一步行动','关键事项时间线'])await expect(d.getByRole('heading',{name:title,exact:true})).toHaveCount(1);
-  const timeline=d.getByLabel('项目关键事项时间线');await timeline.scrollIntoViewIfNeeded();await expect(timeline).toContainText(text);await expect(timeline).toContainText('日期待确认');
+  await expect(d.getByLabel('下载画像MD',{exact:true})).toHaveCount(0);await expect(d.getByLabel('返回上一层画像页面',{exact:true})).toHaveCount(0);await expect(d.getByRole('button',{name:/^新增/})).toHaveCount(0);const header=d.locator(':scope > .profile-detail-heading'),before=await header.boundingBox();await d.evaluate((el:HTMLElement)=>{el.scrollTop=el.scrollHeight;});await expect(d.getByLabel('关闭画像详情')).toBeVisible();const after=await header.boundingBox();expect(Math.abs(after!.y-before!.y)).toBeLessThan(2);const timeline=d.getByLabel('项目关键事项时间线');await timeline.scrollIntoViewIfNeeded();await expect(timeline).toContainText(text);await expect(timeline).toContainText('日期待确认');
   expect(await d.evaluate((e:HTMLElement)=>e.scrollWidth<=e.clientWidth+1)).toBe(true);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
   await page.screenshot({path:'runtime/reports/screenshots/project-events-'+width+'.png'});await d.getByLabel('关闭画像详情').click();
