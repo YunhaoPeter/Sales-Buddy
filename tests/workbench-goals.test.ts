@@ -67,3 +67,9 @@ test('自然语言整理使用模型且不写CRM，拒绝模型捏造关联对�
  process.env.MODEL_API_BASE_URL='http://127.0.0.1:'+address.port;process.env.MODEL_API_KEY='fixture';process.env.MODEL_NAME='fixture';
  try{const count=D.allRecords('task').length;const draft=await G.parseTaskCapture(u,{text:'帮我确认报价'});assert.equal(draft.requiresConfirmation,true);assert.equal(draft.dueAt,null);assert.equal(D.allRecords('task').length,count);objectId='DOES-NOT-EXIST';await assert.rejects(()=>G.parseTaskCapture(u,{text:'关联未知项目'}));}finally{await new Promise<void>(resolve=>server.close(()=>resolve()));for(const [name,value] of Object.entries({MODEL_API_BASE_URL:old.base,MODEL_API_KEY:old.key,MODEL_NAME:old.name}))if(value===undefined)delete process.env[name];else process.env[name]=value;}
 });
+test('日历区间按北京时间筛选、排序，仅显示本人且仍有权限的会议',()=>{
+ const make=(id:string,scheduledAt:string,extra:any={})=>D.saveRecord({id,type:'activity',name:id,customerId:scope.customerId,entityType:'opportunity',entityId:scope.objectId,createdBy:u.id,status:'planned',scheduledAt,updatedAt:D.now(),...extra});
+ make('CAL-START','2026-12-01T16:00:00Z');make('CAL-END','2026-12-03T15:59:59Z');make('CAL-OUT','2026-12-03T16:00:00Z');make('CAL-OTHER','2026-12-02T09:00:00+08:00',{createdBy:other.id});make('CAL-CANCEL','2026-12-02T10:00:00+08:00',{status:'cancelled'});
+ const foreign=D.allRecords('customer').find(c=>!C.canAccess(u,c.id));assert.ok(foreign);make('CAL-FORBIDDEN','2026-12-02T11:00:00+08:00',{customerId:foreign.id,entityType:'customer',entityId:foreign.id});
+ assert.deepEqual(W.personalActivities(u,'2026-12-02','2026-12-03').filter(a=>a.id.startsWith('CAL-')).map(a=>a.id),['CAL-START','CAL-END']);assert.equal(W.personalActivities(admin,'2026-12-02','2026-12-03').length,0);
+});
